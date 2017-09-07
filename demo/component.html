@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>Demo</title>
+	<link rel="stylesheet" type="text/css" href="../src/css/layout.css"/>
+	<link rel="stylesheet" type="text/css" href="../src/css/skin-gray.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+</head>
+<body>
+<div id="container">
+	<vue-tabber>
+		<vue-tabber-label><my-title text="title1"/></vue-tabber-label>
+		<vue-tabber-page><my-content text="content1"/></vue-tabber-page>
+
+		<vue-tabber-label><my-title text="title2"/></vue-tabber-label>
+		<vue-tabber-page><my-content text="content2"/></vue-tabber-page>
+	</vue-tabber>
+</div>
+
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../dist/vue-tabber.js"></script>
+<script type="text/javascript">
+	Vue.component('MyTitle',{
+		props:['text'],
+		template:'<i>{{text}}</i>'
+	});
+
+	Vue.component('MyContent',{
+		props:['text'],
+		template:'<p>{{text}}</p>'
+	});
+
+	var app = new Vue({
+		el: '#container'
+	});
+</script>
+</body>
+</html>

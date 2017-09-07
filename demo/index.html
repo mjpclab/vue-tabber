@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>Demo</title>
+	<link rel="stylesheet" type="text/css" href="../src/css/layout.css"/>
+	<link rel="stylesheet" type="text/css" href="../src/css/skin-gray.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+</head>
+<body>
+<script type="text/x-template" id="template">
+	<div id="container">
+		<vue-tabber :active-index="index" @switch="onSwitch">
+			<vue-tabber-label>title 1</vue-tabber-label>
+			<vue-tabber-page>content 1</vue-tabber-page>
+
+			<vue-tabber-label><b>title 2</b></vue-tabber-label>
+			<vue-tabber-page><my-article class="my-page">content 2</my-article></vue-tabber-page>
+		</vue-tabber>
+	</div>
+</script>
+<div id="app"></div>
+
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../dist/vue-tabber.js"></script>
+<script type="text/javascript">
+	Vue.component('MyArticle',{
+		template:'<p><slot/></p>'
+	});
+
+	var app = new Vue({
+		el: '#app',
+		template: '#template',
+		data: {
+			index: 0
+		},
+		methods: {
+			switchTo: function (index) {
+				this.index = index;
+			},
+			onSwitch(oldIndex, newIndex) {
+				this.index = newIndex;
+			}
+		}
+	});
+</script>
+</body>
+</html>

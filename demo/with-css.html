@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>Demo</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+</head>
+<body>
+<div id="app">
+	<vue-tabber>
+		<vue-tabber-label>title 1</vue-tabber-label>
+		<vue-tabber-page>content 1</vue-tabber-page>
+
+		<vue-tabber-label><b>title 2</b></vue-tabber-label>
+		<vue-tabber-page>content 2</vue-tabber-page>
+	</vue-tabber>
+</div>
+
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../dist/vue-tabber-with-css.js"></script>
+<script type="text/javascript">
+	var app = new Vue({
+		el: '#app'
+	});
+</script>
+</body>
+</html>
