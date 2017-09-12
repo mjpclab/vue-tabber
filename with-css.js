@@ -1,1 +1,1 @@
-module.exports = require('./src/js/index-with-css');
+module.exports = require('./src/js/tabber/index-with-css');

@@ -1,9 +1,5 @@
-let Vue = require('vue');
-if (Vue.default) {
-	Vue = Vue.default;
-}
-const Label = require('./label');
-const Page = require('./page');
+const Label = require('../label');
+const Page = require('../page');
 
 const RE_WHITESPACES = /\s+/;
 
@@ -54,7 +50,7 @@ function mergeEventHandlers(...eventHandlers) {
 	return mergedEventHandler;
 }
 
-const VueTabber = Vue.component('VueTabber', {
+const definition = {
 	props: {
 		triggerEvents: {type: [Array, String], default: 'click'},
 		delayTriggerEvents: {type: [Array, String]},
@@ -307,6 +303,6 @@ const VueTabber = Vue.component('VueTabber', {
 		//return
 		return tabContaienr;
 	}
-});
+};
 
-module.exports = VueTabber;
+module.exports = definition;

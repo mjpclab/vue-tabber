@@ -1,10 +1,12 @@
 {
   "name": "vue-tabber",
   "nameWithCss": "vue-tabber-with-css",
-  "version": "0.0.5",
+  "nameComponents": "vue-tabber-components",
+  "version": "0.0.6",
   "description": "A Vue.js tab sheet component",
   "main": "index.js",
   "mainWithCss": "with-css.js",
+  "mainComponents": "components.js",
   "scripts": {
     "build": "sh -c 'rm -rf dist/*; webpack;'"
   },

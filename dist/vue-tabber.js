@@ -95,14 +95,27 @@ module.exports = __webpack_require__(2);
 "use strict";
 
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 var Vue = __webpack_require__(0);
 if (Vue.default) {
 	Vue = Vue.default;
 }
-var Label = __webpack_require__(3);
-var Page = __webpack_require__(4);
+
+var definition = __webpack_require__(3);
+var VueTabber = Vue.component('VueTabber', definition);
+
+module.exports = VueTabber;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Label = __webpack_require__(4);
+var Page = __webpack_require__(6);
 
 var RE_WHITESPACES = /\s+/;
 
@@ -158,7 +171,7 @@ function mergeEventHandlers() {
 	return mergedEventHandler;
 }
 
-var VueTabber = Vue.component('VueTabber', {
+var definition = {
 	props: {
 		triggerEvents: { type: [Array, String], default: 'click' },
 		delayTriggerEvents: { type: [Array, String] },
@@ -397,25 +410,9 @@ var VueTabber = Vue.component('VueTabber', {
 		//return
 		return tabContaienr;
 	}
-});
+};
 
-module.exports = VueTabber;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Vue = __webpack_require__(0);
-if (Vue.default) {
-	Vue = Vue.default;
-}
-
-var VueTabberLabel = Vue.component('VueTabberLabel', {});
-
-module.exports = VueTabberLabel;
+module.exports = definition;
 
 /***/ }),
 /* 4 */
@@ -429,9 +426,49 @@ if (Vue.default) {
 	Vue = Vue.default;
 }
 
-var VueTabberPage = Vue.component('VueTabberPage', {});
+var definition = __webpack_require__(5);
+var VueTabberLabel = Vue.component('VueTabberLabel', definition);
+
+module.exports = VueTabberLabel;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var definition = {};
+
+module.exports = definition;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Vue = __webpack_require__(0);
+if (Vue.default) {
+	Vue = Vue.default;
+}
+
+var definition = __webpack_require__(7);
+var VueTabberPage = Vue.component('VueTabberPage', definition);
 
 module.exports = VueTabberPage;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var definition = {};
+
+module.exports = definition;
 
 /***/ })
 /******/ ]);

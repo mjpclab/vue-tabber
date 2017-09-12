@@ -63,7 +63,8 @@ const externalsConfig = {
 
 const entries = [
 	{name: thePackage.name, path: thePackage.main},
-	{name: thePackage.nameWithCss, path: thePackage.mainWithCss}
+	{name: thePackage.nameWithCss, path: thePackage.mainWithCss},
+	{name: thePackage.nameComponents, path: thePackage.mainComponents}
 ];
 
 let confs = [];
