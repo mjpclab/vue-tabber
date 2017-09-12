@@ -19,7 +19,7 @@ A Vue.js Tab sheet component.
 ```
 
 # Usage:
-## Import VueTabber module
+## Import VueTabber Module
 *Import in ES6 module environment*  
 ```javascript
 import 'vue-tabber';
@@ -52,7 +52,7 @@ Put tab information in the app or component's template like below:
 </div>
 ```
 
-## Run application
+## Run Application
 Then just start the component:
 ```javascript
 new Vue({
@@ -67,3 +67,68 @@ To hide non-active tab pages, just applying CSS by "inactive" class(controlled b
 VueTabber provides default CSS styles if you don't want to make it yourself. It also provides default skin.
 To use that, importing module `vue-tabber/with-css` instead of `vue-tabber`.
 For global variable mode, referencing the '-with-css' bundle file.
+
+# Properties
+You can specify options by setting properties on `<react-tabber>` element.
+
+## Behavior Properties
+`trigger-events`  
+Determine the types of events triggered on label-item that will make the page-item switched.
+Default value is `click`.
+
+`delay-trigger-events`  
+Specify events on label-item that will trigger page switch after delay a small piece of time.
+Quite useful if you want to keep hover a little time before switching.
+
+`delay-trigger-cancel-events`  
+Specify events on label-item that will cancel delay switching.
+
+`delay-trigger-latency`  
+Specify how long (milliseconds) need to wait before trigger the delayed switching events.
+
+`active-index`  
+The default initial active index of the tab. Will be ignored if it can get value from `statusFieldSelector` or `statusHashTemplate`.
+
+## UI Properties
+### Tab
+`tab-container-class`  
+CSS class for tab container.
+
+### Label
+
+`label-container-class`  
+CSS class for label container.
+
+`show-top-label-container`  
+Show label-container on top of the tab.
+
+`show-bottom-label-container`  
+Show label-container on bottom of the tab.
+
+`top-label-container-class`  
+CSS class for top label container.
+
+`bottom-label-container-class`  
+CSS class for bottom label container.
+
+`label-item-class`  
+CSS class for bottom label item.
+
+`label-item-active-class`  
+CSS class for active label item.
+
+`label-item-inactive-class`  
+CSS class for inactive label item.
+
+### Page
+`page-container-class`  
+CSS class for page container.
+
+`page-item-class`  
+CSS class for page item.
+
+`page-item-active-class`  
+CSS class for active page item.
+
+`page-item-inactive-class`  
+CSS class for inactive page item.
