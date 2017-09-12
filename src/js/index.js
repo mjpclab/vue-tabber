@@ -1,6 +1,9 @@
-import Vue from 'vue';
-import Label from './label';
-import Page from './page';
+let Vue = require('vue');
+if (Vue.default) {
+	Vue = Vue.default;
+}
+const Label = require('./label');
+const Page = require('./page');
 
 const RE_WHITESPACES = /\s+/;
 

@@ -537,7 +537,6 @@ module.exports = __webpack_require__(4);
 
 
 __webpack_require__(5);
-
 __webpack_require__(8);
 
 var VueTabber = __webpack_require__(10);
@@ -736,30 +735,23 @@ exports.push([module.i, ".tab-container .page-container {\n\tborder-color: #ccc;
 "use strict";
 
 
-var _vue = __webpack_require__(0);
-
-var _vue2 = _interopRequireDefault(_vue);
-
-var _label = __webpack_require__(11);
-
-var _label2 = _interopRequireDefault(_label);
-
-var _page = __webpack_require__(12);
-
-var _page2 = _interopRequireDefault(_page);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Vue = __webpack_require__(0);
+if (Vue.default) {
+	Vue = Vue.default;
+}
+var Label = __webpack_require__(11);
+var Page = __webpack_require__(12);
 
 var RE_WHITESPACES = /\s+/;
 
 function isLabel(vnode) {
-	return vnode.componentOptions.Ctor === _label2.default;
+	return vnode.componentOptions.Ctor === Label;
 }
 
 function isPage(vnode) {
-	return vnode.componentOptions.Ctor === _page2.default;
+	return vnode.componentOptions.Ctor === Page;
 }
 
 function getLabelAndPageVnodes(vnodes) {
@@ -806,7 +798,7 @@ function mergeEventHandlers() {
 	return mergedEventHandler;
 }
 
-var VueTabber = _vue2.default.component('VueTabber', {
+var VueTabber = Vue.component('VueTabber', {
 	props: {
 		triggerEvents: { type: [Array, String], default: 'click' },
 		delayTriggerEvents: { type: [Array, String] },
@@ -1056,19 +1048,14 @@ module.exports = VueTabber;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var Vue = __webpack_require__(0);
+if (Vue.default) {
+	Vue = Vue.default;
+}
 
-var _vue = __webpack_require__(0);
+var VueTabberLabel = Vue.component('VueTabberLabel', {});
 
-var _vue2 = _interopRequireDefault(_vue);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var VueTabberLabel = _vue2.default.component('VueTabberLabel', {});
-
-exports.default = VueTabberLabel;
+module.exports = VueTabberLabel;
 
 /***/ }),
 /* 12 */
@@ -1077,19 +1064,14 @@ exports.default = VueTabberLabel;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var Vue = __webpack_require__(0);
+if (Vue.default) {
+	Vue = Vue.default;
+}
 
-var _vue = __webpack_require__(0);
+var VueTabberPage = Vue.component('VueTabberPage', {});
 
-var _vue2 = _interopRequireDefault(_vue);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var VueTabberPage = _vue2.default.component('VueTabberPage', {});
-
-exports.default = VueTabberPage;
+module.exports = VueTabberPage;
 
 /***/ })
 /******/ ]);

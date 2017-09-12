@@ -1,5 +1,8 @@
-import Vue from 'vue';
+let Vue = require('vue');
+if (Vue.default) {
+	Vue = Vue.default;
+}
 
-const VueTabberLabel = Vue.component('VueTabberLabel',{});
+const VueTabberLabel = Vue.component('VueTabberLabel', {});
 
-export default VueTabberLabel;
+module.exports = VueTabberLabel;

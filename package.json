@@ -1,7 +1,7 @@
 {
   "name": "vue-tabber",
   "nameWithCss": "vue-tabber-with-css",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "A Vue.js tab sheet component",
   "main": "index.js",
   "mainWithCss": "with-css.js",

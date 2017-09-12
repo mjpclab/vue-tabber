@@ -1,5 +1,8 @@
-import Vue from 'vue';
+let Vue = require('vue');
+if (Vue.default) {
+	Vue = Vue.default;
+}
 
 const VueTabberPage = Vue.component('VueTabberPage', {});
 
-export default VueTabberPage;
+module.exports = VueTabberPage;

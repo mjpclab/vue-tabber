@@ -1,5 +1,5 @@
-import '../css/layout.css';
-import '../css/skin-gray.css';
+require('../css/layout.css');
+require('../css/skin-gray.css');
 
 const VueTabber = require('./index');
 
