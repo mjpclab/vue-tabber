@@ -130,7 +130,6 @@ function getDefinitions() {
 }
 
 function register(externalVue) {
-	var difinitions = getDefinitions();
 	externalVue.component('VueTabberLabel', labelDefinition);
 	externalVue.component('VueTabberPage', pageDefinition);
 	externalVue.component('VueTabber', tabberDefinition);

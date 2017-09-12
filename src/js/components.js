@@ -11,7 +11,6 @@ function getDefinitions() {
 }
 
 function register(externalVue) {
-	const difinitions = getDefinitions();
 	externalVue.component('VueTabberLabel', labelDefinition);
 	externalVue.component('VueTabberPage', pageDefinition);
 	externalVue.component('VueTabber', tabberDefinition);
