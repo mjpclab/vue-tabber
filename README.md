@@ -81,6 +81,34 @@ new Vue({
 });
 ```
 
+# vue-tabber/components module
+The `vue-tabber/components` module provide methods for special environment usage.
+
+## Register VueTabber components
+For module environment, it is possible to use a specific build of vue, like `vue/dist/vue.runtime.esm`.
+The VueTabber only registers related components to Vue from default `vue` module, which means `vue-tabber` component is not available on that special Vue.
+It is possible to configure the alias for 'vue' to module system, see Vue.js official installation guide.
+Another solution is to register VueTabber components explicitly, like below:
+```javascript
+import Vue from 'vue/dist/vue.esm';
+import * as tabberComponents from 'vue-tabber/components';
+tabberComponents.registerTo(Vue);
+```
+
+## Get Definitions
+Maybe you want to register VueTabber components locally, inside a single component. Use `getDefinitions()` to get component definitions.
+```javascript
+import * as tabberComponents from 'vue-tabber/components';
+const descriptors = tabberComponents.getDefinitions();
+/*
+{
+	VueTabberLabel: {...},
+	VueTabberPage: {...},
+	VueTabber: {...}
+}
+*/
+```
+
 # Including CSS
 By default, "vue-tabber" module do not have any CSS style applied, which means all tab pages are always visible on the page.
 To hide non-active tab pages, just applying CSS by "inactive" class(controlled by property `pageItemInactiveClass`) to hide them.
