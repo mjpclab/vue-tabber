@@ -208,7 +208,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(8);
+var	fixUrls = __webpack_require__(7);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -534,53 +534,24 @@ module.exports = __webpack_require__(4);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
 
-__webpack_require__(6);
 
-__webpack_require__(9);
+__webpack_require__(5);
 
-var VueTabber = __webpack_require__(11);
+__webpack_require__(8);
 
-module.export = VueTabber;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
+var VueTabber = __webpack_require__(10);
+
+module.exports = VueTabber;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if(!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(7);
+var content = __webpack_require__(6);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -605,7 +576,7 @@ if(false) {
 }
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -619,7 +590,7 @@ exports.push([module.i, ".tab-container {\n\tmargin-bottom: 2em;\n}\n\n.tab-cont
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports) {
 
 
@@ -714,13 +685,13 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(10);
+var content = __webpack_require__(9);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -745,7 +716,7 @@ if(false) {
 }
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -759,7 +730,7 @@ exports.push([module.i, ".tab-container .page-container {\n\tborder-color: #ccc;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -769,11 +740,11 @@ var _vue = __webpack_require__(0);
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _label = __webpack_require__(12);
+var _label = __webpack_require__(11);
 
 var _label2 = _interopRequireDefault(_label);
 
-var _page = __webpack_require__(13);
+var _page = __webpack_require__(12);
 
 var _page2 = _interopRequireDefault(_page);
 
@@ -1079,7 +1050,7 @@ var VueTabber = _vue2.default.component('VueTabber', {
 module.exports = VueTabber;
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1100,7 +1071,7 @@ var VueTabberLabel = _vue2.default.component('VueTabberLabel', {});
 exports.default = VueTabberLabel;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
