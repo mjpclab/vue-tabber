@@ -129,7 +129,7 @@ function getDefinitions() {
 	};
 }
 
-function register(externalVue) {
+function registerTo(externalVue) {
 	externalVue.component('VueTabberLabel', labelDefinition);
 	externalVue.component('VueTabberPage', pageDefinition);
 	externalVue.component('VueTabber', tabberDefinition);
@@ -137,7 +137,7 @@ function register(externalVue) {
 
 module.exports = {
 	getDefinitions: getDefinitions,
-	register: register
+	registerTo: registerTo
 };
 
 /***/ }),

@@ -18,5 +18,5 @@ function registerTo(externalVue) {
 
 module.exports = {
 	getDefinitions,
-	register
+	registerTo
 };
