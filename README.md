@@ -83,11 +83,16 @@ new Vue({
 
 # Including CSS
 By default, "vue-tabber" module do not have any CSS style applied, which means all tab pages are always visible on the page.
-To hide non-active tab pages, just applying CSS by "inactive" class(controlled by property `pageItemInactiveClassName`) to hide them.
+To hide non-active tab pages, just applying CSS by "inactive" class(controlled by property `pageItemInactiveClass`) to hide them.
 
 VueTabber provides default CSS styles if you don't want to make it yourself. It also provides default skin.
-To use that, importing module `vue-tabber/with-css` instead of `vue-tabber`.
+
+## Use CSS bundled version
+For module environment, importing module `vue-tabber/with-css` instead of `vue-tabber`.
 For global variable mode, referencing the '-with-css' bundle file.
+
+## Use standalone CSS file
+Copying or referencing source CSS files under `src/css/` directory.
 
 # Properties
 You can specify options by setting properties on `<react-tabber>` element.
