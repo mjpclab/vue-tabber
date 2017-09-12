@@ -18,7 +18,7 @@ A Vue.js Tab sheet component.
 		> ...
 ```
 
-# Usage:
+# Usage: template mode for "full" Vue build
 ## Import VueTabber Module
 *Import in ES6 module environment*  
 ```javascript
@@ -51,12 +51,33 @@ Put tab information in the app or component's template like below:
 	</vue-tabber>
 </div>
 ```
+Both titles and pages can contain plain texts, regular HTML elements or Vue components.
 
 ## Run Application
 Then just start the component:
 ```javascript
 new Vue({
 	el: '#app'
+});
+```
+
+# Usage: implements render() manually for "runtime" Vue build
+Since there is no template compiler in runtime build, we have to implement method `render()` on component manually who uses vue-tabber, including vue-tabber and any other HTML elements or components which should appear inside it.
+
+If you are using Webpack for your project, maybe using `vue-loader` loader is a better solution for writing vue components. It will generate the final render() function for you.
+
+Here is the example for rewriting the template to `render()` function:
+```javascript
+new Vue({
+	el: '#app',
+	render: function (createElement) {
+		return createElement('vue-tabber', [
+			createElement('vue-tabber-label', 'title 1'),
+			createElement('vue-tabber-page', 'content of page 1'),
+			createElement('vue-tabber-label', 'title 2'),
+			createElement('vue-tabber-page', 'content of page 2')
+		]);
+	}
 });
 ```
 
