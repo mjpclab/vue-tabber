@@ -812,6 +812,7 @@ function mergeEventHandlers() {
 }
 
 var definition = {
+	name: 'VueTabber',
 	props: {
 		triggerEvents: { type: [Array, String], default: 'click' },
 		delayTriggerEvents: { type: [Array, String] },
@@ -1078,7 +1079,9 @@ module.exports = VueTabberLabel;
 "use strict";
 
 
-var definition = {};
+var definition = {
+	name: 'VueTabberLabel'
+};
 
 module.exports = definition;
 
@@ -1106,7 +1109,9 @@ module.exports = VueTabberPage;
 "use strict";
 
 
-var definition = {};
+var definition = {
+	name: 'VueTabberPage'
+};
 
 module.exports = definition;
 

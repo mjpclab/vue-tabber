@@ -51,6 +51,7 @@ function mergeEventHandlers(...eventHandlers) {
 }
 
 const definition = {
+	name: 'VueTabber',
 	props: {
 		triggerEvents: {type: [Array, String], default: 'click'},
 		delayTriggerEvents: {type: [Array, String]},

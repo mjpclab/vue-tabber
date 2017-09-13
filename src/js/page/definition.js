@@ -1,3 +1,5 @@
-const definition = {};
+const definition = {
+	name: 'VueTabberPage'
+};
 
 module.exports = definition;
