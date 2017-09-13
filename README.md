@@ -64,9 +64,9 @@ new Vue({
 # Usage: implements render() manually for "runtime" Vue build
 Since there is no template compiler in runtime build, we have to implement method `render()` on component manually who uses vue-tabber, including vue-tabber and any other HTML elements or components which should appear inside it.
 
-If you are using Webpack for your project, maybe using `vue-loader` loader is a better solution for writing vue components. It will generate the final render() function for you.
+If you are using Webpack for your project, maybe using `vue-loader` loader is a better solution for writing vue components. It will generate the final render() function from template for you.
 
-Here is the example for rewriting the template to `render()` function:
+Here is the example for rewriting the template into `render()` function:
 ```javascript
 new Vue({
 	el: '#app',
@@ -123,7 +123,7 @@ For global variable mode, referencing the '-with-css' bundle file.
 Copying or referencing source CSS files under `src/css/` directory.
 
 # Properties
-You can specify options by setting properties on `<react-tabber>` element.
+You can specify options by setting properties on `<vue-tabber>` element.
 
 ## Behavior Properties
 `trigger-events`  
