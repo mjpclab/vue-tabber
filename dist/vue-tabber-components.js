@@ -409,7 +409,7 @@ var definition = {
 		//====================================================================================
 		//start
 		var slotChildren = this.$slots.default;
-		if (!slotChildren.length) {
+		if (!slotChildren || !slotChildren.length) {
 			return;
 		}
 
