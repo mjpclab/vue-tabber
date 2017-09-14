@@ -119,6 +119,9 @@ var Page = __webpack_require__(6);
 
 var RE_WHITESPACES = /\s+/;
 
+var POSITION_TOP = 'top';
+var POSITION_BOTTOM = 'bottom';
+
 function isLabel(vnode) {
 	return vnode.componentOptions.Ctor === Label;
 }
@@ -233,7 +236,7 @@ var definition = {
 		var _this = this;
 
 		//utility
-		var _createLabelItem = function _createLabelItem(childVNodes, index) {
+		var _createLabelItem = function _createLabelItem(childVNodes, key, index) {
 			var _class;
 
 			var doSwitch = function doSwitch() {
@@ -252,34 +255,38 @@ var definition = {
 
 			return createElement('div', {
 				'class': (_class = {}, _defineProperty(_class, _this.labelItemClass, true), _defineProperty(_class, _this.labelItemActiveClass, false), _defineProperty(_class, _this.labelItemInactiveClass, true), _class),
-				on: mergeEventHandlers(getEventHandlers(_this.validTriggerEvents, doSwitch), getEventHandlers(_this.validDelayTriggerEvents, delayDoSwitch), getEventHandlers(_this.validDelayTriggerCancelEvents, cancelDelayDoSwitch))
+				on: mergeEventHandlers(getEventHandlers(_this.validTriggerEvents, doSwitch), getEventHandlers(_this.validDelayTriggerEvents, delayDoSwitch), getEventHandlers(_this.validDelayTriggerCancelEvents, cancelDelayDoSwitch)),
+				key: key
 			}, childVNodes);
 		};
 
-		var _createPageItem = function _createPageItem(childVNodes) {
+		var _createPageItem = function _createPageItem(childVNodes, key) {
 			var _class2;
 
 			return createElement('div', {
-				'class': (_class2 = {}, _defineProperty(_class2, _this.pageItemClass, true), _defineProperty(_class2, _this.pageItemActiveClass, false), _defineProperty(_class2, _this.pageItemInactiveClass, true), _class2)
+				'class': (_class2 = {}, _defineProperty(_class2, _this.pageItemClass, true), _defineProperty(_class2, _this.pageItemActiveClass, false), _defineProperty(_class2, _this.pageItemInactiveClass, true), _class2),
+				key: key
 			}, childVNodes);
 		};
 
 		var createLabelAndPageItems = function createLabelAndPageItems(vnodes) {
 			var labelItems = [];
 			var pageItems = [];
+			var key = undefined;
 
 			var currentLabel = [];
 			var currentPage = [];
 
-			vnodes.forEach(function (vnode) {
+			vnodes.forEach(function (vnode, index) {
 				if (isLabel(vnode)) {
 					if (currentLabel.length) {
-						labelItems.push(_createLabelItem(currentLabel, labelItems.length));
-						pageItems.push(_createPageItem(currentPage, pageItems.length));
+						labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
+						pageItems.push(_createPageItem(currentPage, key));
 					}
 					currentLabel = [];
 					currentLabel.push.apply(currentLabel, vnode.componentOptions.children);
 					currentPage = [];
+					key = vnode.data.key ? 'key-' + vnode.data.key : 'index-' + index;
 				} else /*if(isPage(item))*/{
 						if (!currentLabel.length) {
 							currentLabel.push('');
@@ -289,8 +296,8 @@ var definition = {
 			});
 
 			if (currentLabel.length) {
-				labelItems.push(_createLabelItem(currentLabel, labelItems.length));
-				pageItems.push(_createPageItem(currentPage, pageItems.length));
+				labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
+				pageItems.push(_createPageItem(currentPage, key));
 			}
 
 			return {
@@ -301,30 +308,33 @@ var definition = {
 
 		var createTabContainer = function createTabContainer(items) {
 			return createElement('div', {
-				'class': _defineProperty({}, _this.tabContainerClass, true)
+				'class': _defineProperty({}, _this.tabContainerClass, true),
+				key: 'tab-container'
 			}, items);
 		};
 
-		var _createLabelContainer = function _createLabelContainer(labelItems, positionClass) {
+		var _createLabelContainer = function _createLabelContainer(labelItems, positionClass, position) {
 			var _class4;
 
 			window.labelContainer = createElement('div', {
-				'class': (_class4 = {}, _defineProperty(_class4, _this.labelContainerClass, true), _defineProperty(_class4, positionClass, true), _class4)
+				'class': (_class4 = {}, _defineProperty(_class4, _this.labelContainerClass, true), _defineProperty(_class4, positionClass, true), _class4),
+				key: 'label-container-' + position
 			}, labelItems);
 			return window.labelContainer;
 		};
 
 		var createTopLabelContainer = function createTopLabelContainer(labelItems) {
-			return _createLabelContainer(labelItems, _this.topLabelContainerClass);
+			return _createLabelContainer(labelItems, _this.topLabelContainerClass, POSITION_TOP);
 		};
 
 		var createBottomLabelContainer = function createBottomLabelContainer(labelItems) {
-			return _createLabelContainer(labelItems, _this.bottomLabelContainerClass);
+			return _createLabelContainer(labelItems, _this.bottomLabelContainerClass, POSITION_BOTTOM);
 		};
 
 		var createPageContainer = function createPageContainer(pageItems) {
 			return createElement('div', {
-				'class': _defineProperty({}, _this.pageContainerClass, true)
+				'class': _defineProperty({}, _this.pageContainerClass, true),
+				key: 'page-container'
 			}, pageItems);
 		};
 

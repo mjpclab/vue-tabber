@@ -3,6 +3,9 @@ const Page = require('../page');
 
 const RE_WHITESPACES = /\s+/;
 
+const POSITION_TOP = 'top';
+const POSITION_BOTTOM = 'bottom';
+
 function isLabel(vnode) {
 	return vnode.componentOptions.Ctor === Label;
 }
@@ -109,7 +112,7 @@ const definition = {
 	},
 	render(createElement) {
 		//utility
-		const _createLabelItem = (childVNodes, index) => {
+		const _createLabelItem = (childVNodes, key, index) => {
 			const doSwitch = () => {
 				this.switchTo(index);
 			};
@@ -136,36 +139,40 @@ const definition = {
 					getEventHandlers(this.validTriggerEvents, doSwitch),
 					getEventHandlers(this.validDelayTriggerEvents, delayDoSwitch),
 					getEventHandlers(this.validDelayTriggerCancelEvents, cancelDelayDoSwitch)
-				)
+				),
+				key
 			}, childVNodes);
 		};
 
-		const _createPageItem = (childVNodes) => {
+		const _createPageItem = (childVNodes, key) => {
 			return createElement('div', {
 				'class': {
 					[this.pageItemClass]: true,
 					[this.pageItemActiveClass]: false,
 					[this.pageItemInactiveClass]: true
-				}
+				},
+				key
 			}, childVNodes);
 		};
 
 		const createLabelAndPageItems = (vnodes) => {
 			const labelItems = [];
 			const pageItems = [];
+			let key = undefined;
 
 			let currentLabel = [];
 			let currentPage = [];
 
-			vnodes.forEach(vnode => {
+			vnodes.forEach((vnode, index) => {
 				if (isLabel(vnode)) {
 					if (currentLabel.length) {
-						labelItems.push(_createLabelItem(currentLabel, labelItems.length));
-						pageItems.push(_createPageItem(currentPage, pageItems.length));
+						labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
+						pageItems.push(_createPageItem(currentPage, key));
 					}
 					currentLabel = [];
 					currentLabel.push.apply(currentLabel, vnode.componentOptions.children);
 					currentPage = [];
+					key = vnode.data.key ? 'key-' + vnode.data.key : 'index-' + index;
 				}
 				else /*if(isPage(item))*/ {
 					if (!currentLabel.length) {
@@ -176,8 +183,8 @@ const definition = {
 			});
 
 			if (currentLabel.length) {
-				labelItems.push(_createLabelItem(currentLabel, labelItems.length));
-				pageItems.push(_createPageItem(currentPage, pageItems.length));
+				labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
+				pageItems.push(_createPageItem(currentPage, key));
 			}
 
 			return {
@@ -190,33 +197,36 @@ const definition = {
 			return createElement('div', {
 				'class': {
 					[this.tabContainerClass]: true
-				}
+				},
+				key: 'tab-container'
 			}, items);
 		};
 
-		const _createLabelContainer = (labelItems, positionClass) => {
+		const _createLabelContainer = (labelItems, positionClass, position) => {
 			window.labelContainer = createElement('div', {
 				'class': {
 					[this.labelContainerClass]: true,
 					[positionClass]: true
-				}
+				},
+				key: 'label-container-' + position
 			}, labelItems);
 			return window.labelContainer;
 		};
 
 		const createTopLabelContainer = (labelItems) => {
-			return _createLabelContainer(labelItems, this.topLabelContainerClass);
+			return _createLabelContainer(labelItems, this.topLabelContainerClass, POSITION_TOP);
 		};
 
 		const createBottomLabelContainer = (labelItems) => {
-			return _createLabelContainer(labelItems, this.bottomLabelContainerClass);
+			return _createLabelContainer(labelItems, this.bottomLabelContainerClass, POSITION_BOTTOM);
 		};
 
 		const createPageContainer = (pageItems) => {
 			return createElement('div', {
 				'class': {
 					[this.pageContainerClass]: true
-				}
+				},
+				key: 'page-container'
 			}, pageItems);
 		};
 

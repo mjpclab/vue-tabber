@@ -43,15 +43,17 @@ Put tab information in the app or component's template like below:
 ```html
 <div id="app">
 	<vue-tabber>
-		<vue-tabber-label>title 1</vue-tabber-label>
+		<vue-tabber-label key="optional-key-1">title 1</vue-tabber-label>
 		<vue-tabber-page>content of page 1</vue-tabber-page>
 
-		<vue-tabber-label>title 2</vue-tabber-label>
+		<vue-tabber-label key="optional-key-2">title 2</vue-tabber-label>
 		<vue-tabber-page>content of page 2</vue-tabber-page>
 	</vue-tabber>
 </div>
 ```
-Both titles and pages can contain plain texts, regular HTML elements or Vue components.
+Both labels and pages can contain plain texts, regular HTML elements or Vue components.
+
+Label items can have an optional key attribute, which can reduce DOM changes when items are dynamically changed.
 
 ## Run Application
 Then just start the component:
