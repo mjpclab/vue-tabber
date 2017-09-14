@@ -74,9 +74,9 @@ new Vue({
 	el: '#app',
 	render: function (createElement) {
 		return createElement('vue-tabber', [
-			createElement('vue-tabber-label', 'title 1'),
+			createElement('vue-tabber-label', {key: 'optional-key-1'}, 'title 1'),
 			createElement('vue-tabber-page', 'content of page 1'),
-			createElement('vue-tabber-label', 'title 2'),
+			createElement('vue-tabber-label', {key: 'optional-key-2'}, 'title 2'),
 			createElement('vue-tabber-page', 'content of page 2')
 		]);
 	}
@@ -143,7 +143,30 @@ Specify events on label-item that will cancel delay switching.
 Specify how long (milliseconds) need to wait before trigger the delayed switching events.
 
 `active-index`  
-The default initial active index of the tab. Will be ignored if it can get value from `statusFieldSelector` or `statusHashTemplate`.
+The initial active index of the tab.
+There are two ways to get informed of current index changed. Subscribing event `switch` or prop update of `activeIndex` 
+
+`switch(oldIndex, newIndex)`  
+A `switch` event will be emitted with parameters `oldIndex` and `newIndex` when switched to another page item.
+
+`update:activeIndex(newIndex)`  
+An `update:activeIndex` event will be emitted with parameter `newIndex` when switched to another page item.
+This is convenient for prop binding with `.sync` modifier:
+```html
+<div id="app">
+	<vue-tabber :active-index.sync="index">
+		<!-- ... -->
+	</vue-tabber>
+</div>
+```
+```javascript
+new Vue({
+	el: '#app',
+	data: {
+		index: 0
+	}
+});
+```
 
 ## UI Properties
 ### Tab
@@ -156,10 +179,10 @@ CSS class for tab container.
 CSS class for label container.
 
 `show-top-label-container`  
-Show label-container on top of the tab.
+A boolean value to determine if showing label-container on top of the tab.
 
 `show-bottom-label-container`  
-Show label-container on bottom of the tab.
+A boolean value to determine if showing label-container on bottom of the tab.
 
 `top-label-container-class`  
 CSS class for top label container.
