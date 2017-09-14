@@ -198,11 +198,12 @@ var definition = {
 	},
 	data: function data() {
 		return {
-			currentIndex: -1,
 			count: 0,
-			validTriggerEvents: [],
-			validDelayTriggerEvents: [],
-			validDelayTriggerCancelEvents: [],
+			targetIndex: this.getValidIndex(this.activeIndex),
+			currentIndex: -1,
+			validTriggerEvents: getValidEvents(this.triggerEvents),
+			validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
+			validDelayTriggerCancelEvents: getValidEvents(this.delayTriggerCancelEvents),
 			delayTimeout: undefined
 		};
 	},
@@ -213,38 +214,16 @@ var definition = {
 		}
 	},
 	methods: {
-		switchTo: function switchTo(index) {
+		getValidIndex: function getValidIndex(index) {
 			if (!isFinite(index) || isNaN(index)) {
-				return;
+				return -1;
 			}
 
-			var oldIndex = this.currentIndex;
-			var newIndex = void 0;
-			if (index < 0) {
-				newIndex = 0;
-			} else if (index >= this.count) {
-				newIndex = this.count - 1;
-			} else {
-				newIndex = parseInt(index);
-			}
-
-			if (oldIndex === newIndex) {
-				return;
-			}
-
-			this.currentIndex = newIndex;
-			this.$emit('switch', oldIndex, newIndex);
-			this.$emit('update:activeIndex', newIndex);
-		}
-	},
-	created: function created() {
-		this.validTriggerEvents = getValidEvents(this.triggerEvents);
-		this.validDelayTriggerEvents = getValidEvents(this.delayTriggerEvents);
-		this.validDelayTriggerCancelEvents = getValidEvents(this.delayTriggerCancelEvents);
-	},
-	mounted: function mounted() {
-		if (this.count) {
-			this.switchTo(this.activeIndex);
+			var intIndex = parseInt(index);
+			return intIndex < 0 ? 0 : index;
+		},
+		switchTo: function switchTo(index) {
+			this.targetIndex = this.getValidIndex(index);
 		}
 	},
 	beforeUnmount: function beforeUnmount() {
@@ -271,19 +250,17 @@ var definition = {
 				}
 			};
 
-			var isActive = index === _this.currentIndex;
 			return createElement('div', {
-				'class': (_class = {}, _defineProperty(_class, _this.labelItemClass, true), _defineProperty(_class, _this.labelItemActiveClass, isActive), _defineProperty(_class, _this.labelItemInactiveClass, !isActive), _class),
+				'class': (_class = {}, _defineProperty(_class, _this.labelItemClass, true), _defineProperty(_class, _this.labelItemActiveClass, false), _defineProperty(_class, _this.labelItemInactiveClass, true), _class),
 				on: mergeEventHandlers(getEventHandlers(_this.validTriggerEvents, doSwitch), getEventHandlers(_this.validDelayTriggerEvents, delayDoSwitch), getEventHandlers(_this.validDelayTriggerCancelEvents, cancelDelayDoSwitch))
 			}, childVNodes);
 		};
 
-		var _createPageItem = function _createPageItem(childVNodes, index) {
+		var _createPageItem = function _createPageItem(childVNodes) {
 			var _class2;
 
-			var isActive = index === _this.currentIndex;
 			return createElement('div', {
-				'class': (_class2 = {}, _defineProperty(_class2, _this.pageItemClass, true), _defineProperty(_class2, _this.pageItemActiveClass, isActive), _defineProperty(_class2, _this.pageItemInactiveClass, !isActive), _class2)
+				'class': (_class2 = {}, _defineProperty(_class2, _this.pageItemClass, true), _defineProperty(_class2, _this.pageItemActiveClass, false), _defineProperty(_class2, _this.pageItemInactiveClass, true), _class2)
 			}, childVNodes);
 		};
 
@@ -386,6 +363,19 @@ var definition = {
 		    pageItems = _createLabelAndPageIt.pageItems;
 
 		this.count = labelItems.length;
+		var oldIndex = this.currentIndex;
+		var newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
+		this.currentIndex = newIndex;
+		if (oldIndex !== newIndex) {
+			this.$emit('switch', oldIndex, newIndex);
+			this.$emit('update:activeIndex', newIndex);
+		}
+
+		labelItems[newIndex].data['class'][this.labelItemActiveClass] = true;
+		labelItems[newIndex].data['class'][this.labelItemInactiveClass] = false;
+
+		pageItems[newIndex].data['class'][this.pageItemActiveClass] = true;
+		pageItems[newIndex].data['class'][this.pageItemInactiveClass] = false;
 
 		var topLabelItems = void 0;
 		var bottomLabelItems = void 0;

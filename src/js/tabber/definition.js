@@ -77,11 +77,12 @@ const definition = {
 	},
 	data() {
 		return {
-			currentIndex: -1,
 			count: 0,
-			validTriggerEvents: [],
-			validDelayTriggerEvents: [],
-			validDelayTriggerCancelEvents: [],
+			targetIndex: this.getValidIndex(this.activeIndex),
+			currentIndex: -1,
+			validTriggerEvents: getValidEvents(this.triggerEvents),
+			validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
+			validDelayTriggerCancelEvents: getValidEvents(this.delayTriggerCancelEvents),
 			delayTimeout: undefined
 		};
 	},
@@ -91,40 +92,16 @@ const definition = {
 		}
 	},
 	methods: {
-		switchTo(index) {
+		getValidIndex(index) {
 			if (!isFinite(index) || isNaN(index)) {
-				return;
+				return -1;
 			}
 
-			const oldIndex = this.currentIndex;
-			let newIndex;
-			if (index < 0) {
-				newIndex = 0;
-			}
-			else if (index >= this.count) {
-				newIndex = this.count - 1;
-			}
-			else {
-				newIndex = parseInt(index);
-			}
-
-			if (oldIndex === newIndex) {
-				return;
-			}
-
-			this.currentIndex = newIndex;
-			this.$emit('switch', oldIndex, newIndex);
-			this.$emit('update:activeIndex', newIndex);
-		}
-	},
-	created() {
-		this.validTriggerEvents = getValidEvents(this.triggerEvents);
-		this.validDelayTriggerEvents = getValidEvents(this.delayTriggerEvents);
-		this.validDelayTriggerCancelEvents = getValidEvents(this.delayTriggerCancelEvents);
-	},
-	mounted() {
-		if (this.count) {
-			this.switchTo(this.activeIndex);
+			const intIndex = parseInt(index);
+			return intIndex < 0 ? 0 : index;
+		},
+		switchTo(index) {
+			this.targetIndex = this.getValidIndex(index);
 		}
 	},
 	beforeUnmount() {
@@ -149,12 +126,11 @@ const definition = {
 				}
 			};
 
-			const isActive = index === this.currentIndex;
 			return createElement('div', {
 				'class': {
 					[this.labelItemClass]: true,
-					[this.labelItemActiveClass]: isActive,
-					[this.labelItemInactiveClass]: !isActive
+					[this.labelItemActiveClass]: false,
+					[this.labelItemInactiveClass]: true
 				},
 				on: mergeEventHandlers(
 					getEventHandlers(this.validTriggerEvents, doSwitch),
@@ -164,13 +140,12 @@ const definition = {
 			}, childVNodes);
 		};
 
-		const _createPageItem = (childVNodes, index) => {
-			const isActive = index === this.currentIndex;
+		const _createPageItem = (childVNodes) => {
 			return createElement('div', {
 				'class': {
 					[this.pageItemClass]: true,
-					[this.pageItemActiveClass]: isActive,
-					[this.pageItemInactiveClass]: !isActive
+					[this.pageItemActiveClass]: false,
+					[this.pageItemInactiveClass]: true
 				}
 			}, childVNodes);
 		};
@@ -277,7 +252,21 @@ const definition = {
 
 		//collect labels/pages
 		const {labelItems, pageItems} = createLabelAndPageItems(allItems);
+
 		this.count = labelItems.length;
+		const oldIndex = this.currentIndex;
+		const newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
+		this.currentIndex = newIndex;
+		if (oldIndex !== newIndex) {
+			this.$emit('switch', oldIndex, newIndex);
+			this.$emit('update:activeIndex', newIndex);
+		}
+
+		labelItems[newIndex].data['class'][this.labelItemActiveClass] = true;
+		labelItems[newIndex].data['class'][this.labelItemInactiveClass] = false;
+
+		pageItems[newIndex].data['class'][this.pageItemActiveClass] = true;
+		pageItems[newIndex].data['class'][this.pageItemInactiveClass] = false;
 
 		let topLabelItems;
 		let bottomLabelItems;
