@@ -140,7 +140,7 @@ Quite useful if you want to keep hover a little time before switching.
 Specify events on label-item that will cancel delay switching.
 
 `delay-trigger-latency`  
-Specify how long (milliseconds) need to wait before trigger the delayed switching events.
+Specify how long (in milliseconds) need to wait before trigger the delayed switching events.
 
 `active-index`  
 The initial active index of the tab.

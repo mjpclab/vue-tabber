@@ -44,8 +44,8 @@ function getEventHandlers(events, handler) {
 
 function mergeEventHandlers(...eventHandlers) {
 	const mergedEventHandler = {};
-	eventHandlers.forEach(eventHandler => {
-		Object.keys(eventHandler).forEach(event => {
+	eventHandlers && eventHandlers.forEach(eventHandler => {
+		eventHandler && Object.keys(eventHandler).forEach(event => {
 			const handler = eventHandler[event];
 			mergedEventHandler[event] = handler;
 		})
@@ -129,17 +129,21 @@ const definition = {
 				}
 			};
 
+			const triggerEventHandlers = getEventHandlers(this.validTriggerEvents, doSwitch);
+			let delayTriggerEventHandlers;
+			let delayTriggerCancelEventHandlers;
+			if (this.validDelayTriggerEvents && this.validDelayTriggerEvents.length) {
+				delayTriggerEventHandlers = getEventHandlers(this.validDelayTriggerEvents, delayDoSwitch);
+				delayTriggerCancelEventHandlers = getEventHandlers(this.validDelayTriggerCancelEvents, cancelDelayDoSwitch);
+			}
+
 			return createElement('div', {
 				'class': {
 					[this.labelItemClass]: true,
 					[this.labelItemActiveClass]: false,
 					[this.labelItemInactiveClass]: true
 				},
-				on: mergeEventHandlers(
-					getEventHandlers(this.validTriggerEvents, doSwitch),
-					getEventHandlers(this.validDelayTriggerEvents, delayDoSwitch),
-					getEventHandlers(this.validDelayTriggerCancelEvents, cancelDelayDoSwitch)
-				),
+				on: mergeEventHandlers(delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers),
 				key
 			}, childVNodes);
 		};

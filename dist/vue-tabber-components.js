@@ -204,8 +204,8 @@ function mergeEventHandlers() {
 		eventHandlers[_key] = arguments[_key];
 	}
 
-	eventHandlers.forEach(function (eventHandler) {
-		Object.keys(eventHandler).forEach(function (event) {
+	eventHandlers && eventHandlers.forEach(function (eventHandler) {
+		eventHandler && Object.keys(eventHandler).forEach(function (event) {
 			var handler = eventHandler[event];
 			mergedEventHandler[event] = handler;
 		});
@@ -292,9 +292,17 @@ var definition = {
 				}
 			};
 
+			var triggerEventHandlers = getEventHandlers(_this.validTriggerEvents, doSwitch);
+			var delayTriggerEventHandlers = void 0;
+			var delayTriggerCancelEventHandlers = void 0;
+			if (_this.validDelayTriggerEvents && _this.validDelayTriggerEvents.length) {
+				delayTriggerEventHandlers = getEventHandlers(_this.validDelayTriggerEvents, delayDoSwitch);
+				delayTriggerCancelEventHandlers = getEventHandlers(_this.validDelayTriggerCancelEvents, cancelDelayDoSwitch);
+			}
+
 			return createElement('div', {
 				'class': (_class = {}, _defineProperty(_class, _this.labelItemClass, true), _defineProperty(_class, _this.labelItemActiveClass, false), _defineProperty(_class, _this.labelItemInactiveClass, true), _class),
-				on: mergeEventHandlers(getEventHandlers(_this.validTriggerEvents, doSwitch), getEventHandlers(_this.validDelayTriggerEvents, delayDoSwitch), getEventHandlers(_this.validDelayTriggerCancelEvents, cancelDelayDoSwitch)),
+				on: mergeEventHandlers(delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers),
 				key: key
 			}, childVNodes);
 		};
