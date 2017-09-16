@@ -280,6 +280,7 @@ var definition = {
 			var _class;
 
 			var doSwitch = function doSwitch() {
+				clearTimeout(_this.delayTimeout);
 				_this.switchTo(index);
 			};
 			var localDelayTimeout = void 0;

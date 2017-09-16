@@ -115,6 +115,7 @@ const definition = {
 		//utility
 		const _createLabelItem = (childVNodes, key, index) => {
 			const doSwitch = () => {
+				clearTimeout(this.delayTimeout);
 				this.switchTo(index);
 			};
 			let localDelayTimeout;
