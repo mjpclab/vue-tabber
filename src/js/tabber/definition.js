@@ -23,6 +23,15 @@ function getLabelAndPageVnodes(vnodes) {
 	});
 }
 
+function getValidIndex(index) {
+	if (index === '' || !isFinite(index) || isNaN(index)) {
+		return -1;
+	}
+
+	const intIndex = parseInt(index);
+	return intIndex < 0 ? 0 : index;
+}
+
 function getValidEvents(eventList) {
 	if (eventList) {
 		const validEvents = [];
@@ -81,7 +90,7 @@ const definition = {
 	data() {
 		return {
 			count: 0,
-			targetIndex: this.getValidIndex(this.activeIndex),
+			targetIndex: getValidIndex(this.activeIndex),
 			currentIndex: -1,
 			validTriggerEvents: getValidEvents(this.triggerEvents),
 			validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
@@ -95,16 +104,8 @@ const definition = {
 		}
 	},
 	methods: {
-		getValidIndex(index) {
-			if (!isFinite(index) || isNaN(index)) {
-				return -1;
-			}
-
-			const intIndex = parseInt(index);
-			return intIndex < 0 ? 0 : index;
-		},
 		switchTo(index) {
-			this.targetIndex = this.getValidIndex(index);
+			this.targetIndex = getValidIndex(index);
 		}
 	},
 	beforeUnmount() {

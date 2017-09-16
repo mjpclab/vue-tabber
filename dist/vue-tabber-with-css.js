@@ -779,6 +779,15 @@ function getLabelAndPageVnodes(vnodes) {
 	});
 }
 
+function getValidIndex(index) {
+	if (index === '' || !isFinite(index) || isNaN(index)) {
+		return -1;
+	}
+
+	var intIndex = parseInt(index);
+	return intIndex < 0 ? 0 : index;
+}
+
 function getValidEvents(eventList) {
 	if (eventList) {
 		var validEvents = [];
@@ -842,7 +851,7 @@ var definition = {
 	data: function data() {
 		return {
 			count: 0,
-			targetIndex: this.getValidIndex(this.activeIndex),
+			targetIndex: getValidIndex(this.activeIndex),
 			currentIndex: -1,
 			validTriggerEvents: getValidEvents(this.triggerEvents),
 			validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
@@ -857,16 +866,8 @@ var definition = {
 		}
 	},
 	methods: {
-		getValidIndex: function getValidIndex(index) {
-			if (!isFinite(index) || isNaN(index)) {
-				return -1;
-			}
-
-			var intIndex = parseInt(index);
-			return intIndex < 0 ? 0 : index;
-		},
 		switchTo: function switchTo(index) {
-			this.targetIndex = this.getValidIndex(index);
+			this.targetIndex = getValidIndex(index);
 		}
 	},
 	beforeUnmount: function beforeUnmount() {
