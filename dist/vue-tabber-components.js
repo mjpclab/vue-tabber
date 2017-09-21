@@ -125,13 +125,11 @@ var labelDefinition = __webpack_require__(0);
 var pageDefinition = __webpack_require__(1);
 var tabberDefinition = __webpack_require__(5);
 
-function getDefinitions() {
-	return {
-		VueTabberLabel: labelDefinition,
-		VueTabberPage: pageDefinition,
-		VueTabber: tabberDefinition
-	};
-}
+var definitions = {
+	VueTabberLabel: labelDefinition,
+	VueTabberPage: pageDefinition,
+	VueTabber: tabberDefinition
+};
 
 function registerTo(externalVue) {
 	externalVue.component('VueTabberLabel', labelDefinition);
@@ -140,7 +138,10 @@ function registerTo(externalVue) {
 }
 
 module.exports = {
-	getDefinitions: getDefinitions,
+	definitions: definitions,
+	VueTabberLabel: labelDefinition,
+	VueTabberPage: pageDefinition,
+	VueTabber: tabberDefinition,
 	registerTo: registerTo
 };
 

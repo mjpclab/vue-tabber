@@ -2,13 +2,11 @@ const labelDefinition = require('./label/definition');
 const pageDefinition = require('./page/definition');
 const tabberDefinition = require('./tabber/definition');
 
-function getDefinitions() {
-	return {
-		VueTabberLabel: labelDefinition,
-		VueTabberPage: pageDefinition,
-		VueTabber: tabberDefinition
-	};
-}
+const definitions = {
+	VueTabberLabel: labelDefinition,
+	VueTabberPage: pageDefinition,
+	VueTabber: tabberDefinition
+};
 
 function registerTo(externalVue) {
 	externalVue.component('VueTabberLabel', labelDefinition);
@@ -17,6 +15,9 @@ function registerTo(externalVue) {
 }
 
 module.exports = {
-	getDefinitions,
+	definitions,
+	VueTabberLabel: labelDefinition,
+	VueTabberPage: pageDefinition,
+	VueTabber: tabberDefinition,
 	registerTo
 };

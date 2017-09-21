@@ -98,10 +98,10 @@ tabberComponents.registerTo(Vue);
 ```
 
 ## Get Definitions
-Maybe you want to register VueTabber components locally, inside a single component. Use `getDefinitions()` to get component definitions.
+Maybe you want to register VueTabber components locally, inside a single component. Use `definitions` to get component definitions.
 ```javascript
 import * as tabberComponents from 'vue-tabber/components';
-const descriptors = tabberComponents.getDefinitions();
+const descriptors = tabberComponents.definitions;
 /*
 {
 	VueTabberLabel: {...},
@@ -109,6 +109,25 @@ const descriptors = tabberComponents.getDefinitions();
 	VueTabber: {...}
 }
 */
+
+new Vue({
+	components: descriptors
+});
+```
+
+To combine with other local components, get each definition explicitly:
+```javascript
+import * as tabberComponents from 'vue-tabber/components';
+const {VueTabberLabel, VueTabberPage, VueTabber} = tabberComponents;
+
+new Vue({
+	components: {
+		VueTabberLabel,
+		VueTabberPage,
+		VueTabber,
+		//otherComponents...
+	}
+});
 ```
 
 # Including CSS
