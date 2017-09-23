@@ -199,12 +199,12 @@ new Vue({
 ## UI Properties
 ### Tab
 `tab-container-class`  
-CSS class for tab container.
+CSS class for tab container. Default value is 'tab-container'.
 
 ### Label
 
 `label-container-class`  
-CSS class for label container.
+CSS class for label container. Default value is 'label-container'.
 
 `show-header-label-container`  
 If show label container before tab page. Default value is true.
@@ -213,29 +213,29 @@ If show label container before tab page. Default value is true.
 If show label container after tab page. Default value is false.
 
 `header-label-container-class`  
-Header label container CSS class.
+Header label container CSS class. Default value is 'header-container'.
 
 `footer-label-container-class`  
-Footer label container CSS class.
+Footer label container CSS class. Default value is 'footer-container'.
 
 `label-item-class`  
-CSS class for bottom label item.
+CSS class for bottom label item. Default value is 'label-item'.
 
 `label-item-active-class`  
-CSS class for active label item.
+CSS class for active label item. Default value is 'label-active'.
 
 `label-item-inactive-class`  
-CSS class for inactive label item.
+CSS class for inactive label item. Default value is 'label-inactive'.
 
 ### Page
 `page-container-class`  
-CSS class for page container.
+CSS class for page container. Default value is 'page-container'.
 
 `page-item-class`  
-CSS class for page item.
+CSS class for page item. Default value is 'page-item'.
 
 `page-item-active-class`  
-CSS class for active page item.
+CSS class for active page item. Default value is 'page-active'.
 
 `page-item-inactive-class`  
-CSS class for inactive page item.
+CSS class for inactive page item. Default value is 'page-inactive'.
