@@ -583,7 +583,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".tab-container {\n\tmargin-bottom: 2em;\n}\n\n.tab-container .label-container {\n\tposition: relative;\n}\n\n.tab-container .label-container.top {\n\tbottom: -1px;\n}\n\n.tab-container .label-container.bottom {\n\ttop: -1px;\n}\n\n.tab-container .label-container .label-item {\n\tdisplay: inline-block;\n\tmargin-right: 1em;\n\tborder: 1px solid;\n\n\tpadding: 0.5em 1em;\n\tcursor: pointer;\n}\n\n.tab-container .label-container.top .label-item {\n\tvertical-align: bottom;\n}\n\n.tab-container .label-container.bottom .label-item {\n\tvertical-align: top;\n}\n\n.tab-container .page-container {\n\tborder: 1px solid;\n}\n\n.tab-container .page-inactive {\n\tdisplay: none;\n}", ""]);
+exports.push([module.i, "/* container */\n.tab-container,\n.tab-container-vert {\n\tmargin-bottom: 2em;\n}\n\n.tab-container-vert {\n\tdisplay: -webkit-flex;\n\tdisplay: flex;\n\t-webkit-flex-flow: row nowrap;\n\tflex-flow: row nowrap;\n}\n\n/* label container */\n.tab-container .label-container,\n.tab-container-vert .label-container {\n\tposition: relative;\n}\n\n.tab-container .label-container.header-container {\n\tbottom: -1px;\n}\n\n.tab-container .label-container.footer-container {\n\ttop: -1px;\n}\n\n.tab-container-vert .label-container {\n\t-webkit-flex: 0 0 auto;\n\tflex: 0 0 auto;\n}\n\n.tab-container-vert .label-container.header-container {\n\tmargin-right: -1px;\n}\n\n.tab-container-vert .label-container.footer-container {\n\tmargin-left: -1px;\n}\n\n/* label item */\n.tab-container .label-container .label-item,\n.tab-container-vert .label-container .label-item {\n\tpadding: 0.5em 1em;\n\tcursor: pointer;\n\tborder: 1px solid;\n}\n\n.tab-container .label-container .label-item {\n\tdisplay: inline-block;\n\tmargin-right: 1em;\n}\n\n.tab-container .label-container.header-container .label-item {\n\tvertical-align: bottom;\n}\n\n.tab-container .label-container.footer-container .label-item {\n\tvertical-align: top;\n}\n\n.tab-container-vert .label-container .label-item {\n\tdisplay: block;\n\tmargin-bottom: 0.3em;\n}\n\n/* page container */\n.tab-container .page-container,\n.tab-container-vert .page-container {\n\tborder: 1px solid;\n}\n\n.tab-container-vert .page-container {\n\t-webkit-flex: 1 1 auto;\n\tflex: 1 1 auto;\n}\n\n.tab-container-vert .page-inactive,\n.tab-container .page-inactive {\n\tdisplay: none;\n}", ""]);
 
 // exports
 
@@ -723,7 +723,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".tab-container .page-container {\n\tborder-color: #ccc;\n\tpadding: 1em;\n\tbackground: #fff;\n}\n\n.tab-container .label-container .label-item {\n\tborder-color: #ccc;\n\tbackground: #fff;\n}\n\n.tab-container .label-container .label-active {\n\tcolor: #000;\n}\n\n.tab-container .label-container.top .label-active {\n\tborder-bottom-color: #fff;\n}\n\n.tab-container .label-container.bottom .label-active {\n\tborder-top-color: #fff;\n}\n\n.tab-container .label-container .label-inactive {\n\tcolor:#aaa;\n}", ""]);
+exports.push([module.i, ".tab-container .page-container,\n.tab-container-vert .page-container {\n\tborder-color: #ccc;\n\tpadding: 1em;\n\tbackground: #fff;\n}\n\n.tab-container .label-container .label-item,\n.tab-container-vert .label-container .label-item {\n\tborder-color: #ccc;\n\tbackground: #fff;\n}\n\n.tab-container .label-container .label-inactive {\n\tcolor: #aaa;\n}\n\n.tab-container .label-container .label-active {\n\tcolor: #000;\n}\n\n.tab-container .label-container.header-container .label-active {\n\tborder-bottom-color: #fff;\n}\n\n.tab-container .label-container.footer-container .label-active {\n\tborder-top-color: #fff;\n}\n\n.tab-container-vert .label-container.header-container .label-active {\n\tborder-right-color: #fff;\n}\n\n.tab-container-vert .label-container.footer-container .label-active {\n\tborder-left-color: #fff;\n}\n", ""]);
 
 // exports
 
@@ -835,10 +835,10 @@ var definition = {
 		tabContainerClass: { type: String, default: 'tab-container' },
 
 		labelContainerClass: { type: String, default: 'label-container' },
-		showTopLabelContainer: { type: Boolean, default: true },
-		showBottomLabelContainer: { type: Boolean, default: false },
-		topLabelContainerClass: { type: String, default: 'top' },
-		bottomLabelContainerClass: { type: String, default: 'bottom' },
+		showHeaderLabelContainer: { type: Boolean, default: true },
+		showFooterLabelContainer: { type: Boolean, default: false },
+		headerLabelContainerClass: { type: String, default: 'header-container' },
+		footerLabelContainerClass: { type: String, default: 'footer-container' },
 		labelItemClass: { type: String, default: 'label-item' },
 		labelItemActiveClass: { type: String, default: 'label-active' },
 		labelItemInactiveClass: { type: String, default: 'label-inactive' },
@@ -973,12 +973,12 @@ var definition = {
 			return window.labelContainer;
 		};
 
-		var createTopLabelContainer = function createTopLabelContainer(labelItems) {
-			return _createLabelContainer(labelItems, _this.topLabelContainerClass, POSITION_TOP);
+		var createHeaderLabelContainer = function createHeaderLabelContainer(labelItems) {
+			return _createLabelContainer(labelItems, _this.headerLabelContainerClass, POSITION_TOP);
 		};
 
-		var createBottomLabelContainer = function createBottomLabelContainer(labelItems) {
-			return _createLabelContainer(labelItems, _this.bottomLabelContainerClass, POSITION_BOTTOM);
+		var createFooterLabelContainer = function createFooterLabelContainer(labelItems) {
+			return _createLabelContainer(labelItems, _this.footerLabelContainerClass, POSITION_BOTTOM);
 		};
 
 		var createPageContainer = function createPageContainer(pageItems) {
@@ -1037,26 +1037,26 @@ var definition = {
 		pageItems[newIndex].data['class'][this.pageItemActiveClass] = true;
 		pageItems[newIndex].data['class'][this.pageItemInactiveClass] = false;
 
-		var topLabelItems = void 0;
-		var bottomLabelItems = void 0;
-		if (this.showTopLabelContainer && this.showBottomLabelContainer) {
-			topLabelItems = labelItems;
-			bottomLabelItems = cloneVNodes(labelItems);
+		var headerLabelItems = void 0;
+		var footerLabelItems = void 0;
+		if (this.showHeaderLabelContainer && this.showFooterLabelContainer) {
+			headerLabelItems = labelItems;
+			footerLabelItems = cloneVNodes(labelItems);
 		} else {
-			topLabelItems = bottomLabelItems = labelItems;
+			headerLabelItems = footerLabelItems = labelItems;
 		}
 
 		// top label container
-		var topLabelContainer = this.showTopLabelContainer && createTopLabelContainer(topLabelItems);
+		var headerLabelContainer = this.showHeaderLabelContainer && createHeaderLabelContainer(headerLabelItems);
 
 		//page container
 		var pageContainer = createPageContainer(pageItems);
 
 		// bottom label container
-		var bottomLabelContainer = this.showBottomLabelContainer && createBottomLabelContainer(bottomLabelItems);
+		var footerLabelContainer = this.showFooterLabelContainer && createFooterLabelContainer(footerLabelItems);
 
 		//tabb container
-		var tabContaienr = createTabContainer([topLabelContainer, pageContainer, bottomLabelContainer]);
+		var tabContaienr = createTabContainer([headerLabelContainer, pageContainer, footerLabelContainer]);
 
 		//return
 		return tabContaienr;

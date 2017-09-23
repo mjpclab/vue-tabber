@@ -143,6 +143,15 @@ For global variable mode, referencing the '-with-css' bundle file.
 ## Use standalone CSS file
 Copying or referencing source CSS files under `src/css/` directory.
 
+## Vertical labels
+To use vertical labels style from default CSS, set `tab-container-class` to 'tab-container-vert'.
+Notice that this style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.
+```html
+<vue-tabber tab-container-class="tab-container-vert">
+	......
+</vue-tabber>
+```
+
 # Properties
 You can specify options by setting properties on `<vue-tabber>` element.
 
@@ -197,17 +206,17 @@ CSS class for tab container.
 `label-container-class`  
 CSS class for label container.
 
-`show-top-label-container`  
-A boolean value to determine if showing label-container on top of the tab.
+`show-header-label-container`  
+If show label container before tab page. Default value is true.
 
-`show-bottom-label-container`  
-A boolean value to determine if showing label-container on bottom of the tab.
+`show-footer-label-container`  
+If show label container after tab page. Default value is false.
 
-`top-label-container-class`  
-CSS class for top label container.
+`header-label-container-class`  
+Header label container CSS class.
 
-`bottom-label-container-class`  
-CSS class for bottom label container.
+`footer-label-container-class`  
+Footer label container CSS class.
 
 `label-item-class`  
 CSS class for bottom label item.

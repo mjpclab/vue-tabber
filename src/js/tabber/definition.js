@@ -74,10 +74,10 @@ const definition = {
 		tabContainerClass: {type: String, default: 'tab-container'},
 
 		labelContainerClass: {type: String, default: 'label-container'},
-		showTopLabelContainer: {type: Boolean, default: true},
-		showBottomLabelContainer: {type: Boolean, default: false},
-		topLabelContainerClass: {type: String, default: 'top'},
-		bottomLabelContainerClass: {type: String, default: 'bottom'},
+		showHeaderLabelContainer: {type: Boolean, default: true},
+		showFooterLabelContainer: {type: Boolean, default: false},
+		headerLabelContainerClass: {type: String, default: 'header-container'},
+		footerLabelContainerClass: {type: String, default: 'footer-container'},
 		labelItemClass: {type: String, default: 'label-item'},
 		labelItemActiveClass: {type: String, default: 'label-active'},
 		labelItemInactiveClass: {type: String, default: 'label-inactive'},
@@ -219,12 +219,12 @@ const definition = {
 			return window.labelContainer;
 		};
 
-		const createTopLabelContainer = (labelItems) => {
-			return _createLabelContainer(labelItems, this.topLabelContainerClass, POSITION_TOP);
+		const createHeaderLabelContainer = (labelItems) => {
+			return _createLabelContainer(labelItems, this.headerLabelContainerClass, POSITION_TOP);
 		};
 
-		const createBottomLabelContainer = (labelItems) => {
-			return _createLabelContainer(labelItems, this.bottomLabelContainerClass, POSITION_BOTTOM);
+		const createFooterLabelContainer = (labelItems) => {
+			return _createLabelContainer(labelItems, this.footerLabelContainerClass, POSITION_BOTTOM);
 		};
 
 		const createPageContainer = (pageItems) => {
@@ -284,27 +284,27 @@ const definition = {
 		pageItems[newIndex].data['class'][this.pageItemActiveClass] = true;
 		pageItems[newIndex].data['class'][this.pageItemInactiveClass] = false;
 
-		let topLabelItems;
-		let bottomLabelItems;
-		if (this.showTopLabelContainer && this.showBottomLabelContainer) {
-			topLabelItems = labelItems;
-			bottomLabelItems = cloneVNodes(labelItems);
+		let headerLabelItems;
+		let footerLabelItems;
+		if (this.showHeaderLabelContainer && this.showFooterLabelContainer) {
+			headerLabelItems = labelItems;
+			footerLabelItems = cloneVNodes(labelItems);
 		}
 		else {
-			topLabelItems = bottomLabelItems = labelItems;
+			headerLabelItems = footerLabelItems = labelItems;
 		}
 
 		// top label container
-		const topLabelContainer = this.showTopLabelContainer && createTopLabelContainer(topLabelItems);
+		const headerLabelContainer = this.showHeaderLabelContainer && createHeaderLabelContainer(headerLabelItems);
 
 		//page container
 		const pageContainer = createPageContainer(pageItems);
 
 		// bottom label container
-		const bottomLabelContainer = this.showBottomLabelContainer && createBottomLabelContainer(bottomLabelItems);
+		const footerLabelContainer = this.showFooterLabelContainer && createFooterLabelContainer(footerLabelItems);
 
 		//tabb container
-		const tabContaienr = createTabContainer([topLabelContainer, pageContainer, bottomLabelContainer]);
+		const tabContaienr = createTabContainer([headerLabelContainer, pageContainer, footerLabelContainer]);
 
 		//return
 		return tabContaienr;
