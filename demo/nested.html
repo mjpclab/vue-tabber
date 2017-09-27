@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>Demo</title>
+	<link rel="stylesheet" type="text/css" href="../src/css/layout.css"/>
+	<link rel="stylesheet" type="text/css" href="../src/css/skin-gray.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+</head>
+<body>
+<script type="text/x-template" id="template">
+	<div id="container">
+		<vue-tabber>
+			<vue-tabber-label>A</vue-tabber-label>
+			<vue-tabber-page>
+				<vue-tabber tab-container-class="tab-container-vert">
+					<vue-tabber-label>A-1</vue-tabber-label>
+					<vue-tabber-page>
+						<vue-tabber>
+							<vue-tabber-label>A-1-1</vue-tabber-label>
+							<vue-tabber-page>a-1-1</vue-tabber-page>
+
+							<vue-tabber-label>A-1-2</vue-tabber-label>
+							<vue-tabber-page>a-1-2</vue-tabber-page>
+						</vue-tabber>
+					</vue-tabber-page>
+
+					<vue-tabber-label>A-2</vue-tabber-label>
+					<vue-tabber-page>a-2</vue-tabber-page>
+				</vue-tabber>
+			</vue-tabber-page>
+
+			<vue-tabber-label>B</vue-tabber-label>
+			<vue-tabber-page>b</vue-tabber-page>
+		</vue-tabber>
+	</div>
+</script>
+<div id="app"></div>
+
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../dist/vue-tabber.js"></script>
+<script type="text/javascript">
+	var app = new Vue({
+		el: '#app',
+		template: '#template'
+	});
+</script>
+</body>
+</html>
