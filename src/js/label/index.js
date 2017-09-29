@@ -1,9 +1,7 @@
-let Vue = require('vue');
-if (Vue.default) {
-	Vue = Vue.default;
-}
+import Vue from 'vue';
 
-const definition = require('./definition');
+import definition from './definition';
+
 const VueTabberLabel = Vue.component('VueTabberLabel', definition);
 
-module.exports = VueTabberLabel;
+export default VueTabberLabel;

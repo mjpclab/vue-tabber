@@ -1,5 +1,5 @@
-const Label = require('../label');
-const Page = require('../page');
+import Label from '../label';
+import Page from '../page';
 
 const RE_WHITESPACES = /\s+/;
 
@@ -311,4 +311,4 @@ const definition = {
 	}
 };
 
-module.exports = definition;
+export default definition;

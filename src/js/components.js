@@ -1,6 +1,6 @@
-const labelDefinition = require('./label/definition');
-const pageDefinition = require('./page/definition');
-const tabberDefinition = require('./tabber/definition');
+import labelDefinition from './label/definition';
+import pageDefinition from './page/definition';
+import tabberDefinition from './tabber/definition';
 
 const definitions = {
 	VueTabberLabel: labelDefinition,
@@ -14,7 +14,7 @@ function registerTo(externalVue) {
 	externalVue.component('VueTabber', tabberDefinition);
 }
 
-module.exports = {
+export default {
 	definitions,
 	VueTabberLabel: labelDefinition,
 	VueTabberPage: pageDefinition,

@@ -39,7 +39,7 @@
 			switchTo: function (index) {
 				this.index = index;
 			},
-			onSwitch(oldIndex, newIndex) {
+			onSwitch: function(oldIndex, newIndex) {
 				this.index = newIndex;
 				console.log('switched to ' + newIndex);
 			}

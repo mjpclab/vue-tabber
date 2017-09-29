@@ -1,6 +1,6 @@
-require('../../css/layout.css');
-require('../../css/skin-gray.css');
+import '../../css/layout.css';
+import '../../css/skin-gray.css';
 
-const VueTabber = require('./index');
+import VueTabber from './index';
 
-module.exports = VueTabber;
+export default VueTabber;

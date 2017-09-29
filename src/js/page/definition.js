@@ -1,5 +1,3 @@
-const definition = {
+export default {
 	name: 'VueTabberPage'
 };
-
-module.exports = definition;

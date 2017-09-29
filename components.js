@@ -1,1 +1,1 @@
-module.exports = require('./src/js/components');
+export {default} from './src/js/components';

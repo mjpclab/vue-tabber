@@ -1,5 +1,3 @@
-const definition = {
+export default {
 	name: 'VueTabberLabel'
 };
-
-module.exports = definition;
