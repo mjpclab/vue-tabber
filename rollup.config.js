@@ -1,3 +1,5 @@
+//npm install --save-dev rollup rollup-plugin-babel rollup-plugin-node-resolve rollup-plugin-uglify rollup-plugin-vue
+
 import node from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import vue from 'rollup-plugin-vue';
