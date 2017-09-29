@@ -119,12 +119,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var definitions = {
-	VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
-	VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
-	VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */]
-};
-
 function registerTo(externalVue) {
 	externalVue.component('VueTabberLabel', __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */]);
 	externalVue.component('VueTabberPage', __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */]);
@@ -132,7 +126,11 @@ function registerTo(externalVue) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-	definitions: definitions,
+	definitions: {
+		VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
+		VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
+		VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */]
+	},
 	VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
 	VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
 	VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */],

@@ -2,12 +2,6 @@ import labelDefinition from './label/definition';
 import pageDefinition from './page/definition';
 import tabberDefinition from './tabber/definition';
 
-const definitions = {
-	VueTabberLabel: labelDefinition,
-	VueTabberPage: pageDefinition,
-	VueTabber: tabberDefinition
-};
-
 function registerTo(externalVue) {
 	externalVue.component('VueTabberLabel', labelDefinition);
 	externalVue.component('VueTabberPage', pageDefinition);
@@ -15,9 +9,13 @@ function registerTo(externalVue) {
 }
 
 export default {
-	definitions,
+	definitions: {
+		VueTabberLabel: labelDefinition,
+		VueTabberPage: pageDefinition,
+		VueTabber: tabberDefinition
+	},
 	VueTabberLabel: labelDefinition,
 	VueTabberPage: pageDefinition,
 	VueTabber: tabberDefinition,
-	registerTo
+	registerTo: registerTo
 };
