@@ -1,1 +1,1 @@
-export {default} from './src/js/components';
+module.exports = require('./dist/vue-tabber-components');

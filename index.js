@@ -1,1 +1,1 @@
-export {default} from './src/js/tabber/index';
+module.exports = require('./dist/vue-tabber');
