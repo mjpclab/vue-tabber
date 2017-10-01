@@ -60,8 +60,9 @@ const externalsConfig = {
 };
 
 const entries = [
-	{name: 'vue-tabber', path: 'src/js/tabber/index'},
-	{name: 'vue-tabber-with-css', path: 'src/js/tabber/index-with-css'},
+	{name: 'vue-tabber', path: 'src/js/vue-tabber'},
+	{name: 'vue-tabber-css', path: 'src/js/css'},
+	{name: 'vue-tabber-with-css', path: 'src/js/vue-tabber-with-css'},
 	{name: 'vue-tabber-components', path: 'src/js/components'}
 ];
 

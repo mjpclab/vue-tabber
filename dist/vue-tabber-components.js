@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("vue"));
+		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define(["vue"], factory);
+		define([], factory);
 	else if(typeof exports === 'object')
-		exports["vue-tabber-components"] = factory(require("vue"));
+		exports["vue-tabber-components"] = factory();
 	else
-		root["VueTabberComponents"] = factory(root["Vue"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__) {
+		root["VueTabberComponents"] = factory();
+})(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -93,61 +93,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
-
-/***/ }),
-/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__label_definition__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page_definition__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabber_definition__ = __webpack_require__(4);
-
-
-
-
-function registerTo(externalVue) {
-	externalVue.component('VueTabberLabel', __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */]);
-	externalVue.component('VueTabberPage', __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */]);
-	externalVue.component('VueTabber', __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */]);
-}
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	definitions: {
-		VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
-		VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
-		VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */]
-	},
-	VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
-	VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
-	VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */],
-	registerTo: registerTo
-});
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__label__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page__ = __webpack_require__(6);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-
-
-
 var RE_WHITESPACES = /\s+/;
+var RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
+var RE_TAG_PAGE = /[Vv]ue-?[Tt]abber-?[Pp]age/;
 
 function isLabel(vnode) {
-	return vnode.componentOptions.Ctor === __WEBPACK_IMPORTED_MODULE_0__label__["a" /* default */];
+	return RE_TAG_LABEL.test(vnode.componentOptions.tag);
 }
 
 function isPage(vnode) {
-	return vnode.componentOptions.Ctor === __WEBPACK_IMPORTED_MODULE_1__page__["a" /* default */];
+	return RE_TAG_PAGE.test(vnode.componentOptions.tag);
 }
 
 function getLabelAndPageVnodes(vnodes) {
@@ -446,36 +406,82 @@ var definition = {
 /* harmony default export */ __webpack_exports__["a"] = (definition);
 
 /***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__label_definition__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page_definition__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabber_definition__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__tabber_component__ = __webpack_require__(4);
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	definitions: {
+		VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
+		VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
+		VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */]
+	},
+	VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
+	VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
+	VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */],
+	registerTo: __WEBPACK_IMPORTED_MODULE_3__tabber_component__["a" /* registerTo */]
+});
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return registerTo; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__label_component__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page_component__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__definition__ = __webpack_require__(2);
+
+
+
+
+function registerTo(Vue) {
+	Object(__WEBPACK_IMPORTED_MODULE_0__label_component__["a" /* registerTo */])(Vue);
+	Object(__WEBPACK_IMPORTED_MODULE_1__page_component__["a" /* registerTo */])(Vue);
+	return Vue.component('VueTabber', __WEBPACK_IMPORTED_MODULE_2__definition__["a" /* default */]);
+}
+
+
+
+/***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__definition__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return registerTo; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__definition__ = __webpack_require__(0);
 
 
+function registerTo(Vue) {
+	return Vue.component('VueTabberLabel', __WEBPACK_IMPORTED_MODULE_0__definition__["a" /* default */]);
+}
 
 
-var VueTabberLabel = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('VueTabberLabel', __WEBPACK_IMPORTED_MODULE_1__definition__["a" /* default */]);
-
-/* harmony default export */ __webpack_exports__["a"] = (VueTabberLabel);
 
 /***/ }),
 /* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__definition__ = __webpack_require__(1);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return registerTo; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__definition__ = __webpack_require__(1);
 
 
+function registerTo(Vue) {
+	return Vue.component('VueTabberPage', __WEBPACK_IMPORTED_MODULE_0__definition__["a" /* default */]);
+}
 
 
-var VueTabberPage = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('VueTabberPage', __WEBPACK_IMPORTED_MODULE_1__definition__["a" /* default */]);
-
-/* harmony default export */ __webpack_exports__["a"] = (VueTabberPage);
 
 /***/ })
 /******/ ]);

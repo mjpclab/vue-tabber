@@ -1,14 +1,13 @@
-import Label from '../label';
-import Page from '../page';
-
 const RE_WHITESPACES = /\s+/;
+const RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
+const RE_TAG_PAGE = /[Vv]ue-?[Tt]abber-?[Pp]age/;
 
 function isLabel(vnode) {
-	return vnode.componentOptions.Ctor === Label;
+	return RE_TAG_LABEL.test(vnode.componentOptions.tag);
 }
 
 function isPage(vnode) {
-	return vnode.componentOptions.Ctor === Page;
+	return RE_TAG_PAGE.test(vnode.componentOptions.tag);
 }
 
 function getLabelAndPageVnodes(vnodes) {

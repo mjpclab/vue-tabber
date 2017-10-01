@@ -1,6 +1,6 @@
 {
   "name": "vue-tabber",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "A Vue.js tab sheet component",
   "main": "index.js",
   "scripts": {
