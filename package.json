@@ -4,7 +4,7 @@
   "description": "A Vue.js tab sheet component",
   "main": "index.js",
   "scripts": {
-    "build": "sh -c 'rm -rf dist/*; webpack;'"
+    "build": "sh -c 'rm -rf dist/*; webpack --config build/webpack.config.js;'"
   },
   "author": "MJ PC Lab",
   "license": "ISC",

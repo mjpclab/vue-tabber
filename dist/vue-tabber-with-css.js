@@ -1112,4 +1112,3 @@ var VueTabberPage = __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('VueTa
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=vue-tabber-with-css.js.map

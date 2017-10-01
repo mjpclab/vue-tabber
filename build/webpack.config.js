@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
+
+const CONTEXT = path.resolve(__dirname, '../');
 
 function toCapitalize(str) {
 	let result = str.replace(/-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
@@ -13,11 +14,8 @@ function toCapitalize(str) {
 	return result;
 }
 
-const PACKAGE_FILE = 'package.json';
-const thePackage = JSON.parse(fs.readFileSync(PACKAGE_FILE));
-
 const getEntryConfig = function (entry) {
-	return path.resolve(__dirname, entry);
+	return path.resolve(entry);
 };
 
 const getOutputConfig = function (libraryName, isMinify) {
@@ -28,7 +26,7 @@ const getOutputConfig = function (libraryName, isMinify) {
 			root: toCapitalize(libraryName)
 		},
 		libraryTarget: 'umd',
-		path: path.resolve(__dirname, 'dist/'),
+		path: path.resolve('dist'),
 		filename: libraryName + (isMinify ? '.min' : '') + '.js'
 	};
 };
@@ -71,16 +69,17 @@ let confs = [];
 entries.forEach(entry => {
 	//development version
 	confs.push({
+		context: CONTEXT,
 		entry: getEntryConfig(entry.path),
 		output: getOutputConfig(entry.name, false),
 		module: getModuleConfig(false),
 		externals: externalsConfig,
-		plugins: [],
-		devtool: 'source-map'
+		plugins: []
 	});
 
 	//production version
 	confs.push({
+		context: CONTEXT,
 		entry: getEntryConfig(entry.path),
 		output: getOutputConfig(entry.name, true),
 		module: getModuleConfig(true),
@@ -98,8 +97,7 @@ entries.forEach(entry => {
 					'NODE_ENV': JSON.stringify('production')
 				}
 			})
-		],
-		devtool: 'source-map'
+		]
 	});
 });
 

@@ -6,7 +6,7 @@ import vue from 'rollup-plugin-vue';
 //import uglify from 'rollup-plugin-uglify';
 
 export default {
-	input: 'index.js',
+	input: 'src/js/tabber/index',
 	output: {
 		file: 'dist/vue-tabber.js',
 		format: 'umd'
@@ -21,6 +21,5 @@ export default {
 		babel(),
 		vue(),
 		//uglify()
-	],
-	sourcemap: true
+	]
 };
