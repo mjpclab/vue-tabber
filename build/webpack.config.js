@@ -18,7 +18,7 @@ const getEntryConfig = function (entry) {
 	return path.resolve(entry);
 };
 
-const getOutputConfig = function (libraryName, isMinify) {
+const getOutputConfig = function (libraryName, libraryExport, isMinify) {
 	return {
 		library: {
 			commonjs: libraryName,
@@ -26,6 +26,7 @@ const getOutputConfig = function (libraryName, isMinify) {
 			root: toCapitalize(libraryName)
 		},
 		libraryTarget: 'umd',
+		libraryExport: libraryExport,
 		path: path.resolve('dist'),
 		filename: libraryName + (isMinify ? '.min' : '') + '.js'
 	};
@@ -60,10 +61,10 @@ const externalsConfig = {
 };
 
 const entries = [
-	{name: 'vue-tabber', path: 'src/js/vue-tabber'},
-	{name: 'vue-tabber-css', path: 'src/js/css'},
-	{name: 'vue-tabber-with-css', path: 'src/js/vue-tabber-with-css'},
-	{name: 'vue-tabber-components', path: 'src/js/components'}
+	{name: 'vue-tabber', path: 'src/js/vue-tabber', libraryExport: 'default'},
+	{name: 'vue-tabber-css', path: 'src/js/css', libraryExport: undefined},
+	{name: 'vue-tabber-with-css', path: 'src/js/vue-tabber-with-css', libraryExport: 'default'},
+	{name: 'vue-tabber-components', path: 'src/js/components', libraryExport: undefined}
 ];
 
 let confs = [];
@@ -72,7 +73,7 @@ entries.forEach(entry => {
 	confs.push({
 		context: CONTEXT,
 		entry: getEntryConfig(entry.path),
-		output: getOutputConfig(entry.name, false),
+		output: getOutputConfig(entry.name, entry.libraryExport, false),
 		module: getModuleConfig(false),
 		externals: externalsConfig,
 		plugins: []
@@ -82,7 +83,7 @@ entries.forEach(entry => {
 	confs.push({
 		context: CONTEXT,
 		entry: getEntryConfig(entry.path),
-		output: getOutputConfig(entry.name, true),
+		output: getOutputConfig(entry.name, entry.libraryExport, true),
 		module: getModuleConfig(true),
 		externals: externalsConfig,
 		plugins: [

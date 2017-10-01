@@ -1132,5 +1132,5 @@ var definition = {
 /* harmony default export */ __webpack_exports__["a"] = (definition);
 
 /***/ })
-/******/ ]);
+/******/ ])["default"];
 });
