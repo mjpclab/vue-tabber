@@ -142,9 +142,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var RE_WHITESPACES = /\s+/;
 
-var POSITION_TOP = 'top';
-var POSITION_BOTTOM = 'bottom';
-
 function isLabel(vnode) {
 	return vnode.componentOptions.Ctor === __WEBPACK_IMPORTED_MODULE_0__label__["a" /* default */];
 }
@@ -357,11 +354,11 @@ var definition = {
 		};
 
 		var createHeaderLabelContainer = function createHeaderLabelContainer(labelItems) {
-			return _createLabelContainer(labelItems, _this.headerLabelContainerClass, POSITION_TOP);
+			return _createLabelContainer(labelItems, _this.headerLabelContainerClass, 'header');
 		};
 
 		var createFooterLabelContainer = function createFooterLabelContainer(labelItems) {
-			return _createLabelContainer(labelItems, _this.footerLabelContainerClass, POSITION_BOTTOM);
+			return _createLabelContainer(labelItems, _this.footerLabelContainerClass, 'footer');
 		};
 
 		var createPageContainer = function createPageContainer(pageItems) {

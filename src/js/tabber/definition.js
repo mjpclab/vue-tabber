@@ -3,9 +3,6 @@ import Page from '../page';
 
 const RE_WHITESPACES = /\s+/;
 
-const POSITION_TOP = 'top';
-const POSITION_BOTTOM = 'bottom';
-
 function isLabel(vnode) {
 	return vnode.componentOptions.Ctor === Label;
 }
@@ -220,11 +217,11 @@ const definition = {
 		};
 
 		const createHeaderLabelContainer = (labelItems) => {
-			return _createLabelContainer(labelItems, this.headerLabelContainerClass, POSITION_TOP);
+			return _createLabelContainer(labelItems, this.headerLabelContainerClass, 'header');
 		};
 
 		const createFooterLabelContainer = (labelItems) => {
-			return _createLabelContainer(labelItems, this.footerLabelContainerClass, POSITION_BOTTOM);
+			return _createLabelContainer(labelItems, this.footerLabelContainerClass, 'footer');
 		};
 
 		const createPageContainer = (pageItems) => {
