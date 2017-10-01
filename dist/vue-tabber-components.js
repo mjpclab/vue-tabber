@@ -411,26 +411,28 @@ var definition = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return definitions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "definitions", function() { return definitions; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__label_definition__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page_definition__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabber_definition__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__tabber_component__ = __webpack_require__(4);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "VueTabberLabel", function() { return __WEBPACK_IMPORTED_MODULE_0__label_definition__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "VueTabberPage", function() { return __WEBPACK_IMPORTED_MODULE_1__page_definition__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "VueTabber", function() { return __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "registerTo", function() { return __WEBPACK_IMPORTED_MODULE_3__tabber_component__["a"]; });
 
 
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-	definitions: {
-		VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
-		VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
-		VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */]
-	},
+var definitions = {
 	VueTabberLabel: __WEBPACK_IMPORTED_MODULE_0__label_definition__["a" /* default */],
 	VueTabberPage: __WEBPACK_IMPORTED_MODULE_1__page_definition__["a" /* default */],
-	VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */],
-	registerTo: __WEBPACK_IMPORTED_MODULE_3__tabber_component__["a" /* registerTo */]
-});
+	VueTabber: __WEBPACK_IMPORTED_MODULE_2__tabber_definition__["a" /* default */]
+};
+
+
 
 /***/ }),
 /* 4 */

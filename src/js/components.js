@@ -3,14 +3,17 @@ import pageDefinition from './page/definition';
 import tabberDefinition from './tabber/definition';
 import {registerTo} from './tabber/component';
 
-export default {
-	definitions: {
-		VueTabberLabel: labelDefinition,
-		VueTabberPage: pageDefinition,
-		VueTabber: tabberDefinition
-	},
+const definitions = {
 	VueTabberLabel: labelDefinition,
 	VueTabberPage: pageDefinition,
-	VueTabber: tabberDefinition,
-	registerTo: registerTo
+	VueTabber: tabberDefinition
+};
+
+export {
+	definitions as default,
+	definitions,
+	labelDefinition as VueTabberLabel,
+	pageDefinition as VueTabberPage,
+	tabberDefinition as VueTabber,
+	registerTo
 };
