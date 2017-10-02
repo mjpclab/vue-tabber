@@ -45,9 +45,12 @@ Put tab information in the app or component's template like below:
 	<vue-tabber>
 		<vue-tabber-label key="optional-key-1">title 1</vue-tabber-label>
 		<vue-tabber-page>content of page 1</vue-tabber-page>
+		<vue-tabber-page>another content of page 1</vue-tabber-page>
 
 		<vue-tabber-label key="optional-key-2">title 2</vue-tabber-label>
 		<vue-tabber-page>content of page 2</vue-tabber-page>
+		<vue-tabber-page><p>vue-tabber-page tag is optional if wrapped by another tag.</p></vue-tabber-page>
+		<p>vue-tabber-page tag is optional if wrapped by another tag.</p>
 	</vue-tabber>
 </div>
 ```

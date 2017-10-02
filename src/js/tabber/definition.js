@@ -3,20 +3,11 @@ const RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
 const RE_TAG_PAGE = /[Vv]ue-?[Tt]abber-?[Pp]age/;
 
 function isLabel(vnode) {
-	return RE_TAG_LABEL.test(vnode.componentOptions.tag);
+	return vnode.componentOptions && RE_TAG_LABEL.test(vnode.componentOptions.tag);
 }
 
 function isPage(vnode) {
-	return RE_TAG_PAGE.test(vnode.componentOptions.tag);
-}
-
-function getLabelAndPageVnodes(vnodes) {
-	return vnodes.filter(vnode => {
-		if (!vnode.componentOptions) {
-			return false;
-		}
-		return isLabel(vnode) || isPage(vnode);
-	});
+	return vnode.componentOptions && RE_TAG_PAGE.test(vnode.componentOptions.tag);
 }
 
 function getValidIndex(index) {
@@ -176,11 +167,16 @@ const definition = {
 					currentPage = [];
 					key = vnode.data.key ? 'key-' + vnode.data.key : 'index-' + index;
 				}
-				else /*if(isPage(item))*/ {
+				else {
 					if (!currentLabel.length) {
 						currentLabel.push('');
 					}
-					currentPage.push.apply(currentPage, vnode.componentOptions.children);
+					if (isPage(vnode)) {
+						currentPage.push.apply(currentPage, vnode.componentOptions.children);
+					}
+					else if (vnode.tag) {
+						currentPage.push(vnode);
+					}
 				}
 			});
 
@@ -257,13 +253,8 @@ const definition = {
 			return;
 		}
 
-		const allItems = getLabelAndPageVnodes(slotChildren);
-		if (!allItems.length) {
-			return;
-		}
-
 		//collect labels/pages
-		const {labelItems, pageItems} = createLabelAndPageItems(allItems);
+		const {labelItems, pageItems} = createLabelAndPageItems(slotChildren);
 
 		this.count = labelItems.length;
 		const oldIndex = this.currentIndex;
