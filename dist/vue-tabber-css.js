@@ -7,7 +7,7 @@
 		exports["vue-tabber-css"] = factory();
 	else
 		root["VueTabberCss"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -550,8 +550,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js??ref--1-1!./layout.css", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js??ref--1-1!./layout.css");
+		module.hot.accept("!!../../node_modules/_css-loader@0.28.10@css-loader/index.js??ref--1-1!./layout.css", function() {
+			var newContent = require("!!../../node_modules/_css-loader@0.28.10@css-loader/index.js??ref--1-1!./layout.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -564,7 +564,7 @@ if(false) {
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
@@ -690,8 +690,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js??ref--1-1!./skin-gray.css", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js??ref--1-1!./skin-gray.css");
+		module.hot.accept("!!../../node_modules/_css-loader@0.28.10@css-loader/index.js??ref--1-1!./skin-gray.css", function() {
+			var newContent = require("!!../../node_modules/_css-loader@0.28.10@css-loader/index.js??ref--1-1!./skin-gray.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -704,7 +704,7 @@ if(false) {
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 

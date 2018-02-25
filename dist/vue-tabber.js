@@ -7,7 +7,7 @@
 		exports["vue-tabber"] = factory(require("vue"));
 	else
 		root["VueTabber"] = factory(root["Vue"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -258,6 +258,7 @@ var definition = {
 			count: 0,
 			targetIndex: getValidIndex(this.activeIndex),
 			currentIndex: -1,
+			renderedIndex: -1,
 			validTriggerEvents: getValidEvents(this.triggerEvents),
 			validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
 			validDelayTriggerCancelEvents: getValidEvents(this.delayTriggerCancelEvents),
@@ -429,9 +430,9 @@ var definition = {
 		this.count = labelItems.length;
 		var oldIndex = this.currentIndex;
 		var newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
-		this.currentIndex = newIndex;
 		if (oldIndex !== newIndex) {
-			this.$emit('switch', oldIndex, newIndex);
+			this.currentIndex = newIndex;
+			this.$emit('switching', oldIndex, newIndex);
 			this.$emit('update:activeIndex', newIndex);
 		}
 
@@ -464,6 +465,14 @@ var definition = {
 
 		//return
 		return tabContaienr;
+	},
+	updated: function updated() {
+		var oldIndex = this.renderedIndex;
+		var newIndex = this.currentIndex;
+		if (oldIndex !== newIndex) {
+			this.renderedIndex = newIndex;
+			this.$emit('switched', oldIndex, newIndex);
+		}
 	}
 };
 

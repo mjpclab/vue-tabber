@@ -11,7 +11,7 @@
 <body>
 <script type="text/x-template" id="template">
 	<div id="container">
-		<vue-tabber>
+		<vue-tabber @switching="onSwitching">
 			<vue-tabber-label key="optional-key-1">title 1</vue-tabber-label>
 			<vue-tabber-page>content of page 1. </vue-tabber-page>
 			<vue-tabber-page>another content of page 1. </vue-tabber-page>
@@ -43,9 +43,9 @@
 			switchTo: function (index) {
 				this.index = index;
 			},
-			onSwitch: function(oldIndex, newIndex) {
+			onSwitching: function(oldIndex, newIndex) {
 				this.index = newIndex;
-				console.log('switched to ' + newIndex);
+				console.log('switching from ' + oldIndex + ' to ' + newIndex);
 			}
 		}
 	});

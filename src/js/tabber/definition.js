@@ -79,6 +79,7 @@ const definition = {
 			count: 0,
 			targetIndex: getValidIndex(this.activeIndex),
 			currentIndex: -1,
+			renderedIndex: -1,
 			validTriggerEvents: getValidEvents(this.triggerEvents),
 			validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
 			validDelayTriggerCancelEvents: getValidEvents(this.delayTriggerCancelEvents),
@@ -259,9 +260,9 @@ const definition = {
 		this.count = labelItems.length;
 		const oldIndex = this.currentIndex;
 		const newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
-		this.currentIndex = newIndex;
 		if (oldIndex !== newIndex) {
-			this.$emit('switch', oldIndex, newIndex);
+			this.currentIndex = newIndex;
+			this.$emit('switching', oldIndex, newIndex);
 			this.$emit('update:activeIndex', newIndex);
 		}
 
@@ -295,6 +296,14 @@ const definition = {
 
 		//return
 		return tabContaienr;
+	},
+	updated() {
+		const oldIndex = this.renderedIndex;
+		const newIndex = this.currentIndex;
+		if (oldIndex !== newIndex) {
+			this.renderedIndex = newIndex;
+			this.$emit('switched', oldIndex, newIndex);
+		}
 	}
 };
 

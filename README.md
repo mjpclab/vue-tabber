@@ -174,10 +174,15 @@ Specify how long (in milliseconds) need to wait before trigger the delayed switc
 
 `active-index`  
 The initial active index of the tab.
-There are two ways to get informed of current index changed. Subscribing event `switch` or prop update of `activeIndex` 
+There are two ways to get informed of current index changed. Subscribing event `switching` or prop update of `activeIndex`
 
-`switch(oldIndex, newIndex)`  
-A `switch` event will be emitted with parameters `oldIndex` and `newIndex` when switched to another page item.
+`switching(oldIndex, newIndex)`  
+A `switching` event will be emitted with parameters `oldIndex` and `newIndex` when switching to another page item.
+Subscribe this event if you want to know a switching is performed as early as possible.
+
+`switched(oldIndex, newIndex)`  
+A `switched` event will be emitted with parameters `oldIndex` and `newIndex` when switched to another page item.
+Subscribe this event if you want to do some work based on result of switching(e.g. get the height of the component).
 
 `update:activeIndex(newIndex)`  
 An `update:activeIndex` event will be emitted with parameter `newIndex` when switched to another page item.

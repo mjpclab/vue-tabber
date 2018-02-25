@@ -7,7 +7,7 @@
 		exports["vue-tabber-with-css"] = factory(require("vue"));
 	else
 		root["VueTabberWithCss"] = factory(root["Vue"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_10__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_10__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -562,8 +562,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js??ref--1-1!./layout.css", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js??ref--1-1!./layout.css");
+		module.hot.accept("!!../../node_modules/_css-loader@0.28.10@css-loader/index.js??ref--1-1!./layout.css", function() {
+			var newContent = require("!!../../node_modules/_css-loader@0.28.10@css-loader/index.js??ref--1-1!./layout.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -576,7 +576,7 @@ if(false) {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
@@ -702,8 +702,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js??ref--1-1!./skin-gray.css", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js??ref--1-1!./skin-gray.css");
+		module.hot.accept("!!../../node_modules/_css-loader@0.28.10@css-loader/index.js??ref--1-1!./skin-gray.css", function() {
+			var newContent = require("!!../../node_modules/_css-loader@0.28.10@css-loader/index.js??ref--1-1!./skin-gray.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -716,7 +716,7 @@ if(false) {
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
@@ -910,6 +910,7 @@ var definition = {
 			count: 0,
 			targetIndex: getValidIndex(this.activeIndex),
 			currentIndex: -1,
+			renderedIndex: -1,
 			validTriggerEvents: getValidEvents(this.triggerEvents),
 			validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
 			validDelayTriggerCancelEvents: getValidEvents(this.delayTriggerCancelEvents),
@@ -1081,9 +1082,9 @@ var definition = {
 		this.count = labelItems.length;
 		var oldIndex = this.currentIndex;
 		var newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
-		this.currentIndex = newIndex;
 		if (oldIndex !== newIndex) {
-			this.$emit('switch', oldIndex, newIndex);
+			this.currentIndex = newIndex;
+			this.$emit('switching', oldIndex, newIndex);
 			this.$emit('update:activeIndex', newIndex);
 		}
 
@@ -1116,6 +1117,14 @@ var definition = {
 
 		//return
 		return tabContaienr;
+	},
+	updated: function updated() {
+		var oldIndex = this.renderedIndex;
+		var newIndex = this.currentIndex;
+		if (oldIndex !== newIndex) {
+			this.renderedIndex = newIndex;
+			this.$emit('switched', oldIndex, newIndex);
+		}
 	}
 };
 
