@@ -7,7 +7,7 @@
 		exports["vue-tabber"] = factory(require("vue"));
 	else
 		root["VueTabber"] = factory(root["Vue"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -46,12 +46,32 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -69,6 +89,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
@@ -78,15 +99,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tabber_component__ = __webpack_require__(2);
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tabber_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 
 
 
 
-var VueTabber = Object(__WEBPACK_IMPORTED_MODULE_1__tabber_component__["a" /* registerTo */])(__WEBPACK_IMPORTED_MODULE_0_vue___default.a);
+var VueTabber = Object(_tabber_component__WEBPACK_IMPORTED_MODULE_1__["registerTo"])(vue__WEBPACK_IMPORTED_MODULE_0___default.a);
 
 /* harmony default export */ __webpack_exports__["default"] = (VueTabber);
 
@@ -94,25 +115,26 @@ var VueTabber = Object(__WEBPACK_IMPORTED_MODULE_1__tabber_component__["a" /* re
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 
 /***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return registerTo; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__label_component__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page_component__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__definition__ = __webpack_require__(7);
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "registerTo", function() { return registerTo; });
+/* harmony import */ var _label_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _page_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _definition__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 
 
 
 
 function registerTo(Vue) {
-	Object(__WEBPACK_IMPORTED_MODULE_0__label_component__["a" /* registerTo */])(Vue);
-	Object(__WEBPACK_IMPORTED_MODULE_1__page_component__["a" /* registerTo */])(Vue);
-	return Vue.component('VueTabber', __WEBPACK_IMPORTED_MODULE_2__definition__["a" /* default */]);
+	Object(_label_component__WEBPACK_IMPORTED_MODULE_0__["registerTo"])(Vue);
+	Object(_page_component__WEBPACK_IMPORTED_MODULE_1__["registerTo"])(Vue);
+	return Vue.component('VueTabber', _definition__WEBPACK_IMPORTED_MODULE_2__["default"]);
 }
 
 
@@ -122,12 +144,13 @@ function registerTo(Vue) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return registerTo; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__definition__ = __webpack_require__(4);
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "registerTo", function() { return registerTo; });
+/* harmony import */ var _definition__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 
 
 function registerTo(Vue) {
-	return Vue.component('VueTabberLabel', __WEBPACK_IMPORTED_MODULE_0__definition__["a" /* default */]);
+	return Vue.component('VueTabberLabel', _definition__WEBPACK_IMPORTED_MODULE_0__["default"]);
 }
 
 
@@ -137,7 +160,8 @@ function registerTo(Vue) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'VueTabberLabel'
 });
 
@@ -146,12 +170,13 @@ function registerTo(Vue) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return registerTo; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__definition__ = __webpack_require__(6);
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "registerTo", function() { return registerTo; });
+/* harmony import */ var _definition__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 
 function registerTo(Vue) {
-	return Vue.component('VueTabberPage', __WEBPACK_IMPORTED_MODULE_0__definition__["a" /* default */]);
+	return Vue.component('VueTabberPage', _definition__WEBPACK_IMPORTED_MODULE_0__["default"]);
 }
 
 
@@ -161,7 +186,8 @@ function registerTo(Vue) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'VueTabberPage'
 });
 
@@ -170,6 +196,7 @@ function registerTo(Vue) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var RE_WHITESPACES = /\s+/;
@@ -476,7 +503,7 @@ var definition = {
 	}
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (definition);
+/* harmony default export */ __webpack_exports__["default"] = (definition);
 
 /***/ })
 /******/ ])["default"];

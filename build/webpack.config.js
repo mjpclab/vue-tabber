@@ -62,8 +62,6 @@ const externalsConfig = {
 
 const entries = [
 	{name: 'vue-tabber', path: 'src/js/vue-tabber', libraryExport: 'default'},
-	{name: 'vue-tabber-css', path: 'src/js/css', libraryExport: undefined},
-	{name: 'vue-tabber-with-css', path: 'src/js/vue-tabber-with-css', libraryExport: 'default'},
 	{name: 'vue-tabber-components', path: 'src/js/components', libraryExport: undefined}
 ];
 
@@ -71,35 +69,22 @@ let confs = [];
 entries.forEach(entry => {
 	//development version
 	confs.push({
+		mode: 'none',
 		context: CONTEXT,
 		entry: getEntryConfig(entry.path),
 		output: getOutputConfig(entry.name, entry.libraryExport, false),
 		module: getModuleConfig(false),
-		externals: externalsConfig,
-		plugins: []
+		externals: externalsConfig
 	});
 
 	//production version
 	confs.push({
+		mode: 'production',
 		context: CONTEXT,
 		entry: getEntryConfig(entry.path),
 		output: getOutputConfig(entry.name, entry.libraryExport, true),
 		module: getModuleConfig(true),
-		externals: externalsConfig,
-		plugins: [
-			new webpack.optimize.UglifyJsPlugin({
-				compress: {
-					warnings: false,
-					properties: false
-				},
-				sourceMap: true
-			}),
-			new webpack.DefinePlugin({
-				'process.env': {
-					'NODE_ENV': JSON.stringify('production')
-				}
-			})
-		]
+		externals: externalsConfig
 	});
 });
 

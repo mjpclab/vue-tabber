@@ -133,17 +133,16 @@ new Vue({
 ```
 
 # Including CSS
-By default, "vue-tabber" module do not have any CSS style applied, which means all tab pages are always visible on the page.
-To hide non-active tab pages, just applying CSS by "inactive" class(controlled by property `pageItemInactiveClass`) to hide them.
+vue-tabber provides default CSS styles if you don't want to make from scratch. Make sure CSS class name options are not customized.
 
-VueTabber provides default CSS styles if you don't want to make it yourself. It also provides default skin.
-
-## Use CSS bundled version
-For module environment, importing module `vue-tabber/with-css` instead of `vue-tabber`.
-For global variable mode, referencing the '-with-css' bundle file.
+## Importing by module
+```javascript
+import 'vue-tabber/src/css';
+```
 
 ## Use standalone CSS file
-Copying or referencing source CSS files under `src/css/` directory.
+Copying or referencing CSS files from `src/css/` directory.
+
 
 ## Vertical labels
 To use vertical labels style from default CSS, set `tab-container-class` to 'tab-container-vert'.
