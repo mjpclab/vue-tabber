@@ -2,9 +2,9 @@
   "name": "vue-tabber",
   "version": "0.0.28",
   "description": "A Vue.js tab sheet component",
-  "main": "index.js",
+  "main": "dist/vue-tabber.js",
   "scripts": {
-    "build": "sh -c 'rm -rf dist/*; webpack --config build/webpack.config.js;'"
+    "build": "sh -c 'rm -rf dist/*; rollup -c'"
   },
   "author": "MJ PC Lab",
   "license": "ISC",
@@ -16,12 +16,14 @@
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
-    "babel-loader": "^8.0.5",
-    "css-loader": "^2.1.0",
-    "style-loader": "^0.23.1",
-    "vue": "^2.6.3",
-    "webpack": "^4.29.3",
-    "webpack-cli": "^3.2.3"
+    "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-uglify": "^6.0.2",
+    "rollup-plugin-vue": "^4.7.1",
+    "vue": "^2.6.4",
+    "vue-template-compiler": "^2.6.4"
   },
   "repository": {
     "type": "git",

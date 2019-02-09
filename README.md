@@ -96,38 +96,20 @@ It is possible to configure the alias for 'vue' to module system, see Vue.js off
 Another solution is to register VueTabber components explicitly, like below:
 ```javascript
 import Vue from 'vue/dist/vue.esm';
-import * as tabberComponents from 'vue-tabber/components';
-tabberComponents.registerTo(Vue);
+import {registerTo} from 'vue-tabber';
+registerTo(Vue);
 ```
 
-## Get Definitions
-Maybe you want to register VueTabber components locally, inside a single component. Use `definitions` to get component definitions.
+## Get Component
+Maybe you want to register VueTabber components locally, inside a single component, especially has global component names conflict with other libraries.
 ```javascript
-import definitions from 'vue-tabber/components';
-//import {definitions} from 'vue-tabber/components';    //also works
-/*
-{
-	VueTabberLabel: {...},
-	VueTabberPage: {...},
-	VueTabber: {...}
-}
-*/
-
-new Vue({
-	components: definitions
-});
-```
-
-To combine with other local components, get each definition explicitly:
-```javascript
-import {VueTabberLabel, VueTabberPage, VueTabber} from 'vue-tabber/components';
-
+import {LabelComponent, PageComponent, TabberComponent} from 'vue-tabber';
 new Vue({
 	components: {
-		VueTabberLabel,
-		VueTabberPage,
-		VueTabber,
-		//otherComponents...
+		LabelComponent,
+		PageComponent, 
+		TabberComponent,
+		// otherComponents...
 	}
 });
 ```
