@@ -7,7 +7,17 @@
 	Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
 
 	var definition = {
-	  name: 'VueTabberLabel'
+	  name: 'VueTabberLabel',
+	  props: {
+	    disabled: {
+	      type: [Boolean],
+	      default: false
+	    },
+	    hidden: {
+	      type: [Boolean],
+	      default: false
+	    }
+	  }
 	};
 
 	function registerTo(Vue$$1) {
@@ -37,7 +47,45 @@
 	  return obj;
 	}
 
-	var RE_WHITESPACES = /\s+/;
+	function _objectSpread(target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i] != null ? arguments[i] : {};
+	    var ownKeys = Object.keys(source);
+
+	    if (typeof Object.getOwnPropertySymbols === 'function') {
+	      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+	        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+	      }));
+	    }
+
+	    ownKeys.forEach(function (key) {
+	      _defineProperty(target, key, source[key]);
+	    });
+	  }
+
+	  return target;
+	}
+
+	function _toConsumableArray(arr) {
+	  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+	}
+
+	function _arrayWithoutHoles(arr) {
+	  if (Array.isArray(arr)) {
+	    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+	    return arr2;
+	  }
+	}
+
+	function _iterableToArray(iter) {
+	  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+	}
+
+	function _nonIterableSpread() {
+	  throw new TypeError("Invalid attempt to spread non-iterable instance");
+	}
+
 	var RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
 	var RE_TAG_PANEL = /[Vv]ue-?[Tt]abber-?[Pp]anel/;
 
@@ -49,14 +97,209 @@
 	  return vnode.componentOptions && RE_TAG_PANEL.test(vnode.componentOptions.tag);
 	}
 
-	function getValidIndex(index) {
-	  if (index === '' || !isFinite(index) || isNaN(index)) {
-	    return -1;
+	function parseEntries(vNodes) {
+	  var entries = [];
+	  var key, disabled, hidden;
+	  var labelVNodes = [];
+	  var panelVNodes = [];
+
+	  var pushEntry = function pushEntry() {
+	    entries.push({
+	      label: labelVNodes,
+	      panel: panelVNodes,
+	      key: key,
+	      disabled: disabled,
+	      hidden: hidden
+	    });
+	  };
+
+	  vNodes.forEach(function (vNode, index) {
+	    if (isLabel(vNode)) {
+	      var _labelVNodes;
+
+	      if (labelVNodes.length) {
+	        pushEntry();
+	      }
+
+	      labelVNodes = [];
+
+	      (_labelVNodes = labelVNodes).push.apply(_labelVNodes, _toConsumableArray(vNode.componentOptions.children));
+
+	      panelVNodes = [];
+	      key = vNode.key;
+	      var _vNode$componentOptio = vNode.componentOptions.propsData,
+	          itemDisabled = _vNode$componentOptio.disabled,
+	          itemHidden = _vNode$componentOptio.hidden;
+	      disabled = Boolean(itemDisabled);
+	      hidden = Boolean(itemHidden);
+	    } else {
+	      if (!labelVNodes.length) {
+	        labelVNodes.push('');
+	      }
+
+	      if (isPanel(vNode)) {
+	        var _panelVNodes;
+
+	        (_panelVNodes = panelVNodes).push.apply(_panelVNodes, _toConsumableArray(vNode.componentOptions.children));
+	      } else if (vNode.tag) {
+	        panelVNodes.push(vNode);
+	      }
+	    }
+	  });
+
+	  if (labelVNodes.length) {
+	    pushEntry();
 	  }
 
-	  var intIndex = parseInt(index);
-	  return intIndex < 0 ? 0 : index;
+	  return entries;
 	}
+
+	function createEventHandler(events, handler) {
+	  var on = {};
+	  events && events.length && events.forEach(function (event) {
+	    on[event] = handler;
+	  });
+	  return on;
+	}
+
+	function createLabelItem(createElement, tabber, entry, index) {
+	  var labelItemActiveClass = tabber.labelItemActiveClass,
+	      labelItemInactiveClass = tabber.labelItemInactiveClass,
+	      labelItemDisabledClass = tabber.labelItemDisabledClass,
+	      labelItemHiddenClass = tabber.labelItemHiddenClass;
+	  var _tabber$$props = tabber.$props,
+	      delayTriggerLatency = _tabber$$props.delayTriggerLatency,
+	      labelItemClass = _tabber$$props.labelItemClass;
+	  var _tabber$$data = tabber.$data,
+	      currentIndex = _tabber$$data.currentIndex,
+	      delayTimeout = _tabber$$data.delayTimeout,
+	      validTriggerEvents = _tabber$$data.validTriggerEvents,
+	      validDelayTriggerEvents = _tabber$$data.validDelayTriggerEvents,
+	      validDelayTriggerCancelEvents = _tabber$$data.validDelayTriggerCancelEvents;
+	  var label = entry.label,
+	      key = entry.key,
+	      disabled = entry.disabled,
+	      hidden = entry.hidden;
+	  var delayTriggerCancelEventHandlers;
+	  var delayTriggerEventHandlers;
+	  var triggerEventHandlers;
+
+	  if (!disabled && !hidden) {
+	    var doSwitch = function doSwitch() {
+	      clearTimeout(delayTimeout);
+	      tabber.switchTo(index);
+	    };
+
+	    var localDelayTimeout;
+	    var delayDoSwitch = delayTriggerLatency <= 0 ? doSwitch : function () {
+	      clearTimeout(delayTimeout);
+	      localDelayTimeout = tabber.delayTimeout = setTimeout(doSwitch, delayTriggerLatency);
+	    };
+
+	    var cancelDelayDoSwitch = function cancelDelayDoSwitch() {
+	      if (localDelayTimeout === delayTimeout) {
+	        clearTimeout(localDelayTimeout);
+	      }
+	    };
+
+	    triggerEventHandlers = createEventHandler(validTriggerEvents, doSwitch);
+
+	    if (validDelayTriggerEvents && validDelayTriggerEvents.length) {
+	      delayTriggerEventHandlers = createEventHandler(validDelayTriggerEvents, delayDoSwitch);
+	      delayTriggerCancelEventHandlers = createEventHandler(validDelayTriggerCancelEvents, cancelDelayDoSwitch);
+	    }
+	  }
+
+	  var classes = [labelItemClass];
+	  classes.push(index === currentIndex ? labelItemActiveClass : labelItemInactiveClass);
+
+	  if (disabled) {
+	    classes.push(labelItemDisabledClass);
+	  }
+
+	  if (hidden) {
+	    classes.push(labelItemHiddenClass);
+	  }
+
+	  return createElement('div', {
+	    'class': classes,
+	    on: _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers),
+	    key: key ? 'key-' + key : 'index-' + index
+	  }, label);
+	}
+
+	function createLabelContainer(createElement, tabber, entries, side) {
+	  var labelItems = entries.map(function (entry, index) {
+	    return createLabelItem(createElement, tabber, entry, index);
+	  });
+	  var _tabber$$props2 = tabber.$props,
+	      mode = _tabber$$props2.mode,
+	      labelContainerClass = _tabber$$props2.labelContainerClass;
+	  var classes = [labelContainerClass, labelContainerClass + '-' + side, labelContainerClass + '-' + mode, labelContainerClass + '-' + side + '-' + mode];
+	  return createElement('div', {
+	    'class': classes,
+	    key: 'label-container' + '-' + side
+	  }, labelItems);
+	}
+
+	function createPanelItem(createElement, tabber, entry, index) {
+	  var panel = entry.panel,
+	      key = entry.key,
+	      disabled = entry.disabled,
+	      hidden = entry.hidden;
+	  var panelItemActiveClass = tabber.panelItemActiveClass,
+	      panelItemInactiveClass = tabber.panelItemInactiveClass,
+	      panelItemDisabledClass = tabber.panelItemDisabledClass,
+	      panelItemHiddenClass = tabber.panelItemHiddenClass;
+	  var panelItemClass = tabber.$props.panelItemClass;
+	  var currentIndex = tabber.$data.currentIndex;
+	  var classes = [panelItemClass];
+	  classes.push(index === currentIndex ? panelItemActiveClass : panelItemInactiveClass);
+
+	  if (disabled) {
+	    classes.push(panelItemDisabledClass);
+	  }
+
+	  if (hidden) {
+	    classes.push(panelItemHiddenClass);
+	  }
+
+	  return createElement('div', {
+	    'class': classes,
+	    key: key ? 'key-' + key : 'index-' + index
+	  }, panel);
+	}
+
+	function createPanelContainer(createElement, tabber, entries) {
+	  var panelItems = entries.map(function (entry, index) {
+	    return createPanelItem(createElement, tabber, entry, index);
+	  });
+	  var panelContainerClass = tabber.$props.panelContainerClass;
+	  var classes = [panelContainerClass];
+	  return createElement('div', {
+	    'class': classes,
+	    key: 'panel-container'
+	  }, panelItems);
+	}
+
+	function createTabContainer(createElement, tabber, entries) {
+	  var tabContainerModeClass = tabber.tabContainerModeClass;
+	  var _tabber$$props = tabber.$props,
+	      showHeaderLabelContainer = _tabber$$props.showHeaderLabelContainer,
+	      showFooterLabelContainer = _tabber$$props.showFooterLabelContainer,
+	      tabContainerClass = _tabber$$props.tabContainerClass;
+	  var headerLabelContainer = showHeaderLabelContainer && createLabelContainer(createElement, tabber, entries, 'header');
+	  var panelContainer = createPanelContainer(createElement, tabber, entries);
+	  var footerLabelContainer = showFooterLabelContainer && createLabelContainer(createElement, tabber, entries, 'footer');
+	  var children = [headerLabelContainer, panelContainer, footerLabelContainer];
+	  var classes = [tabContainerClass, tabContainerModeClass];
+	  return createElement('div', {
+	    'class': classes,
+	    key: 'tab-container'
+	  }, children);
+	}
+
+	var RE_WHITESPACES = /\s+/;
 
 	function getValidEvents(eventList) {
 	  if (eventList) {
@@ -69,33 +312,24 @@
 	  }
 	}
 
-	function getEventHandlers(events, handler) {
-	  var on = {};
-	  events && events.forEach(function (eventName) {
-	    on[eventName] = handler;
-	  });
-	  return on;
-	}
-
-	function mergeEventHandlers() {
-	  var mergedEventHandler = {};
-
-	  for (var _len = arguments.length, eventHandlers = new Array(_len), _key = 0; _key < _len; _key++) {
-	    eventHandlers[_key] = arguments[_key];
+	function getValidIndex(index) {
+	  if (index === '' || !isFinite(index) || isNaN(index)) {
+	    return -1;
 	  }
 
-	  eventHandlers && eventHandlers.forEach(function (eventHandler) {
-	    eventHandler && Object.keys(eventHandler).forEach(function (event) {
-	      var handler = eventHandler[event];
-	      mergedEventHandler[event] = handler;
-	    });
-	  });
-	  return mergedEventHandler;
+	  var intIndex = parseInt(index);
+	  return intIndex < 0 ? 0 : index;
 	}
 
 	var component = {
 	  name: 'VueTabber',
 	  props: {
+	    mode: {
+	      validator: function validator(value) {
+	        return ['horizontal', 'vertical'].indexOf(value) >= 0;
+	      },
+	      default: 'horizontal'
+	    },
 	    triggerEvents: {
 	      type: [Array, String],
 	      default: 'click'
@@ -130,25 +364,9 @@
 	      type: Boolean,
 	      default: false
 	    },
-	    headerLabelContainerClass: {
-	      type: String,
-	      default: 'header-container'
-	    },
-	    footerLabelContainerClass: {
-	      type: String,
-	      default: 'footer-container'
-	    },
 	    labelItemClass: {
 	      type: String,
 	      default: 'label-item'
-	    },
-	    labelItemActiveClass: {
-	      type: String,
-	      default: 'label-active'
-	    },
-	    labelItemInactiveClass: {
-	      type: String,
-	      default: 'label-inactive'
 	    },
 	    panelContainerClass: {
 	      type: String,
@@ -157,14 +375,6 @@
 	    panelItemClass: {
 	      type: String,
 	      default: 'panel-item'
-	    },
-	    panelItemActiveClass: {
-	      type: String,
-	      default: 'panel-active'
-	    },
-	    panelItemInactiveClass: {
-	      type: String,
-	      default: 'panel-inactive'
 	    }
 	  },
 	  data: function data() {
@@ -178,6 +388,35 @@
 	      validDelayTriggerCancelEvents: getValidEvents(this.delayTriggerCancelEvents),
 	      delayTimeout: undefined
 	    };
+	  },
+	  computed: {
+	    tabContainerModeClass: function tabContainerModeClass() {
+	      return this.tabContainerClass + '-' + this.mode;
+	    },
+	    labelItemActiveClass: function labelItemActiveClass() {
+	      return this.labelItemClass + '-' + 'active';
+	    },
+	    labelItemInactiveClass: function labelItemInactiveClass() {
+	      return this.labelItemClass + '-' + 'inactive';
+	    },
+	    labelItemDisabledClass: function labelItemDisabledClass() {
+	      return this.labelItemClass + '-' + 'disabled';
+	    },
+	    labelItemHiddenClass: function labelItemHiddenClass() {
+	      return this.labelItemClass + '-' + 'hidden';
+	    },
+	    panelItemActiveClass: function panelItemActiveClass() {
+	      return this.panelItemClass + '-' + 'active';
+	    },
+	    panelItemInactiveClass: function panelItemInactiveClass() {
+	      return this.panelItemClass + '-' + 'inactive';
+	    },
+	    panelItemDisabledClass: function panelItemDisabledClass() {
+	      return this.panelItemClass + '-' + 'disabled';
+	    },
+	    panelItemHiddenClass: function panelItemHiddenClass() {
+	      return this.panelItemClass + '-' + 'hidden';
+	    }
 	  },
 	  watch: {
 	    activeIndex: function activeIndex(newValue) {
@@ -193,157 +432,14 @@
 	    clearTimeout(this.delayTimeout);
 	  },
 	  render: function render(createElement) {
-	    var _this = this;
-
-	    //utility
-	    var _createLabelItem = function _createLabelItem(childVNodes, key, index) {
-	      var _class;
-
-	      var doSwitch = function doSwitch() {
-	        clearTimeout(_this.delayTimeout);
-
-	        _this.switchTo(index);
-	      };
-
-	      var localDelayTimeout;
-	      var delayDoSwitch = _this.delayTriggerLatency <= 0 ? doSwitch : function () {
-	        clearTimeout(_this.delayTimeout);
-	        localDelayTimeout = _this.delayTimeout = setTimeout(doSwitch, _this.delayTriggerLatency);
-	      };
-
-	      var cancelDelayDoSwitch = function cancelDelayDoSwitch() {
-	        if (localDelayTimeout === _this.delayTimeout) {
-	          clearTimeout(localDelayTimeout);
-	        }
-	      };
-
-	      var triggerEventHandlers = getEventHandlers(_this.validTriggerEvents, doSwitch);
-	      var delayTriggerEventHandlers;
-	      var delayTriggerCancelEventHandlers;
-
-	      if (_this.validDelayTriggerEvents && _this.validDelayTriggerEvents.length) {
-	        delayTriggerEventHandlers = getEventHandlers(_this.validDelayTriggerEvents, delayDoSwitch);
-	        delayTriggerCancelEventHandlers = getEventHandlers(_this.validDelayTriggerCancelEvents, cancelDelayDoSwitch);
-	      }
-
-	      return createElement('div', {
-	        'class': (_class = {}, _defineProperty(_class, _this.labelItemClass, true), _defineProperty(_class, _this.labelItemActiveClass, false), _defineProperty(_class, _this.labelItemInactiveClass, true), _class),
-	        on: mergeEventHandlers(delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers),
-	        key: key
-	      }, childVNodes);
-	    };
-
-	    var _createPanelItem = function _createPanelItem(childVNodes, key) {
-	      var _class2;
-
-	      return createElement('div', {
-	        'class': (_class2 = {}, _defineProperty(_class2, _this.panelItemClass, true), _defineProperty(_class2, _this.panelItemActiveClass, false), _defineProperty(_class2, _this.panelItemInactiveClass, true), _class2),
-	        key: key
-	      }, childVNodes);
-	    };
-
-	    var createLabelAndPanelItems = function createLabelAndPanelItems(vnodes) {
-	      var labelItems = [];
-	      var panelItems = [];
-	      var key = undefined;
-	      var currentLabel = [];
-	      var currentPanel = [];
-	      vnodes.forEach(function (vnode, index) {
-	        if (isLabel(vnode)) {
-	          if (currentLabel.length) {
-	            labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
-	            panelItems.push(_createPanelItem(currentPanel, key));
-	          }
-
-	          currentLabel = [];
-	          currentLabel.push.apply(currentLabel, vnode.componentOptions.children);
-	          currentPanel = [];
-	          key = vnode.data.key ? 'key-' + vnode.data.key : 'index-' + index;
-	        } else {
-	          if (!currentLabel.length) {
-	            currentLabel.push('');
-	          }
-
-	          if (isPanel(vnode)) {
-	            currentPanel.push.apply(currentPanel, vnode.componentOptions.children);
-	          } else if (vnode.tag) {
-	            currentPanel.push(vnode);
-	          }
-	        }
-	      });
-
-	      if (currentLabel.length) {
-	        labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
-	        panelItems.push(_createPanelItem(currentPanel, key));
-	      }
-
-	      return {
-	        labelItems: labelItems,
-	        panelItems: panelItems
-	      };
-	    };
-
-	    var createTabContainer = function createTabContainer(items) {
-	      return createElement('div', {
-	        'class': _defineProperty({}, _this.tabContainerClass, true),
-	        key: 'tab-container'
-	      }, items);
-	    };
-
-	    var _createLabelContainer = function _createLabelContainer(labelItems, positionClass, position) {
-	      var _class4;
-
-	      return createElement('div', {
-	        'class': (_class4 = {}, _defineProperty(_class4, _this.labelContainerClass, true), _defineProperty(_class4, positionClass, true), _class4),
-	        key: 'label-container-' + position
-	      }, labelItems);
-	    };
-
-	    var createHeaderLabelContainer = function createHeaderLabelContainer(labelItems) {
-	      return _createLabelContainer(labelItems, _this.headerLabelContainerClass, 'header');
-	    };
-
-	    var createFooterLabelContainer = function createFooterLabelContainer(labelItems) {
-	      return _createLabelContainer(labelItems, _this.footerLabelContainerClass, 'footer');
-	    };
-
-	    var createPanelContainer = function createPanelContainer(panelItems) {
-	      return createElement('div', {
-	        'class': _defineProperty({}, _this.panelContainerClass, true),
-	        key: 'panel-container'
-	      }, panelItems);
-	    };
-
-	    var cloneVNode = function cloneVNode(vnode) {
-	      if (vnode.tag) {
-	        return createElement(vnode.tag, vnode.data, cloneVNodes(vnode.children));
-	      } else if (vnode.text) {
-	        return vnode.text;
-	      } else {
-	        return vnode;
-	      }
-	    };
-
-	    var cloneVNodes = function cloneVNodes(vnodes) {
-	      return vnodes.map(function (vnode) {
-	        return cloneVNode(vnode);
-	      });
-	    }; //====================================================================================
-	    //start
-
-
 	    var slotChildren = this.$slots.default;
 
 	    if (!slotChildren || !slotChildren.length) {
 	      return;
-	    } //collect labels/panels
+	    }
 
-
-	    var _createLabelAndPanelI = createLabelAndPanelItems(slotChildren),
-	        labelItems = _createLabelAndPanelI.labelItems,
-	        panelItems = _createLabelAndPanelI.panelItems;
-
-	    this.count = labelItems.length;
+	    var entries = parseEntries(slotChildren);
+	    this.count = entries.length;
 	    var oldIndex = this.currentIndex;
 	    var newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
 
@@ -351,32 +447,12 @@
 	      this.currentIndex = newIndex;
 	      this.$emit('switching', oldIndex, newIndex);
 	      this.$emit('update:activeIndex', newIndex);
-	    }
-
-	    labelItems[newIndex].data['class'][this.labelItemActiveClass] = true;
-	    labelItems[newIndex].data['class'][this.labelItemInactiveClass] = false;
-	    panelItems[newIndex].data['class'][this.panelItemActiveClass] = true;
-	    panelItems[newIndex].data['class'][this.panelItemInactiveClass] = false;
-	    var headerLabelItems;
-	    var footerLabelItems;
-
-	    if (this.showHeaderLabelContainer && this.showFooterLabelContainer) {
-	      headerLabelItems = labelItems;
-	      footerLabelItems = cloneVNodes(labelItems);
-	    } else {
-	      headerLabelItems = footerLabelItems = labelItems;
-	    } // top label container
+	    } //tabb container
 
 
-	    var headerLabelContainer = this.showHeaderLabelContainer && createHeaderLabelContainer(headerLabelItems); //panel container
+	    var tabberContaienr = createTabContainer(createElement, this, entries); //return
 
-	    var panelContainer = createPanelContainer(panelItems); // bottom label container
-
-	    var footerLabelContainer = this.showFooterLabelContainer && createFooterLabelContainer(footerLabelItems); //tabb container
-
-	    var tabContaienr = createTabContainer([headerLabelContainer, panelContainer, footerLabelContainer]); //return
-
-	    return tabContaienr;
+	    return tabberContaienr;
 	  },
 	  updated: function updated() {
 	    var oldIndex = this.renderedIndex;

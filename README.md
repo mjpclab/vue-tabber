@@ -119,18 +119,19 @@ vue-tabber provides default CSS styles if you don't want to make from scratch. M
 
 ## Importing by module
 ```javascript
-import 'vue-tabber/src/css';
+import 'vue-tabber/src/js/theme/gray';
+import 'vue-tabber/src/js/theme/effect/fade'; // optional fade effect when switching, must load after theme
 ```
 
 ## Use standalone CSS file
-Copying or referencing CSS files from `src/css/` directory.
+Copying or referencing CSS files from `dist/theme/` directory.
 
 
 ## Vertical labels
-To use vertical labels style from default CSS, set `tab-container-class` to 'tab-container-vert'.
-Notice that this style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.
-```html
-<vue-tabber tab-container-class="tab-container-vert">
+To use vertical labels, specify property `mode` to "vertical".  
+Notice that vertical style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.```html
+```vue
+<vue-tabber mode="vertical">
 	......
 </vue-tabber>
 ```
@@ -200,20 +201,8 @@ If show label container before tab panel. Default value is true.
 `show-footer-label-container`  
 If show label container after tab panel. Default value is false.
 
-`header-label-container-class`  
-Header label container CSS class. Default value is 'header-container'.
-
-`footer-label-container-class`  
-Footer label container CSS class. Default value is 'footer-container'.
-
 `label-item-class`  
 CSS class for bottom label item. Default value is 'label-item'.
-
-`label-item-active-class`  
-CSS class for active label item. Default value is 'label-active'.
-
-`label-item-inactive-class`  
-CSS class for inactive label item. Default value is 'label-inactive'.
 
 ### Panel
 `panel-container-class`  
@@ -221,9 +210,3 @@ CSS class for panel container. Default value is 'panel-container'.
 
 `panel-item-class`  
 CSS class for panel item. Default value is 'panel-item'.
-
-`panel-item-active-class`  
-CSS class for active panel item. Default value is 'panel-active'.
-
-`panel-item-inactive-class`  
-CSS class for inactive panel item. Default value is 'panel-inactive'.

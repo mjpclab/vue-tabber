@@ -4,7 +4,7 @@
   "description": "A Vue.js tab sheet component",
   "main": "dist/vue-tabber.js",
   "scripts": {
-    "build": "sh -c 'rm -rf dist/*; rollup -c'"
+    "build": "bash build.sh"
   },
   "author": "MJ PC Lab",
   "license": "ISC",
