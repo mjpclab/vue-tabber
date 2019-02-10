@@ -9,11 +9,11 @@ function registerTo(Vue$$1) {
 }
 
 var definition$1 = {
-  name: 'VueTabberPage'
+  name: 'VueTabberPanel'
 };
 
 function registerTo$1(Vue$$1) {
-  return Vue$$1.component('VueTabberPage', definition$1);
+  return Vue$$1.component('VueTabberPanel', definition$1);
 }
 
 function _defineProperty(obj, key, value) {
@@ -33,14 +33,14 @@ function _defineProperty(obj, key, value) {
 
 var RE_WHITESPACES = /\s+/;
 var RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
-var RE_TAG_PAGE = /[Vv]ue-?[Tt]abber-?[Pp]age/;
+var RE_TAG_PANEL = /[Vv]ue-?[Tt]abber-?[Pp]anel/;
 
 function isLabel(vnode) {
   return vnode.componentOptions && RE_TAG_LABEL.test(vnode.componentOptions.tag);
 }
 
-function isPage(vnode) {
-  return vnode.componentOptions && RE_TAG_PAGE.test(vnode.componentOptions.tag);
+function isPanel(vnode) {
+  return vnode.componentOptions && RE_TAG_PANEL.test(vnode.componentOptions.tag);
 }
 
 function getValidIndex(index) {
@@ -144,21 +144,21 @@ var component = {
       type: String,
       default: 'label-inactive'
     },
-    pageContainerClass: {
+    panelContainerClass: {
       type: String,
-      default: 'page-container'
+      default: 'panel-container'
     },
-    pageItemClass: {
+    panelItemClass: {
       type: String,
-      default: 'page-item'
+      default: 'panel-item'
     },
-    pageItemActiveClass: {
+    panelItemActiveClass: {
       type: String,
-      default: 'page-active'
+      default: 'panel-active'
     },
-    pageItemInactiveClass: {
+    panelItemInactiveClass: {
       type: String,
-      default: 'page-inactive'
+      default: 'panel-inactive'
     }
   },
   data: function data() {
@@ -227,53 +227,53 @@ var component = {
       }, childVNodes);
     };
 
-    var _createPageItem = function _createPageItem(childVNodes, key) {
+    var _createPanelItem = function _createPanelItem(childVNodes, key) {
       var _class2;
 
       return createElement('div', {
-        'class': (_class2 = {}, _defineProperty(_class2, _this.pageItemClass, true), _defineProperty(_class2, _this.pageItemActiveClass, false), _defineProperty(_class2, _this.pageItemInactiveClass, true), _class2),
+        'class': (_class2 = {}, _defineProperty(_class2, _this.panelItemClass, true), _defineProperty(_class2, _this.panelItemActiveClass, false), _defineProperty(_class2, _this.panelItemInactiveClass, true), _class2),
         key: key
       }, childVNodes);
     };
 
-    var createLabelAndPageItems = function createLabelAndPageItems(vnodes) {
+    var createLabelAndPanelItems = function createLabelAndPanelItems(vnodes) {
       var labelItems = [];
-      var pageItems = [];
+      var panelItems = [];
       var key = undefined;
       var currentLabel = [];
-      var currentPage = [];
+      var currentPanel = [];
       vnodes.forEach(function (vnode, index) {
         if (isLabel(vnode)) {
           if (currentLabel.length) {
             labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
-            pageItems.push(_createPageItem(currentPage, key));
+            panelItems.push(_createPanelItem(currentPanel, key));
           }
 
           currentLabel = [];
           currentLabel.push.apply(currentLabel, vnode.componentOptions.children);
-          currentPage = [];
+          currentPanel = [];
           key = vnode.data.key ? 'key-' + vnode.data.key : 'index-' + index;
         } else {
           if (!currentLabel.length) {
             currentLabel.push('');
           }
 
-          if (isPage(vnode)) {
-            currentPage.push.apply(currentPage, vnode.componentOptions.children);
+          if (isPanel(vnode)) {
+            currentPanel.push.apply(currentPanel, vnode.componentOptions.children);
           } else if (vnode.tag) {
-            currentPage.push(vnode);
+            currentPanel.push(vnode);
           }
         }
       });
 
       if (currentLabel.length) {
         labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
-        pageItems.push(_createPageItem(currentPage, key));
+        panelItems.push(_createPanelItem(currentPanel, key));
       }
 
       return {
         labelItems: labelItems,
-        pageItems: pageItems
+        panelItems: panelItems
       };
     };
 
@@ -301,11 +301,11 @@ var component = {
       return _createLabelContainer(labelItems, _this.footerLabelContainerClass, 'footer');
     };
 
-    var createPageContainer = function createPageContainer(pageItems) {
+    var createPanelContainer = function createPanelContainer(panelItems) {
       return createElement('div', {
-        'class': _defineProperty({}, _this.pageContainerClass, true),
-        key: 'page-container'
-      }, pageItems);
+        'class': _defineProperty({}, _this.panelContainerClass, true),
+        key: 'panel-container'
+      }, panelItems);
     };
 
     var cloneVNode = function cloneVNode(vnode) {
@@ -330,12 +330,12 @@ var component = {
 
     if (!slotChildren || !slotChildren.length) {
       return;
-    } //collect labels/pages
+    } //collect labels/panels
 
 
-    var _createLabelAndPageIt = createLabelAndPageItems(slotChildren),
-        labelItems = _createLabelAndPageIt.labelItems,
-        pageItems = _createLabelAndPageIt.pageItems;
+    var _createLabelAndPanelI = createLabelAndPanelItems(slotChildren),
+        labelItems = _createLabelAndPanelI.labelItems,
+        panelItems = _createLabelAndPanelI.panelItems;
 
     this.count = labelItems.length;
     var oldIndex = this.currentIndex;
@@ -349,8 +349,8 @@ var component = {
 
     labelItems[newIndex].data['class'][this.labelItemActiveClass] = true;
     labelItems[newIndex].data['class'][this.labelItemInactiveClass] = false;
-    pageItems[newIndex].data['class'][this.pageItemActiveClass] = true;
-    pageItems[newIndex].data['class'][this.pageItemInactiveClass] = false;
+    panelItems[newIndex].data['class'][this.panelItemActiveClass] = true;
+    panelItems[newIndex].data['class'][this.panelItemInactiveClass] = false;
     var headerLabelItems;
     var footerLabelItems;
 
@@ -362,13 +362,13 @@ var component = {
     } // top label container
 
 
-    var headerLabelContainer = this.showHeaderLabelContainer && createHeaderLabelContainer(headerLabelItems); //page container
+    var headerLabelContainer = this.showHeaderLabelContainer && createHeaderLabelContainer(headerLabelItems); //panel container
 
-    var pageContainer = createPageContainer(pageItems); // bottom label container
+    var panelContainer = createPanelContainer(panelItems); // bottom label container
 
     var footerLabelContainer = this.showFooterLabelContainer && createFooterLabelContainer(footerLabelItems); //tabb container
 
-    var tabContaienr = createTabContainer([headerLabelContainer, pageContainer, footerLabelContainer]); //return
+    var tabContaienr = createTabContainer([headerLabelContainer, panelContainer, footerLabelContainer]); //return
 
     return tabContaienr;
   },
@@ -396,7 +396,7 @@ function registerTo$3(Vue$$1) {
 var VueTabber = registerTo$3(Vue);
 VueTabber.registerTo = registerTo$3;
 VueTabber.LabelComponent = definition;
-VueTabber.PageComponent = definition$1;
+VueTabber.PanelComponent = definition$1;
 VueTabber.TabberComponent = component;
 
 export default VueTabber;

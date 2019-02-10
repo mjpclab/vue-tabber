@@ -10,11 +10,11 @@ A Vue.js Tab sheet component.
 		> .label-item
 		> .label-item
 		> ...
-	> .page-container
-		> .page-item
-		> .page-item
-		> .page-item
-		> .page-item
+	> .panel-container
+		> .panel-item
+		> .panel-item
+		> .panel-item
+		> .panel-item
 		> ...
 ```
 
@@ -44,17 +44,17 @@ Put tab information in the app or component's template like below:
 <div id="app">
 	<vue-tabber>
 		<vue-tabber-label key="optional-key-1">title 1</vue-tabber-label>
-		<vue-tabber-page>content of page 1</vue-tabber-page>
-		<vue-tabber-page>another content of page 1</vue-tabber-page>
+		<vue-tabber-panel>content of panel 1</vue-tabber-panel>
+		<vue-tabber-panel>another content of panel 1</vue-tabber-panel>
 
 		<vue-tabber-label key="optional-key-2">title 2</vue-tabber-label>
-		<vue-tabber-page>content of page 2</vue-tabber-page>
-		<vue-tabber-page><p>vue-tabber-page tag is optional if wrapped by another tag.</p></vue-tabber-page>
-		<p>vue-tabber-page tag is optional if wrapped by another tag.</p>
+		<vue-tabber-panel>content of panel 2</vue-tabber-panel>
+		<vue-tabber-panel><p>vue-tabber-panel tag is optional if wrapped by another tag.</p></vue-tabber-panel>
+		<p>vue-tabber-panel tag is optional if wrapped by another tag.</p>
 	</vue-tabber>
 </div>
 ```
-Both labels and pages can contain plain texts, regular HTML elements or Vue components.
+Both labels and panels can contain plain texts, regular HTML elements or Vue components.
 
 Label items can have an optional key attribute, which can reduce DOM changes when items are dynamically changed.
 
@@ -78,9 +78,9 @@ new Vue({
 	render: function (createElement) {
 		return createElement('vue-tabber', [
 			createElement('vue-tabber-label', {key: 'optional-key-1'}, 'title 1'),
-			createElement('vue-tabber-page', 'content of page 1'),
+			createElement('vue-tabber-panel', 'content of panel 1'),
 			createElement('vue-tabber-label', {key: 'optional-key-2'}, 'title 2'),
-			createElement('vue-tabber-page', 'content of page 2')
+			createElement('vue-tabber-panel', 'content of panel 2')
 		]);
 	}
 });
@@ -103,11 +103,11 @@ registerTo(Vue);
 ## Get Component
 Maybe you want to register VueTabber components locally, inside a single component, especially has global component names conflict with other libraries.
 ```javascript
-import {LabelComponent, PageComponent, TabberComponent} from 'vue-tabber';
+import {LabelComponent, PanelComponent, TabberComponent} from 'vue-tabber';
 new Vue({
 	components: {
 		LabelComponent,
-		PageComponent, 
+		PanelComponent, 
 		TabberComponent,
 		// otherComponents...
 	}
@@ -140,11 +140,11 @@ You can specify options by setting properties on `<vue-tabber>` element.
 
 ## Behavior Properties
 `trigger-events`  
-Determine the types of events triggered on label-item that will make the page-item switched.
+Determine the types of events triggered on label-item that will make the panel-item switched.
 Default value is `click`.
 
 `delay-trigger-events`  
-Specify events on label-item that will trigger page switch after delay a small piece of time.
+Specify events on label-item that will trigger panel switch after delay a small piece of time.
 Quite useful if you want to keep hover a little time before switching.
 
 `delay-trigger-cancel-events`  
@@ -158,15 +158,15 @@ The initial active index of the tab.
 There are two ways to get informed of current index changed. Subscribing event `switching` or prop update of `activeIndex`
 
 `switching(oldIndex, newIndex)`  
-A `switching` event will be emitted with parameters `oldIndex` and `newIndex` when switching to another page item.
+A `switching` event will be emitted with parameters `oldIndex` and `newIndex` when switching to another panel item.
 Subscribe this event if you want to know a switching is performed as early as possible.
 
 `switched(oldIndex, newIndex)`  
-A `switched` event will be emitted with parameters `oldIndex` and `newIndex` when switched to another page item.
+A `switched` event will be emitted with parameters `oldIndex` and `newIndex` when switched to another panel item.
 Subscribe this event if you want to do some work based on result of switching(e.g. get the height of the component).
 
 `update:activeIndex(newIndex)`  
-An `update:activeIndex` event will be emitted with parameter `newIndex` when switched to another page item.
+An `update:activeIndex` event will be emitted with parameter `newIndex` when switched to another panel item.
 This is convenient for prop binding with `.sync` modifier:
 ```html
 <div id="app">
@@ -195,10 +195,10 @@ CSS class for tab container. Default value is 'tab-container'.
 CSS class for label container. Default value is 'label-container'.
 
 `show-header-label-container`  
-If show label container before tab page. Default value is true.
+If show label container before tab panel. Default value is true.
 
 `show-footer-label-container`  
-If show label container after tab page. Default value is false.
+If show label container after tab panel. Default value is false.
 
 `header-label-container-class`  
 Header label container CSS class. Default value is 'header-container'.
@@ -215,15 +215,15 @@ CSS class for active label item. Default value is 'label-active'.
 `label-item-inactive-class`  
 CSS class for inactive label item. Default value is 'label-inactive'.
 
-### Page
-`page-container-class`  
-CSS class for page container. Default value is 'page-container'.
+### Panel
+`panel-container-class`  
+CSS class for panel container. Default value is 'panel-container'.
 
-`page-item-class`  
-CSS class for page item. Default value is 'page-item'.
+`panel-item-class`  
+CSS class for panel item. Default value is 'panel-item'.
 
-`page-item-active-class`  
-CSS class for active page item. Default value is 'page-active'.
+`panel-item-active-class`  
+CSS class for active panel item. Default value is 'panel-active'.
 
-`page-item-inactive-class`  
-CSS class for inactive page item. Default value is 'page-inactive'.
+`panel-item-inactive-class`  
+CSS class for inactive panel item. Default value is 'panel-inactive'.

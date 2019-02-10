@@ -1,13 +1,13 @@
 const RE_WHITESPACES = /\s+/;
 const RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
-const RE_TAG_PAGE = /[Vv]ue-?[Tt]abber-?[Pp]age/;
+const RE_TAG_PANEL = /[Vv]ue-?[Tt]abber-?[Pp]anel/;
 
 function isLabel(vnode) {
 	return vnode.componentOptions && RE_TAG_LABEL.test(vnode.componentOptions.tag);
 }
 
-function isPage(vnode) {
-	return vnode.componentOptions && RE_TAG_PAGE.test(vnode.componentOptions.tag);
+function isPanel(vnode) {
+	return vnode.componentOptions && RE_TAG_PANEL.test(vnode.componentOptions.tag);
 }
 
 function getValidIndex(index) {
@@ -69,10 +69,10 @@ const component = {
 		labelItemActiveClass: {type: String, default: 'label-active'},
 		labelItemInactiveClass: {type: String, default: 'label-inactive'},
 
-		pageContainerClass: {type: String, default: 'page-container'},
-		pageItemClass: {type: String, default: 'page-item'},
-		pageItemActiveClass: {type: String, default: 'page-active'},
-		pageItemInactiveClass: {type: String, default: 'page-inactive'},
+		panelContainerClass: {type: String, default: 'panel-container'},
+		panelItemClass: {type: String, default: 'panel-item'},
+		panelItemActiveClass: {type: String, default: 'panel-active'},
+		panelItemInactiveClass: {type: String, default: 'panel-inactive'},
 	},
 	data() {
 		return {
@@ -138,55 +138,55 @@ const component = {
 			}, childVNodes);
 		};
 
-		const _createPageItem = (childVNodes, key) => {
+		const _createPanelItem = (childVNodes, key) => {
 			return createElement('div', {
 				'class': {
-					[this.pageItemClass]: true,
-					[this.pageItemActiveClass]: false,
-					[this.pageItemInactiveClass]: true
+					[this.panelItemClass]: true,
+					[this.panelItemActiveClass]: false,
+					[this.panelItemInactiveClass]: true
 				},
 				key
 			}, childVNodes);
 		};
 
-		const createLabelAndPageItems = (vnodes) => {
+		const createLabelAndPanelItems = (vnodes) => {
 			const labelItems = [];
-			const pageItems = [];
+			const panelItems = [];
 			let key = undefined;
 
 			let currentLabel = [];
-			let currentPage = [];
+			let currentPanel = [];
 
 			vnodes.forEach((vnode, index) => {
 				if (isLabel(vnode)) {
 					if (currentLabel.length) {
 						labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
-						pageItems.push(_createPageItem(currentPage, key));
+						panelItems.push(_createPanelItem(currentPanel, key));
 					}
 					currentLabel = [];
 					currentLabel.push.apply(currentLabel, vnode.componentOptions.children);
-					currentPage = [];
+					currentPanel = [];
 					key = vnode.data.key ? 'key-' + vnode.data.key : 'index-' + index;
 				} else {
 					if (!currentLabel.length) {
 						currentLabel.push('');
 					}
-					if (isPage(vnode)) {
-						currentPage.push.apply(currentPage, vnode.componentOptions.children);
+					if (isPanel(vnode)) {
+						currentPanel.push.apply(currentPanel, vnode.componentOptions.children);
 					} else if (vnode.tag) {
-						currentPage.push(vnode);
+						currentPanel.push(vnode);
 					}
 				}
 			});
 
 			if (currentLabel.length) {
 				labelItems.push(_createLabelItem(currentLabel, key, labelItems.length));
-				pageItems.push(_createPageItem(currentPage, key));
+				panelItems.push(_createPanelItem(currentPanel, key));
 			}
 
 			return {
 				labelItems,
-				pageItems
+				panelItems
 			};
 		};
 
@@ -217,13 +217,13 @@ const component = {
 			return _createLabelContainer(labelItems, this.footerLabelContainerClass, 'footer');
 		};
 
-		const createPageContainer = (pageItems) => {
+		const createPanelContainer = (panelItems) => {
 			return createElement('div', {
 				'class': {
-					[this.pageContainerClass]: true
+					[this.panelContainerClass]: true
 				},
-				key: 'page-container'
-			}, pageItems);
+				key: 'panel-container'
+			}, panelItems);
 		};
 
 		const cloneVNode = (vnode) => {
@@ -249,8 +249,8 @@ const component = {
 			return;
 		}
 
-		//collect labels/pages
-		const {labelItems, pageItems} = createLabelAndPageItems(slotChildren);
+		//collect labels/panels
+		const {labelItems, panelItems} = createLabelAndPanelItems(slotChildren);
 
 		this.count = labelItems.length;
 		const oldIndex = this.currentIndex;
@@ -264,8 +264,8 @@ const component = {
 		labelItems[newIndex].data['class'][this.labelItemActiveClass] = true;
 		labelItems[newIndex].data['class'][this.labelItemInactiveClass] = false;
 
-		pageItems[newIndex].data['class'][this.pageItemActiveClass] = true;
-		pageItems[newIndex].data['class'][this.pageItemInactiveClass] = false;
+		panelItems[newIndex].data['class'][this.panelItemActiveClass] = true;
+		panelItems[newIndex].data['class'][this.panelItemInactiveClass] = false;
 
 		let headerLabelItems;
 		let footerLabelItems;
@@ -279,14 +279,14 @@ const component = {
 		// top label container
 		const headerLabelContainer = this.showHeaderLabelContainer && createHeaderLabelContainer(headerLabelItems);
 
-		//page container
-		const pageContainer = createPageContainer(pageItems);
+		//panel container
+		const panelContainer = createPanelContainer(panelItems);
 
 		// bottom label container
 		const footerLabelContainer = this.showFooterLabelContainer && createFooterLabelContainer(footerLabelItems);
 
 		//tabb container
-		const tabContaienr = createTabContainer([headerLabelContainer, pageContainer, footerLabelContainer]);
+		const tabContaienr = createTabContainer([headerLabelContainer, panelContainer, footerLabelContainer]);
 
 		//return
 		return tabContaienr;
