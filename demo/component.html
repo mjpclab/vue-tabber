@@ -21,6 +21,8 @@
 <script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
 <script type="text/javascript" src="../dist/vue-tabber.js"></script>
 <script type="text/javascript">
+	VueTabber.registerTo(Vue);
+
 	Vue.component('MyTitle',{
 		props:['text'],
 		template:'<i>{{text}}</i>'

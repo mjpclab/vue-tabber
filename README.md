@@ -22,21 +22,24 @@ A Vue.js Tab sheet component.
 ## Import VueTabber Module
 *Import in ES6 module environment*  
 ```javascript
-import 'vue-tabber';
+import {components, registerTo} from 'vue-tabber';
 ```
 
 *Import in commonjs environment*  
 ```javascript
-require('vue-tabber');
+const {components, registerTo} = require('vue-tabber');
 ```
 
 *Import in AMD environment*  
 ```javascript
-require(['vue-tabber']);
+require(['vue-tabber'], function(VueTabber){
+	// VueTabber.components
+	// VueTabber.registerTo
+});
 ```
 
 *Using global variable mode*  
-Just importing vue-tabber by `<script>` tag.
+Just importing vue-tabber by `<script>` tag. Methods are under global variable `VueTabber`.
 
 ## Prepare Template
 Put tab information in the app or component's template like below:
@@ -61,8 +64,25 @@ Label items can have an optional key attribute, which can reduce DOM changes whe
 ## Run Application
 Then just start the component:
 ```javascript
+// register components to global
+import Vue from 'vue';
+import { registerTo } from 'vue-tabber';
+registerTo(Vue);
+
 new Vue({
 	el: '#app'
+});
+```
+```javascript
+// use as local components
+import Vue from 'vue';
+import { components as tabberComponents } from 'vue-tabber';
+
+new Vue({
+	el: '#app',
+	components: {
+		...tabberComponents
+	}
 });
 ```
 
@@ -82,34 +102,6 @@ new Vue({
 			createElement('vue-tabber-label', {key: 'optional-key-2'}, 'title 2'),
 			createElement('vue-tabber-panel', 'content of panel 2')
 		]);
-	}
-});
-```
-
-# vue-tabber/components module
-The `vue-tabber/components` module provide methods for special environment usage.
-
-## Register VueTabber components
-For module environment, it is possible to use a specific build of vue, like `vue/dist/vue.runtime.esm`.
-The VueTabber only registers related components to Vue from default `vue` module, which means `vue-tabber` component is not available on that special Vue.
-It is possible to configure the alias for 'vue' to module system, see Vue.js official installation guide.
-Another solution is to register VueTabber components explicitly, like below:
-```javascript
-import Vue from 'vue/dist/vue.esm';
-import {registerTo} from 'vue-tabber';
-registerTo(Vue);
-```
-
-## Get Component
-Maybe you want to register VueTabber components locally, inside a single component, especially has global component names conflict with other libraries.
-```javascript
-import {LabelComponent, PanelComponent, TabberComponent} from 'vue-tabber';
-new Vue({
-	components: {
-		LabelComponent,
-		PanelComponent, 
-		TabberComponent,
-		// otherComponents...
 	}
 });
 ```

@@ -10,7 +10,7 @@ const getConfig = function (format, filename) {
 	const config = {
 		input: 'src/js/index.js',
 		output: {
-			name: 'vue-tabber',
+			name: 'VueTabber',
 			format: format,
 			globals: {
 				vue: 'Vue'

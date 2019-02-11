@@ -1,12 +1,12 @@
 const RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
 const RE_TAG_PANEL = /[Vv]ue-?[Tt]abber-?[Pp]anel/;
 
-function isLabel(vnode) {
-	return vnode.componentOptions && RE_TAG_LABEL.test(vnode.componentOptions.tag);
+function isLabel(vNode) {
+	return vNode.componentOptions && RE_TAG_LABEL.test(vNode.componentOptions.tag);
 }
 
-function isPanel(vnode) {
-	return vnode.componentOptions && RE_TAG_PANEL.test(vnode.componentOptions.tag);
+function isPanel(vNode) {
+	return vNode.componentOptions && RE_TAG_PANEL.test(vNode.componentOptions.tag);
 }
 
 function parseEntries(vNodes) {

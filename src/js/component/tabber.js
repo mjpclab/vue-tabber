@@ -1,6 +1,6 @@
-import parseEntries from './feature/parse-entries';
-import createTabContainer from './feature/create-tab-container';
-import getValidEvents from './utility/get-valid-events';
+import parseEntries from '../feature/parse-entries';
+import createTabContainer from '../feature/create-tab-container';
+import getValidEvents from '../utility/get-valid-events';
 
 function getValidIndex(index) {
 	if (index === '' || !isFinite(index) || isNaN(index)) {
@@ -11,7 +11,7 @@ function getValidIndex(index) {
 	return intIndex < 0 ? 0 : index;
 }
 
-const component = {
+const Tabber = {
 	name: 'VueTabber',
 	props: {
 		mode: {
@@ -123,4 +123,4 @@ const component = {
 	}
 };
 
-export default component;
+export default Tabber;

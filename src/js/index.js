@@ -1,22 +1,13 @@
-import Vue from 'vue';
-import registerLabelTo from './label/register';
-import registerPanelTo from './panel/register';
-import registerTabberTo from './tabber/register';
+import VueTabberLabel from './component/label';
+import VueTabberPanel from './component/panel';
+import VueTabber from './component/tabber';
 
-import LabelComponent from './label/component';
-import PanelComponent from './panel/component';
-import TabberComponent from './tabber/component';
+const components = {VueTabber, VueTabberLabel, VueTabberPanel};
 
 function registerTo(Vue) {
-	registerLabelTo(Vue);
-	registerPanelTo(Vue);
-	return registerTabberTo(Vue);
+	Vue.component('VueTabber', VueTabber);
+	Vue.component('VueTabberLabel', VueTabberLabel);
+	Vue.component('VueTabberPanel', VueTabberPanel);
 }
 
-const VueTabber = registerTo(Vue);
-VueTabber.registerTo = registerTo;
-VueTabber.LabelComponent = LabelComponent;
-VueTabber.PanelComponent = PanelComponent;
-VueTabber.TabberComponent = TabberComponent;
-
-export default VueTabber;
+export {components, registerTo};

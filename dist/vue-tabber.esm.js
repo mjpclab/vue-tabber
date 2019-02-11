@@ -1,6 +1,4 @@
-import Vue from 'vue';
-
-var definition = {
+var Label = {
   name: 'VueTabberLabel',
   props: {
     disabled: {
@@ -14,17 +12,9 @@ var definition = {
   }
 };
 
-function registerTo(Vue$$1) {
-  return Vue$$1.component('VueTabberLabel', definition);
-}
-
-var definition$1 = {
+var Panel = {
   name: 'VueTabberPanel'
 };
-
-function registerTo$1(Vue$$1) {
-  return Vue$$1.component('VueTabberPanel', definition$1);
-}
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -83,12 +73,12 @@ function _nonIterableSpread() {
 var RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
 var RE_TAG_PANEL = /[Vv]ue-?[Tt]abber-?[Pp]anel/;
 
-function isLabel(vnode) {
-  return vnode.componentOptions && RE_TAG_LABEL.test(vnode.componentOptions.tag);
+function isLabel(vNode) {
+  return vNode.componentOptions && RE_TAG_LABEL.test(vNode.componentOptions.tag);
 }
 
-function isPanel(vnode) {
-  return vnode.componentOptions && RE_TAG_PANEL.test(vnode.componentOptions.tag);
+function isPanel(vNode) {
+  return vNode.componentOptions && RE_TAG_PANEL.test(vNode.componentOptions.tag);
 }
 
 function parseEntries(vNodes) {
@@ -315,7 +305,7 @@ function getValidIndex(index) {
   return intIndex < 0 ? 0 : index;
 }
 
-var component = {
+var Tabber = {
   name: 'VueTabber',
   props: {
     mode: {
@@ -459,20 +449,16 @@ var component = {
   }
 };
 
-function registerTo$2(Vue$$1) {
-  return Vue$$1.component('VueTabber', component);
+var components = {
+  VueTabber: Tabber,
+  VueTabberLabel: Label,
+  VueTabberPanel: Panel
+};
+
+function registerTo(Vue) {
+  Vue.component('VueTabber', Tabber);
+  Vue.component('VueTabberLabel', Label);
+  Vue.component('VueTabberPanel', Panel);
 }
 
-function registerTo$3(Vue$$1) {
-  registerTo(Vue$$1);
-  registerTo$1(Vue$$1);
-  return registerTo$2(Vue$$1);
-}
-
-var VueTabber = registerTo$3(Vue);
-VueTabber.registerTo = registerTo$3;
-VueTabber.LabelComponent = definition;
-VueTabber.PanelComponent = definition$1;
-VueTabber.TabberComponent = component;
-
-export default VueTabber;
+export { components, registerTo };
