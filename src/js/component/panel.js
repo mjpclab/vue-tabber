@@ -1,5 +1,8 @@
 const Panel = {
-	name: 'VueTabberPanel'
+	name: 'TabPanel',
+	render() {
+		return null;
+	}
 };
 
 export default Panel;

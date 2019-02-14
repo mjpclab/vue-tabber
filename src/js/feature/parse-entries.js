@@ -1,12 +1,16 @@
-const RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
-const RE_TAG_PANEL = /[Vv]ue-?[Tt]abber-?[Pp]anel/;
+import Label from '../component/label';
+import Panel from '../component/panel';
 
 function isLabel(vNode) {
-	return vNode.componentOptions && RE_TAG_LABEL.test(vNode.componentOptions.tag);
+	return vNode.componentOptions &&
+		vNode.componentOptions.Ctor &&
+		vNode.componentOptions.Ctor.extendOptions === Label;
 }
 
 function isPanel(vNode) {
-	return vNode.componentOptions && RE_TAG_PANEL.test(vNode.componentOptions.tag);
+	return vNode.componentOptions &&
+		vNode.componentOptions.Ctor &&
+		vNode.componentOptions.Ctor.extendOptions === Panel;
 }
 
 function parseEntries(vNodes) {
@@ -26,7 +30,7 @@ function parseEntries(vNodes) {
 		});
 	};
 
-	vNodes.forEach((vNode, index) => {
+	vNodes.forEach((vNode) => {
 		if (isLabel(vNode)) {
 			if (labelVNodes.length) {
 				pushEntry();

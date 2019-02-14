@@ -1,21 +1,3 @@
-var Label = {
-  name: 'VueTabberLabel',
-  props: {
-    disabled: {
-      type: [Boolean],
-      default: false
-    },
-    hidden: {
-      type: [Boolean],
-      default: false
-    }
-  }
-};
-
-var Panel = {
-  name: 'VueTabberPanel'
-};
-
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -70,15 +52,36 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
-var RE_TAG_LABEL = /[Vv]ue-?[Tt]abber-?[Ll]abel/;
-var RE_TAG_PANEL = /[Vv]ue-?[Tt]abber-?[Pp]anel/;
+var Label = {
+  name: 'TabLabel',
+  props: {
+    disabled: {
+      type: [Boolean],
+      default: false
+    },
+    hidden: {
+      type: [Boolean],
+      default: false
+    }
+  },
+  render: function render() {
+    return null;
+  }
+};
+
+var Panel = {
+  name: 'TabPanel',
+  render: function render() {
+    return null;
+  }
+};
 
 function isLabel(vNode) {
-  return vNode.componentOptions && RE_TAG_LABEL.test(vNode.componentOptions.tag);
+  return vNode.componentOptions && vNode.componentOptions.Ctor && vNode.componentOptions.Ctor.extendOptions === Label;
 }
 
 function isPanel(vNode) {
-  return vNode.componentOptions && RE_TAG_PANEL.test(vNode.componentOptions.tag);
+  return vNode.componentOptions && vNode.componentOptions.Ctor && vNode.componentOptions.Ctor.extendOptions === Panel;
 }
 
 function parseEntries(vNodes) {
@@ -97,7 +100,7 @@ function parseEntries(vNodes) {
     });
   };
 
-  vNodes.forEach(function (vNode, index) {
+  vNodes.forEach(function (vNode) {
     if (isLabel(vNode)) {
       var _labelVNodes;
 
@@ -305,8 +308,8 @@ function getValidIndex(index) {
   return intIndex < 0 ? 0 : index;
 }
 
-var Tabber = {
-  name: 'VueTabber',
+var Tab = {
+  name: 'Tab',
   props: {
     mode: {
       validator: function validator(value) {
@@ -449,16 +452,4 @@ var Tabber = {
   }
 };
 
-var components = {
-  VueTabber: Tabber,
-  VueTabberLabel: Label,
-  VueTabberPanel: Panel
-};
-
-function registerTo(Vue) {
-  Vue.component('VueTabber', Tabber);
-  Vue.component('VueTabberLabel', Label);
-  Vue.component('VueTabberPanel', Panel);
-}
-
-export { components, registerTo };
+export { Tab, Label as TabLabel, Panel as TabPanel };

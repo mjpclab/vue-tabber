@@ -22,66 +22,69 @@ A Vue.js Tab sheet component.
 ## Import VueTabber Module
 *Import in ES6 module environment*  
 ```javascript
-import {components, registerTo} from 'vue-tabber';
+import {Tab, TabLabel, TabPanel} from 'vue-tabber';
 ```
 
 *Import in commonjs environment*  
 ```javascript
-const {components, registerTo} = require('vue-tabber');
+const {Tab, TabLabel, TabPanel} = require('vue-tabber');
 ```
 
 *Import in AMD environment*  
 ```javascript
 require(['vue-tabber'], function(VueTabber){
-	// VueTabber.components
-	// VueTabber.registerTo
+	// VueTabber.Tabber
+	// VueTabber.TabberLabel
+	// VueTabber.TabberPanel
 });
 ```
 
 *Using global variable mode*  
-Just importing vue-tabber by `<script>` tag. Methods are under global variable `VueTabber`.
+Just importing vue-tabber by `<script>` tag. Components are under global variable `VueTabber`.
 
 ## Prepare Template
 Put tab information in the app or component's template like below:
 ```html
 <div id="app">
-	<vue-tabber>
-		<vue-tabber-label key="optional-key-1">title 1</vue-tabber-label>
-		<vue-tabber-panel>content of panel 1</vue-tabber-panel>
-		<vue-tabber-panel>another content of panel 1</vue-tabber-panel>
+	<tab>
+		<tab-label key="optional-key-1">title 1</tab-label>
+		<tab-panel>content of panel 1</tab-panel>
+		<tab-panel>another content of panel 1</tab-panel>
 
-		<vue-tabber-label key="optional-key-2">title 2</vue-tabber-label>
-		<vue-tabber-panel>content of panel 2</vue-tabber-panel>
-		<vue-tabber-panel><p>vue-tabber-panel tag is optional if wrapped by another tag.</p></vue-tabber-panel>
-		<p>vue-tabber-panel tag is optional if wrapped by another tag.</p>
-	</vue-tabber>
+		<tab-label key="optional-key-2">title 2</tab-label>
+		<tab-panel>content of panel 2</tab-panel>
+		<tab-panel><p>tab-panel tag is optional if wrapped by another tag.</p></tab-panel>
+		<p>tab-panel tag is optional if wrapped by another tag.</p>
+	</tab>
 </div>
 ```
 Both labels and panels can contain plain texts, regular HTML elements or Vue components.
 
 Label items can have an optional key attribute, which can reduce DOM changes when items are dynamically changed.
 
-## Run Application
-Then just start the component:
+## Register Components and Run Application
+*Register to global*
 ```javascript
-// register components to global
 import Vue from 'vue';
-import { registerTo } from 'vue-tabber';
-registerTo(Vue);
+import {Tab, TabLabel, TabPanel} from 'vue-tabber';
+Vue.component('Tab', Tab);
+Vue.component('TabLabel', TabLabel);
+Vue.component('TabPanel', TabPanel);
 
 new Vue({
 	el: '#app'
 });
 ```
-```javascript
-// use as local components
-import Vue from 'vue';
-import { components as tabberComponents } from 'vue-tabber';
 
+*Register to local component*
+```javascript
+import Vue from 'vue';
+import {Tab, TabLabel, TabPanel} from 'vue-tabber';
 new Vue({
-	el: '#app',
 	components: {
-		...tabberComponents
+		Tab,
+		TabLabel,
+		TabPanel
 	}
 });
 ```
@@ -93,14 +96,16 @@ If you are using Webpack for your project, maybe using `vue-loader` loader is a 
 
 Here is the example for rewriting the template into `render()` function:
 ```javascript
+import Vue from 'vue';
+import {Tab, TabLabel, TabPanel} from 'vue-tabber';
 new Vue({
 	el: '#app',
 	render: function (createElement) {
-		return createElement('vue-tabber', [
-			createElement('vue-tabber-label', {key: 'optional-key-1'}, 'title 1'),
-			createElement('vue-tabber-panel', 'content of panel 1'),
-			createElement('vue-tabber-label', {key: 'optional-key-2'}, 'title 2'),
-			createElement('vue-tabber-panel', 'content of panel 2')
+		return createElement(Tab, [
+			createElement(TabLabel, {key: 'optional-key-1'}, 'title 1'),
+			createElement(TabPanel, 'content of panel 1'),
+			createElement(TabLabel, {key: 'optional-key-2'}, 'title 2'),
+			createElement(TabPanel, 'content of panel 2')
 		]);
 	}
 });

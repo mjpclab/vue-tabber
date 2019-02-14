@@ -10,16 +10,16 @@
 <body>
 <script type="text/x-template" id="template">
 	<div id="container">
-		<vue-tabber @switching="onSwitching">
-			<vue-tabber-label key="optional-key-1">title 1</vue-tabber-label>
-			<vue-tabber-panel>content of panel 1.</vue-tabber-panel>
-			<vue-tabber-panel>another content of panel 1.</vue-tabber-panel>
+		<tab @switching="onSwitching">
+			<tab-label key="optional-key-1">title 1</tab-label>
+			<tab-panel>content of panel 1.</tab-panel>
+			<tab-panel>another content of panel 1.</tab-panel>
 
-			<vue-tabber-label key="optional-key-2">title 2</vue-tabber-label>
-			<vue-tabber-panel>content of panel 2</vue-tabber-panel>
-			<vue-tabber-panel><p>vue-tabber-panel tag is optional if wrapped by another tag.</p></vue-tabber-panel>
-			<p>vue-tabber-panel tag is optional if wrapped by another tag.</p>
-		</vue-tabber>
+			<tab-label key="optional-key-2">title 2</tab-label>
+			<tab-panel>content of panel 2</tab-panel>
+			<tab-panel><p>tab-panel tag is optional if wrapped by another tag.</p></tab-panel>
+			<p>tab-panel tag is optional if wrapped by another tag.</p>
+		</tab>
 	</div>
 </script>
 <div id="app"></div>
@@ -28,7 +28,9 @@
 <script type="text/javascript" src="../dist/vue-tabber.js"></script>
 
 <script type="text/javascript">
-	VueTabber.registerTo(Vue);
+	Vue.component('Tab',VueTabber.Tab);
+	Vue.component('TabLabel',VueTabber.TabLabel);
+	Vue.component('TabPanel',VueTabber.TabPanel);
 
 	var app = new Vue({
 		el: '#app',

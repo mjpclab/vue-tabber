@@ -10,29 +10,29 @@
 <body>
 <script type="text/x-template" id="template">
 	<div id="container">
-		<vue-tabber>
-			<vue-tabber-label>A</vue-tabber-label>
-			<vue-tabber-panel>
-				<vue-tabber tab-container-class="tab-container-vert">
-					<vue-tabber-label>A-1</vue-tabber-label>
-					<vue-tabber-panel>
-						<vue-tabber>
-							<vue-tabber-label>A-1-1</vue-tabber-label>
-							<vue-tabber-panel>a-1-1</vue-tabber-panel>
+		<tab>
+			<tab-label>A</tab-label>
+			<tab-panel>
+				<tab tab-container-class="tab-container-vert">
+					<tab-label>A-1</tab-label>
+					<tab-panel>
+						<tab>
+							<tab-label>A-1-1</tab-label>
+							<tab-panel>a-1-1</tab-panel>
 
-							<vue-tabber-label>A-1-2</vue-tabber-label>
-							<vue-tabber-panel>a-1-2</vue-tabber-panel>
-						</vue-tabber>
-					</vue-tabber-panel>
+							<tab-label>A-1-2</tab-label>
+							<tab-panel>a-1-2</tab-panel>
+						</tab>
+					</tab-panel>
 
-					<vue-tabber-label>A-2</vue-tabber-label>
-					<vue-tabber-panel>a-2</vue-tabber-panel>
-				</vue-tabber>
-			</vue-tabber-panel>
+					<tab-label>A-2</tab-label>
+					<tab-panel>a-2</tab-panel>
+				</tab>
+			</tab-panel>
 
-			<vue-tabber-label>B</vue-tabber-label>
-			<vue-tabber-panel>b</vue-tabber-panel>
-		</vue-tabber>
+			<tab-label>B</tab-label>
+			<tab-panel>b</tab-panel>
+		</tab>
 	</div>
 </script>
 <div id="app"></div>
@@ -40,7 +40,9 @@
 <script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
 <script type="text/javascript" src="../dist/vue-tabber.js"></script>
 <script type="text/javascript">
-	VueTabber.registerTo(Vue);
+	Vue.component('Tab',VueTabber.Tab);
+	Vue.component('TabLabel',VueTabber.TabLabel);
+	Vue.component('TabPanel',VueTabber.TabPanel);
 
 	var app = new Vue({
 		el: '#app',

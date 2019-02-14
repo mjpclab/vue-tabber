@@ -11,8 +11,8 @@ function getValidIndex(index) {
 	return intIndex < 0 ? 0 : index;
 }
 
-const Tabber = {
-	name: 'VueTabber',
+const Tab = {
+	name: 'Tab',
 	props: {
 		mode: {
 			validator(value) {
@@ -123,4 +123,4 @@ const Tabber = {
 	}
 };
 
-export default Tabber;
+export default Tab;
