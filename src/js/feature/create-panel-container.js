@@ -30,10 +30,10 @@ function createPanelItem(createElement, tabber, entry, index) {
 }
 
 
-function createPanelContainer(createElement, tabber, entries) {
+function createPanelContainer(createElement, tabber) {
+	const {entries, panelContainerClass} = tabber.$props;
 	const panelItems = entries.map((entry, index) => createPanelItem(createElement, tabber, entry, index));
 
-	const {panelContainerClass} = tabber.$props;
 	const classes = [panelContainerClass,];
 
 	return createElement('div', {

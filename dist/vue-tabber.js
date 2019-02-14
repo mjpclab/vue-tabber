@@ -221,13 +221,14 @@
     }, label);
   }
 
-  function createLabelContainer(createElement, tabber, entries, side) {
+  function createLabelContainer(createElement, tabber, side) {
+    var _tabber$$props2 = tabber.$props,
+        entries = _tabber$$props2.entries,
+        mode = _tabber$$props2.mode,
+        labelContainerClass = _tabber$$props2.labelContainerClass;
     var labelItems = entries.map(function (entry, index) {
       return createLabelItem(createElement, tabber, entry, index);
     });
-    var _tabber$$props2 = tabber.$props,
-        mode = _tabber$$props2.mode,
-        labelContainerClass = _tabber$$props2.labelContainerClass;
     var classes = [labelContainerClass, labelContainerClass + '-' + side, labelContainerClass + '-' + mode, labelContainerClass + '-' + side + '-' + mode];
     return createElement('div', {
       'class': classes,
@@ -263,11 +264,13 @@
     }, panel);
   }
 
-  function createPanelContainer(createElement, tabber, entries) {
+  function createPanelContainer(createElement, tabber) {
+    var _tabber$$props = tabber.$props,
+        entries = _tabber$$props.entries,
+        panelContainerClass = _tabber$$props.panelContainerClass;
     var panelItems = entries.map(function (entry, index) {
       return createPanelItem(createElement, tabber, entry, index);
     });
-    var panelContainerClass = tabber.$props.panelContainerClass;
     var classes = [panelContainerClass];
     return createElement('div', {
       'class': classes,
@@ -275,15 +278,15 @@
     }, panelItems);
   }
 
-  function createTabContainer(createElement, tabber, entries) {
+  function createTabContainer(createElement, tabber) {
     var tabContainerModeClass = tabber.tabContainerModeClass;
     var _tabber$$props = tabber.$props,
         showHeaderLabelContainer = _tabber$$props.showHeaderLabelContainer,
         showFooterLabelContainer = _tabber$$props.showFooterLabelContainer,
         tabContainerClass = _tabber$$props.tabContainerClass;
-    var headerLabelContainer = showHeaderLabelContainer && createLabelContainer(createElement, tabber, entries, 'header');
-    var panelContainer = createPanelContainer(createElement, tabber, entries);
-    var footerLabelContainer = showFooterLabelContainer && createLabelContainer(createElement, tabber, entries, 'footer');
+    var headerLabelContainer = showHeaderLabelContainer && createLabelContainer(createElement, tabber, 'header');
+    var panelContainer = createPanelContainer(createElement, tabber);
+    var footerLabelContainer = showFooterLabelContainer && createLabelContainer(createElement, tabber, 'footer');
     var children = [headerLabelContainer, panelContainer, footerLabelContainer];
     var classes = [tabContainerClass, tabContainerModeClass];
     return createElement('div', {
@@ -305,6 +308,68 @@
     }
   }
 
+  var TabPropsDefinition = {
+    mode: {
+      validator: function validator(value) {
+        return ['horizontal', 'vertical'].indexOf(value) >= 0;
+      },
+      default: 'horizontal'
+    },
+    triggerEvents: {
+      type: [Array, String],
+      default: 'click'
+    },
+    delayTriggerEvents: {
+      type: [Array, String]
+    },
+    delayTriggerCancelEvents: {
+      type: [Array, String]
+    },
+    delayTriggerLatency: {
+      type: [Number, String],
+      default: 200
+    },
+    activeIndex: {
+      type: [Number, String],
+      default: 0
+    },
+    tabContainerClass: {
+      type: String,
+      default: 'tab-container'
+    },
+    labelContainerClass: {
+      type: String,
+      default: 'label-container'
+    },
+    showHeaderLabelContainer: {
+      type: Boolean,
+      default: true
+    },
+    showFooterLabelContainer: {
+      type: Boolean,
+      default: false
+    },
+    labelItemClass: {
+      type: String,
+      default: 'label-item'
+    },
+    panelContainerClass: {
+      type: String,
+      default: 'panel-container'
+    },
+    panelItemClass: {
+      type: String,
+      default: 'panel-item'
+    }
+  };
+
+  var TabContainerPropsDefinition = _objectSpread({}, TabPropsDefinition, {
+    entries: {
+      type: Array,
+      default: []
+    }
+  });
+
   function getValidIndex(index) {
     if (index === '' || !isFinite(index) || isNaN(index)) {
       return -1;
@@ -314,62 +379,9 @@
     return intIndex < 0 ? 0 : index;
   }
 
-  var Tab = {
-    name: 'Tab',
-    props: {
-      mode: {
-        validator: function validator(value) {
-          return ['horizontal', 'vertical'].indexOf(value) >= 0;
-        },
-        default: 'horizontal'
-      },
-      triggerEvents: {
-        type: [Array, String],
-        default: 'click'
-      },
-      delayTriggerEvents: {
-        type: [Array, String]
-      },
-      delayTriggerCancelEvents: {
-        type: [Array, String]
-      },
-      delayTriggerLatency: {
-        type: [Number, String],
-        default: 200
-      },
-      activeIndex: {
-        type: [Number, String],
-        default: 0
-      },
-      tabContainerClass: {
-        type: String,
-        default: 'tab-container'
-      },
-      labelContainerClass: {
-        type: String,
-        default: 'label-container'
-      },
-      showHeaderLabelContainer: {
-        type: Boolean,
-        default: true
-      },
-      showFooterLabelContainer: {
-        type: Boolean,
-        default: false
-      },
-      labelItemClass: {
-        type: String,
-        default: 'label-item'
-      },
-      panelContainerClass: {
-        type: String,
-        default: 'panel-container'
-      },
-      panelItemClass: {
-        type: String,
-        default: 'panel-item'
-      }
-    },
+  var TabContainer = {
+    name: 'TabContainer',
+    props: TabContainerPropsDefinition,
     data: function data() {
       return {
         count: 0,
@@ -425,14 +437,7 @@
       clearTimeout(this.delayTimeout);
     },
     render: function render(createElement) {
-      var slotChildren = this.$slots.default;
-
-      if (!slotChildren || !slotChildren.length) {
-        return;
-      }
-
-      var entries = parseEntries(slotChildren);
-      this.count = entries.length;
+      this.count = this.entries.length;
       var oldIndex = this.currentIndex;
       var newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
 
@@ -440,12 +445,9 @@
         this.currentIndex = newIndex;
         this.$emit('switching', oldIndex, newIndex);
         this.$emit('update:activeIndex', newIndex);
-      } //tabb container
+      }
 
-
-      var tabberContaienr = createTabContainer(createElement, this, entries); //return
-
-      return tabberContaienr;
+      return createTabContainer(createElement, this);
     },
     updated: function updated() {
       var oldIndex = this.renderedIndex;
@@ -455,6 +457,25 @@
         this.renderedIndex = newIndex;
         this.$emit('switched', oldIndex, newIndex);
       }
+    }
+  };
+
+  var Tab = {
+    name: 'Tab',
+    props: TabPropsDefinition,
+    render: function render(createElement) {
+      var slotChildren = this.$slots.default;
+
+      if (!slotChildren || !slotChildren.length) {
+        return null;
+      }
+
+      var entries = parseEntries(slotChildren);
+      return createElement(TabContainer, {
+        props: _objectSpread({}, this.$props, {
+          entries: entries
+        })
+      });
     }
   };
 

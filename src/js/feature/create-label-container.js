@@ -76,10 +76,10 @@ function createLabelItem(createElement, tabber, entry, index) {
 }
 
 
-function createLabelContainer(createElement, tabber, entries, side) {
+function createLabelContainer(createElement, tabber, side) {
+	const {entries, mode, labelContainerClass} = tabber.$props;
 	const labelItems = entries.map((entry, index) => createLabelItem(createElement, tabber, entry, index));
 
-	const {mode, labelContainerClass} = tabber.$props;
 	const classes = [
 		labelContainerClass,
 		labelContainerClass + '-' + side,
