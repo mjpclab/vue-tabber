@@ -1,10 +1,10 @@
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import vue from 'rollup-plugin-vue';
-import commonjs from 'rollup-plugin-commonjs';
 import {uglify} from 'rollup-plugin-uglify';
 
-const getConfig = function (format, filename) {
+const getConfig = function (filename) {
+	const format = filename.indexOf('.esm') >= 0 ? 'esm' : 'umd';
 	const isMinify = filename.indexOf('.min') >= 0;
 
 	const config = {
@@ -30,7 +30,7 @@ const getConfig = function (format, filename) {
 };
 
 export default [
-	getConfig('umd', 'vue-tabber'),
-	getConfig('umd', 'vue-tabber.min'),
-	getConfig('esm', 'vue-tabber.esm')
+	getConfig('vue-tabber'),
+	getConfig('vue-tabber.min'),
+	getConfig('vue-tabber.esm')
 ];
