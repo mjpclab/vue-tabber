@@ -13,8 +13,15 @@ function isPanel(vNode) {
 		vNode.componentOptions.Ctor.extendOptions === Panel;
 }
 
-function parseEntries(vNodes) {
+function parseEntries(propEntries, vNodes) {
 	const entries = [];
+
+	// prop entries
+	if (propEntries && propEntries.length) {
+		entries.push(...propEntries);
+	}
+
+	// children
 	let key, disabled, hidden;
 
 	let labelVNodes = [];
@@ -30,7 +37,7 @@ function parseEntries(vNodes) {
 		});
 	};
 
-	vNodes.forEach((vNode) => {
+	vNodes && vNodes.length && vNodes.forEach((vNode) => {
 		if (isLabel(vNode)) {
 			if (labelVNodes.length) {
 				pushEntry();

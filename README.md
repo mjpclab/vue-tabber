@@ -80,16 +80,16 @@ Put tab information in the app or component's template like below:
 ```
 ```javascript
 new Vue({
-	el: '#app',
-	// ...
+	el: '#app'
 });
 ```
 
 Both labels and panels can contain plain texts, regular HTML elements or Vue components.
 
 Label items can have an optional key attribute, which can reduce DOM changes when items are dynamically changed.
+In some APIs, `key` can be used instead of `index` which represents a tab item position.
 
-Continues multiple Panels are allowed, they are just belongs to the same closest Label. Panel Element can be omitted if inside contents has another element to wrap them.
+Continues multiple Panels are allowed, they are just belongs to the same closest Label. Panel element can be omitted if inside contents has another element to wrap them.
 
 ## Use .vue file format
 If you have setup a packaging development environment(like Webpack, etc), and configured corresponding "loader" for process `.vue` file,
@@ -138,6 +138,27 @@ new Vue({
 ```
 If you have registered component, you can also use component id instead of component definition.
 
+## Specify data structure instead of templating
+For all 3 rendering methods above, you can specify tab data structure directly instead of filling inside labels and panels in the Tab. 
+The limitation is label and panel content can only have strings, which means no elements could be put in.
+Prop `entries` accepts the data structure. `label` represents label content, `panel` represents panel content, `key` is optional.
+```html
+<div id="app">
+	<tab :entries="entries" />
+</div>
+```
+```javascript
+new Vue({
+	el: '#app',
+	data: {
+		entries: [
+			{label: 'label1', panel: 'content 1', key: 'tab1'},
+			{label: 'label2', panel: 'content 2', key: 'tab2'}
+		]
+	}
+});
+```
+
 ## Controlling the active tab item
 There are 2 ways to control the active tab item.
 
@@ -147,8 +168,8 @@ Not specifying prop `activePosition` or its value is `undefined` or `null` will 
 
 ### Controlled by outside component
 The active tab item position is managed by outside component.
-Specifying a value which is not `undefined` or `null` to prop `activePosition`. if the tabber component wish to change it,
-for example the end user clicked another tab item, event `updateActivePosition({index, key})` will be invoked to request
+Specifying a value which is neither `undefined` nor `null` to prop `activePosition`. if the tabber component wish to change it,
+for example the end user clicked another tab item, event `updateActivePosition({index, key})` will be triggered to request
 a change of active position.
 
 # Including CSS
@@ -166,7 +187,7 @@ Copying or referencing CSS files from `dist/theme/` directory.
 
 ## Vertical labels
 To use vertical labels, specify property `mode` to "vertical".  
-Notice that vertical style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.```html
+Notice that vertical style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.
 ```vue
 <vue-tabber mode="vertical">
 	......
@@ -194,17 +215,16 @@ Specify how long (in milliseconds) need to wait before trigger the delayed switc
 `active-position`  
 The initial active index or key of the tab.
 
-`switching(from:{index, key}, to:{index, key})`  
+`v-on:switching(from:{index, key}, to:{index, key})`  
 A `switching` event will be emitted with parameters `oldIndex` and `newIndex` when switching to another panel item.
 Subscribe this event if you want to know a switching is performed as early as possible.
 
-`switched(from:{index, key}, to:{index, key})`  
+`v-on:switched(from:{index, key}, to:{index, key})`  
 A `switched` event will be emitted with parameters `oldIndex` and `newIndex` when switched to another panel item.
 Subscribe this event if you want to do some work based on result of switching(e.g. get the height of the component).
 
 `v-on:updateActivePosition({index, key})`  
 An `updateActivePosition` event will be emitted with new position `{index, key}` when request to change active position.
-```
 
 ## UI Properties
 ### Tab

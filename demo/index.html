@@ -10,7 +10,7 @@
 <body>
 <script type="text/x-template" id="template">
 	<div id="container">
-		<tab @switching="onSwitching">
+		<tab @switching="onSwitching" :entries="entries">
 			<tab-label key="optional-key-1">title 1</tab-label>
 			<tab-panel>content of panel 1.</tab-panel>
 			<tab-panel>another content of panel 1.</tab-panel>
@@ -35,6 +35,11 @@
 	var app = new Vue({
 		el: '#app',
 		template: '#template',
+		data: {
+			entries: [
+				{label: 'title 0', panel: 'content 0', key: 'optional-key-0'},
+			]
+		},
 		methods: {
 			onSwitching: function (from, to) {
 				console.log('switching', from, to);

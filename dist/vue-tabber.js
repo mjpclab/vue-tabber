@@ -90,8 +90,14 @@
     return vNode.componentOptions && vNode.componentOptions.Ctor && vNode.componentOptions.Ctor.extendOptions === Panel;
   }
 
-  function parseEntries(vNodes) {
-    var entries = [];
+  function parseEntries(propEntries, vNodes) {
+    var entries = []; // prop entries
+
+    if (propEntries && propEntries.length) {
+      entries.push.apply(entries, _toConsumableArray(propEntries));
+    } // children
+
+
     var key, disabled, hidden;
     var labelVNodes = [];
     var panelVNodes = [];
@@ -106,7 +112,7 @@
       });
     };
 
-    vNodes.forEach(function (vNode) {
+    vNodes && vNodes.length && vNodes.forEach(function (vNode) {
       if (isLabel(vNode)) {
         var _labelVNodes;
 
@@ -148,6 +154,10 @@
   }
 
   var sharedPropsDefinition = {
+    entries: {
+      type: Array,
+      default: []
+    },
     mode: {
       validator: function validator(value) {
         return ['horizontal', 'vertical'].indexOf(value) >= 0;
@@ -190,13 +200,8 @@
       default: 'panel-item'
     }
   };
-  var callbackPropsDefinition = {
-    onUpdateTargetPosition: {
-      type: Function
-    }
-  };
 
-  var publicPropsDefinition = _objectSpread({}, sharedPropsDefinition, callbackPropsDefinition, {
+  var publicPropsDefinition = _objectSpread({}, sharedPropsDefinition, {
     triggerEvents: {
       type: [Array, String],
       default: 'click'
@@ -209,11 +214,7 @@
     }
   });
 
-  var tabPropsDefinition = _objectSpread({}, publicPropsDefinition, callbackPropsDefinition, {
-    entries: {
-      type: Array,
-      default: []
-    },
+  var tabPropsDefinition = _objectSpread({}, publicPropsDefinition, {
     triggerEvents: {
       type: Array
     },
@@ -645,12 +646,8 @@
         this.prevPosition = currentPosition;
       },
       switchTo: function switchTo(normalizedPosition) {
-        var onUpdateTargetPosition = this.$props.onUpdateTargetPosition;
-
         if (this.manageTargetPosition) {
-          if (!onUpdateTargetPosition || onUpdateTargetPosition(normalizedPosition) !== false) {
-            this.targetPosition = normalizedPosition.index;
-          }
+          this.targetPosition = normalizedPosition.index;
         } else {
           this.$emit('updateActivePosition', normalizedPosition);
         }
@@ -742,12 +739,13 @@
     render: function render(createElement) {
       var slotChildren = this.$slots.default;
       var _this$$props = this.$props,
+          entries = _this$$props.entries,
           triggerEvents = _this$$props.triggerEvents,
           delayTriggerEvents = _this$$props.delayTriggerEvents,
           delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents;
       return createElement(Tab, {
         props: _objectSpread({}, this.$props, {
-          entries: parseEntries(slotChildren),
+          entries: parseEntries(entries, slotChildren),
           triggerEvents: normalizeEvents(triggerEvents),
           delayTriggerEvents: normalizeEvents(delayTriggerEvents),
           delayTriggerCancelEvents: normalizeEvents(delayTriggerCancelEvents)

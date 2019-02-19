@@ -1,4 +1,5 @@
 const sharedPropsDefinition = {
+	entries: {type: Array, default: []},
 	mode: {
 		validator(value) {
 			return ['horizontal', 'vertical'].indexOf(value) >= 0
@@ -28,7 +29,6 @@ const publicPropsDefinition = {
 
 const tabPropsDefinition = {
 	...publicPropsDefinition,
-	entries: {type: Array, default: []},
 	triggerEvents: {type: Array},
 	delayTriggerEvents: {type: Array},
 	delayTriggerCancelEvents: Array

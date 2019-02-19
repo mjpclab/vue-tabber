@@ -14,12 +14,12 @@ const Index = {
 	render(createElement) {
 		const slotChildren = this.$slots.default;
 
-		const {triggerEvents, delayTriggerEvents, delayTriggerCancelEvents} = this.$props;
+		const {entries, triggerEvents, delayTriggerEvents, delayTriggerCancelEvents} = this.$props;
 
 		return createElement(Tab, {
 			props: {
 				...this.$props,
-				entries: parseEntries(slotChildren),
+				entries: parseEntries(entries, slotChildren),
 				triggerEvents: normalizeEvents(triggerEvents),
 				delayTriggerEvents: normalizeEvents(delayTriggerEvents),
 				delayTriggerCancelEvents: normalizeEvents(delayTriggerCancelEvents)
