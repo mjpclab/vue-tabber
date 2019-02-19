@@ -1,92 +1,112 @@
-import createTabContainer from '../feature/create-tab-container';
-import getValidEvents from '../utility/get-valid-events';
-import {TabContainerPropsDefinition} from '../utility/props-definition';
-
-function getValidIndex(index) {
-	if (index === '' || !isFinite(index) || isNaN(index)) {
-		return -1;
-	}
-
-	const intIndex = parseInt(index);
-	return intIndex < 0 ? 0 : index;
-}
+import ClassNameSuffix from '../utility/class-name-suffix';
+import LabelContainer from './label-container';
+import PanelContainer from './panel-container';
 
 const TabContainer = {
-	name: 'TabContainer',
-	props: TabContainerPropsDefinition,
-	data() {
-		return {
-			count: 0,
-			targetIndex: getValidIndex(this.activeIndex),
-			currentIndex: -1,
-			renderedIndex: -1,
-			validTriggerEvents: getValidEvents(this.triggerEvents),
-			validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
-			validDelayTriggerCancelEvents: getValidEvents(this.delayTriggerCancelEvents),
-			delayTimeout: undefined
-		};
-	},
-	computed: {
-		tabContainerModeClass() {
-			return this.tabContainerClass + '-' + this.mode;
-		},
-		labelItemActiveClass() {
-			return this.labelItemClass + '-' + 'active';
-		},
-		labelItemInactiveClass() {
-			return this.labelItemClass + '-' + 'inactive';
-		},
-		labelItemDisabledClass() {
-			return this.labelItemClass + '-' + 'disabled';
-		},
-		labelItemHiddenClass() {
-			return this.labelItemClass + '-' + 'hidden';
-		},
-		panelItemActiveClass() {
-			return this.panelItemClass + '-' + 'active';
-		},
-		panelItemInactiveClass() {
-			return this.panelItemClass + '-' + 'inactive';
-		},
-		panelItemDisabledClass() {
-			return this.panelItemClass + '-' + 'disabled';
-		},
-		panelItemHiddenClass() {
-			return this.panelItemClass + '-' + 'hidden';
-		}
-	},
-	watch: {
-		activeIndex(newValue) {
-			this.switchTo(newValue);
-		}
-	},
-	methods: {
-		switchTo(index) {
-			this.targetIndex = getValidIndex(index);
-		}
-	},
-	beforeUnmount() {
-		clearTimeout(this.delayTimeout);
+	name: 'VueTabberTabContainer',
+	props: {
+		entries: {type: Array},
+		mode: {type: String},
+		tabContainerClass: {type: String},
+		labelContainerClass: {type: String},
+		labelItemClass: {type: String},
+		panelContainerClass: {type: String},
+		panelItemClass: {type: String},
+		delayTriggerLatency: {type: Number},
+		showHeaderLabelContainer: {type: Boolean},
+		showFooterLabelContainer: {type: Boolean},
+
+		triggerEvents: {type: Array},
+		delayTriggerEvents: {type: Array},
+		delayTriggerCancelEvents: {type: Array},
+
+		fnSwitchTo: {type: Function},
+
+		tabContext: {type: Object},
+		currentIndex: {type: Number}
 	},
 	render(createElement) {
-		this.count = this.entries.length;
-		const oldIndex = this.currentIndex;
-		const newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
-		if (oldIndex !== newIndex) {
-			this.currentIndex = newIndex;
-			this.$emit('switching', oldIndex, newIndex);
-			this.$emit('update:activeIndex', newIndex);
+		const {
+			entries,
+			mode,
+			tabContainerClass,
+			labelContainerClass,
+			labelItemClass,
+			panelContainerClass,
+			panelItemClass,
+			delayTriggerLatency,
+			showHeaderLabelContainer,
+			showFooterLabelContainer,
+
+			triggerEvents,
+			delayTriggerEvents,
+			delayTriggerCancelEvents,
+
+			fnSwitchTo,
+
+			tabContext,
+			currentIndex
+		} = this.$props;
+
+		const tabContainerModeClass = tabContainerClass + '-' + mode;
+		const tabContainerAllClass = [tabContainerClass, tabContainerModeClass];
+
+		const children = [];
+		if (showHeaderLabelContainer) {
+			children.push(createElement(LabelContainer, {
+				props: {
+					entries,
+					mode,
+					labelContainerClass,
+					labelItemClass,
+					delayTriggerLatency,
+
+					triggerEvents,
+					delayTriggerEvents,
+					delayTriggerCancelEvents,
+
+					fnSwitchTo,
+
+					tabContext,
+					currentIndex,
+					side: ClassNameSuffix.header
+				}
+			}));
+		}
+		children.push(createElement(PanelContainer, {
+			props: {
+				entries,
+				mode,
+				panelContainerClass,
+				panelItemClass,
+				currentIndex
+			}
+		}));
+		if (showFooterLabelContainer) {
+			children.push(createElement(LabelContainer, {
+				props: {
+					entries,
+					mode,
+					labelContainerClass,
+					labelItemClass,
+					delayTriggerLatency,
+
+					triggerEvents,
+					delayTriggerEvents,
+					delayTriggerCancelEvents,
+
+					fnSwitchTo,
+
+					tabContext,
+					currentIndex,
+					side: ClassNameSuffix.footer
+				}
+			}));
 		}
 
-		return createTabContainer(createElement, this);
-	},
-	updated() {
-		const oldIndex = this.renderedIndex;
-		const newIndex = this.currentIndex;
-		if (oldIndex !== newIndex) {
-			this.renderedIndex = newIndex;
-			this.$emit('switched', oldIndex, newIndex);
-		}
+		return createElement('div', {
+			'class': tabContainerAllClass,
+		}, children);
 	}
 };
 

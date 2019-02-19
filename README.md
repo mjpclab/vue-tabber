@@ -17,32 +17,52 @@ A Vue.js Tab sheet component.
 		> .panel-item
 		> ...
 ```
-
-# Usage: template mode for "full" Vue build
-## Import VueTabber Module
-*Import in ES6 module environment*  
+# Import Tab Component
+## Import in ES6 module environment  
 ```javascript
-import {Tab, TabLabel, TabPanel} from 'vue-tabber';
+import Tab from 'vue-tabber';
 ```
 
-*Import in commonjs environment*  
+## Import in commonjs environment  
 ```javascript
-const {Tab, TabLabel, TabPanel} = require('vue-tabber');
+const Tab = require('vue-tabber');
 ```
 
-*Import in AMD environment*  
+## Import in AMD environment
 ```javascript
-require(['vue-tabber'], function(VueTabber){
-	// VueTabber.Tabber
-	// VueTabber.TabberLabel
-	// VueTabber.TabberPanel
+require(['vue-tabber'], function(Tab) {
 });
 ```
 
-*Using global variable mode*  
-Just importing vue-tabber by `<script>` tag. Components are under global variable `VueTabber`.
+## Using global variable mode  
+Just importing vue-tabber by `<script>` tag. Tab Component are under global variable `VueTabber`.
 
-## Prepare Template
+# Register Component
+## Register as global component
+```javascript
+import Vue from 'vue';
+import Tab from 'vue-tabber';
+
+Vue.component('Tab', Tab);
+Vue.component('TabLabel', Tab.Label);
+Vue.component('TabPanel', Tab.Panel);
+````
+
+## Register as local component
+```javascript
+import Vue from 'vue';
+import Tab from 'vue-tabber';
+new Vue({
+	components: {
+		Tab: Tab,
+		TabLabel: Tab.Label,
+		TabPanel: Tab.Panel
+	}
+});
+```
+
+# Usage
+## Template mode for "full" Vue build
 Put tab information in the app or component's template like below:
 ```html
 <div id="app">
@@ -58,66 +78,86 @@ Put tab information in the app or component's template like below:
 	</tab>
 </div>
 ```
+```javascript
+new Vue({
+	el: '#app',
+	// ...
+});
+```
+
 Both labels and panels can contain plain texts, regular HTML elements or Vue components.
 
 Label items can have an optional key attribute, which can reduce DOM changes when items are dynamically changed.
 
-## Register Components and Run Application
-*Register to global*
-```javascript
-import Vue from 'vue';
-import {Tab, TabLabel, TabPanel} from 'vue-tabber';
-Vue.component('Tab', Tab);
-Vue.component('TabLabel', TabLabel);
-Vue.component('TabPanel', TabPanel);
+Continues multiple Panels are allowed, they are just belongs to the same closest Label. Panel Element can be omitted if inside contents has another element to wrap them.
 
-new Vue({
-	el: '#app'
-});
-```
+## Use .vue file format
+If you have setup a packaging development environment(like Webpack, etc), and configured corresponding "loader" for process `.vue` file,
+then usage may look like below: 
+```vue
+<template>
+<tab>
+	<tab-label key="optional-key-1">title 1</tab-label>
+	<tab-panel>content of panel 1</tab-panel>
 
-*Register to local component*
-```javascript
-import Vue from 'vue';
-import {Tab, TabLabel, TabPanel} from 'vue-tabber';
-new Vue({
+	<tab-label key="optional-key-2">title 2</tab-label>
+	<tab-panel>content of panel 2</tab-panel>
+</tab>
+</template>
+
+<script>
+import Tab from 'vue-tabber';
+export default {
 	components: {
-		Tab,
-		TabLabel,
-		TabPanel
+		Tab: Tab,
+		TabLabel: Tab.Label,
+		TabPanel: Tab.Panel
 	}
-});
+}
+</script>
 ```
 
-# Usage: implements render() manually for "runtime" Vue build
+## Implements render() manually for "runtime" Vue build
 Since there is no template compiler in runtime build, we have to implement method `render()` on component manually who uses vue-tabber, including vue-tabber and any other HTML elements or components which should appear inside it.
-
-If you are using Webpack for your project, maybe using `vue-loader` loader is a better solution for writing vue components. It will generate the final render() function from template for you.
 
 Here is the example for rewriting the template into `render()` function:
 ```javascript
 import Vue from 'vue';
-import {Tab, TabLabel, TabPanel} from 'vue-tabber';
+import Tab from 'vue-tabber';
 new Vue({
 	el: '#app',
 	render: function (createElement) {
 		return createElement(Tab, [
-			createElement(TabLabel, {key: 'optional-key-1'}, 'title 1'),
-			createElement(TabPanel, 'content of panel 1'),
-			createElement(TabLabel, {key: 'optional-key-2'}, 'title 2'),
-			createElement(TabPanel, 'content of panel 2')
+			createElement(Tab.Label, {key: 'optional-key-1'}, 'title 1'),
+			createElement(Tab.Panel, 'content of panel 1'),
+			createElement(Tab.Label, {key: 'optional-key-2'}, 'title 2'),
+			createElement(Tab.Panel, 'content of panel 2')
 		]);
 	}
 });
 ```
+If you have registered component, you can also use component id instead of component definition.
+
+## Controlling the active tab item
+There are 2 ways to control the active tab item.
+
+### Controlled by tabber component itself
+The active tab item position is managed by tabber component itself.
+Not specifying prop `activePosition` or its value is `undefined` or `null` will go this way. 
+
+### Controlled by outside component
+The active tab item position is managed by outside component.
+Specifying a value which is not `undefined` or `null` to prop `activePosition`. if the tabber component wish to change it,
+for example the end user clicked another tab item, event `updateActivePosition({index, key})` will be invoked to request
+a change of active position.
 
 # Including CSS
 vue-tabber provides default CSS styles if you don't want to make from scratch. Make sure CSS class name options are not customized.
 
 ## Importing by module
 ```javascript
-import 'vue-tabber/src/js/theme/gray';
-import 'vue-tabber/src/js/theme/effect/fade'; // optional fade effect when switching, must load after theme
+import 'vue-tabber/dist/theme/gray.css';
+import 'vue-tabber/dist/theme/effect/fade.css'; // optional fade effect when switching, must load after theme
 ```
 
 ## Use standalone CSS file
@@ -151,35 +191,19 @@ Specify events on label-item that will cancel delay switching.
 `delay-trigger-latency`  
 Specify how long (in milliseconds) need to wait before trigger the delayed switching events.
 
-`active-index`  
-The initial active index of the tab.
-There are two ways to get informed of current index changed. Subscribing event `switching` or prop update of `activeIndex`
+`active-position`  
+The initial active index or key of the tab.
 
-`switching(oldIndex, newIndex)`  
+`switching(from:{index, key}, to:{index, key})`  
 A `switching` event will be emitted with parameters `oldIndex` and `newIndex` when switching to another panel item.
 Subscribe this event if you want to know a switching is performed as early as possible.
 
-`switched(oldIndex, newIndex)`  
+`switched(from:{index, key}, to:{index, key})`  
 A `switched` event will be emitted with parameters `oldIndex` and `newIndex` when switched to another panel item.
 Subscribe this event if you want to do some work based on result of switching(e.g. get the height of the component).
 
-`update:activeIndex(newIndex)`  
-An `update:activeIndex` event will be emitted with parameter `newIndex` when switched to another panel item.
-This is convenient for prop binding with `.sync` modifier:
-```html
-<div id="app">
-	<vue-tabber :active-index.sync="index">
-		<!-- ... -->
-	</vue-tabber>
-</div>
-```
-```javascript
-new Vue({
-	el: '#app',
-	data: {
-		index: 0
-	}
-});
+`v-on:updateActivePosition({index, key})`  
+An `updateActivePosition` event will be emitted with new position `{index, key}` when request to change active position.
 ```
 
 ## UI Properties

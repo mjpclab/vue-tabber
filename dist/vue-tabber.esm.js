@@ -141,191 +141,19 @@ function parseEntries(vNodes) {
   return entries;
 }
 
-function createEventHandler(events, handler) {
-  var on = {};
-  events && events.length && events.forEach(function (event) {
-    on[event] = handler;
-  });
-  return on;
-}
-
-function createLabelItem(createElement, tabber, entry, index) {
-  var labelItemActiveClass = tabber.labelItemActiveClass,
-      labelItemInactiveClass = tabber.labelItemInactiveClass,
-      labelItemDisabledClass = tabber.labelItemDisabledClass,
-      labelItemHiddenClass = tabber.labelItemHiddenClass;
-  var _tabber$$props = tabber.$props,
-      delayTriggerLatency = _tabber$$props.delayTriggerLatency,
-      labelItemClass = _tabber$$props.labelItemClass;
-  var _tabber$$data = tabber.$data,
-      currentIndex = _tabber$$data.currentIndex,
-      delayTimeout = _tabber$$data.delayTimeout,
-      validTriggerEvents = _tabber$$data.validTriggerEvents,
-      validDelayTriggerEvents = _tabber$$data.validDelayTriggerEvents,
-      validDelayTriggerCancelEvents = _tabber$$data.validDelayTriggerCancelEvents;
-  var label = entry.label,
-      key = entry.key,
-      disabled = entry.disabled,
-      hidden = entry.hidden;
-  var delayTriggerCancelEventHandlers;
-  var delayTriggerEventHandlers;
-  var triggerEventHandlers;
-
-  if (!disabled && !hidden) {
-    var doSwitch = function doSwitch() {
-      clearTimeout(delayTimeout);
-      tabber.switchTo(index);
-    };
-
-    var localDelayTimeout;
-    var delayDoSwitch = delayTriggerLatency <= 0 ? doSwitch : function () {
-      clearTimeout(delayTimeout);
-      localDelayTimeout = tabber.delayTimeout = setTimeout(doSwitch, delayTriggerLatency);
-    };
-
-    var cancelDelayDoSwitch = function cancelDelayDoSwitch() {
-      if (localDelayTimeout === delayTimeout) {
-        clearTimeout(localDelayTimeout);
-      }
-    };
-
-    triggerEventHandlers = createEventHandler(validTriggerEvents, doSwitch);
-
-    if (validDelayTriggerEvents && validDelayTriggerEvents.length) {
-      delayTriggerEventHandlers = createEventHandler(validDelayTriggerEvents, delayDoSwitch);
-      delayTriggerCancelEventHandlers = createEventHandler(validDelayTriggerCancelEvents, cancelDelayDoSwitch);
-    }
-  }
-
-  var classes = [labelItemClass];
-  classes.push(index === currentIndex ? labelItemActiveClass : labelItemInactiveClass);
-
-  if (disabled) {
-    classes.push(labelItemDisabledClass);
-  }
-
-  if (hidden) {
-    classes.push(labelItemHiddenClass);
-  }
-
-  return createElement('div', {
-    'class': classes,
-    on: _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers),
-    key: key ? 'key-' + key : 'index-' + index
-  }, label);
-}
-
-function createLabelContainer(createElement, tabber, side) {
-  var _tabber$$props2 = tabber.$props,
-      entries = _tabber$$props2.entries,
-      mode = _tabber$$props2.mode,
-      labelContainerClass = _tabber$$props2.labelContainerClass;
-  var labelItems = entries.map(function (entry, index) {
-    return createLabelItem(createElement, tabber, entry, index);
-  });
-  var classes = [labelContainerClass, labelContainerClass + '-' + side, labelContainerClass + '-' + mode, labelContainerClass + '-' + side + '-' + mode];
-  return createElement('div', {
-    'class': classes,
-    key: 'label-container' + '-' + side
-  }, labelItems);
-}
-
-function createPanelItem(createElement, tabber, entry, index) {
-  var panel = entry.panel,
-      key = entry.key,
-      disabled = entry.disabled,
-      hidden = entry.hidden;
-  var panelItemActiveClass = tabber.panelItemActiveClass,
-      panelItemInactiveClass = tabber.panelItemInactiveClass,
-      panelItemDisabledClass = tabber.panelItemDisabledClass,
-      panelItemHiddenClass = tabber.panelItemHiddenClass;
-  var panelItemClass = tabber.$props.panelItemClass;
-  var currentIndex = tabber.$data.currentIndex;
-  var classes = [panelItemClass];
-  classes.push(index === currentIndex ? panelItemActiveClass : panelItemInactiveClass);
-
-  if (disabled) {
-    classes.push(panelItemDisabledClass);
-  }
-
-  if (hidden) {
-    classes.push(panelItemHiddenClass);
-  }
-
-  return createElement('div', {
-    'class': classes,
-    key: key ? 'key-' + key : 'index-' + index
-  }, panel);
-}
-
-function createPanelContainer(createElement, tabber) {
-  var _tabber$$props = tabber.$props,
-      entries = _tabber$$props.entries,
-      panelContainerClass = _tabber$$props.panelContainerClass;
-  var panelItems = entries.map(function (entry, index) {
-    return createPanelItem(createElement, tabber, entry, index);
-  });
-  var classes = [panelContainerClass];
-  return createElement('div', {
-    'class': classes,
-    key: 'panel-container'
-  }, panelItems);
-}
-
-function createTabContainer(createElement, tabber) {
-  var tabContainerModeClass = tabber.tabContainerModeClass;
-  var _tabber$$props = tabber.$props,
-      showHeaderLabelContainer = _tabber$$props.showHeaderLabelContainer,
-      showFooterLabelContainer = _tabber$$props.showFooterLabelContainer,
-      tabContainerClass = _tabber$$props.tabContainerClass;
-  var headerLabelContainer = showHeaderLabelContainer && createLabelContainer(createElement, tabber, 'header');
-  var panelContainer = createPanelContainer(createElement, tabber);
-  var footerLabelContainer = showFooterLabelContainer && createLabelContainer(createElement, tabber, 'footer');
-  var children = [headerLabelContainer, panelContainer, footerLabelContainer];
-  var classes = [tabContainerClass, tabContainerModeClass];
-  return createElement('div', {
-    'class': classes,
-    key: 'tab-container'
-  }, children);
-}
-
-var RE_WHITESPACES = /\s+/;
-
-function getValidEvents(eventList) {
-  if (eventList) {
-    var validEvents = [];
-    var events = Array.isArray(eventList) ? eventList : String(eventList).split(RE_WHITESPACES);
-    events.length && events.forEach(function (eventName) {
-      eventName && validEvents.push(eventName);
-    });
-    return validEvents;
-  }
-}
-
-var TabPropsDefinition = {
+var sharedPropsDefinition = {
   mode: {
     validator: function validator(value) {
       return ['horizontal', 'vertical'].indexOf(value) >= 0;
     },
     default: 'horizontal'
   },
-  triggerEvents: {
-    type: [Array, String],
-    default: 'click'
-  },
-  delayTriggerEvents: {
-    type: [Array, String]
-  },
-  delayTriggerCancelEvents: {
-    type: [Array, String]
-  },
   delayTriggerLatency: {
     type: [Number, String],
     default: 200
   },
-  activeIndex: {
-    type: [Number, String],
-    default: 0
+  activePosition: {
+    type: [Number, String]
   },
   tabContainerClass: {
     type: String,
@@ -356,121 +184,571 @@ var TabPropsDefinition = {
     default: 'panel-item'
   }
 };
+var callbackPropsDefinition = {
+  onUpdateTargetPosition: {
+    type: Function
+  }
+};
 
-var TabContainerPropsDefinition = _objectSpread({}, TabPropsDefinition, {
-  entries: {
-    type: Array,
-    default: []
+var publicPropsDefinition = _objectSpread({}, sharedPropsDefinition, callbackPropsDefinition, {
+  triggerEvents: {
+    type: [Array, String],
+    default: 'click'
+  },
+  delayTriggerEvents: {
+    type: [Array, String]
+  },
+  delayTriggerCancelEvents: {
+    type: [Array, String]
   }
 });
 
-function getValidIndex(index) {
-  if (index === '' || !isFinite(index) || isNaN(index)) {
-    return -1;
+var tabPropsDefinition = _objectSpread({}, publicPropsDefinition, callbackPropsDefinition, {
+  entries: {
+    type: Array,
+    default: []
+  },
+  triggerEvents: {
+    type: Array
+  },
+  delayTriggerEvents: {
+    type: Array
+  },
+  delayTriggerCancelEvents: Array
+});
+
+var RE_WHITESPACES = /\s+/;
+
+function normalizeEvents(events) {
+  if (!events) {
+    return [];
   }
 
-  var intIndex = parseInt(index);
-  return intIndex < 0 ? 0 : index;
+  var arrayed = Array.isArray(events) ? events : String(events).split(RE_WHITESPACES);
+  var normalized = arrayed.filter(Boolean);
+  return normalized;
 }
 
+var ClassNameSuffix = {
+  active: 'active',
+  inactive: 'inactive',
+  disabled: 'disabled',
+  hidden: 'hidden',
+  header: 'header',
+  footer: 'footer'
+};
+
+function createEventHandler(events, handler) {
+  var eventHandlers = {};
+  events.forEach(function (event) {
+    eventHandlers[event] = handler;
+  });
+  return eventHandlers;
+}
+
+var LabelContainer = {
+  name: 'VueTabberLabelContainer',
+  props: {
+    entries: {
+      type: Array
+    },
+    mode: {
+      type: String
+    },
+    labelContainerClass: {
+      type: String
+    },
+    labelItemClass: {
+      type: String
+    },
+    delayTriggerLatency: {
+      type: Number
+    },
+    triggerEvents: {
+      type: Array
+    },
+    delayTriggerEvents: {
+      type: Array
+    },
+    delayTriggerCancelEvents: {
+      type: Array
+    },
+    fnSwitchTo: {
+      type: Function
+    },
+    tabContext: {
+      type: Object
+    },
+    currentIndex: {
+      type: Number
+    },
+    side: {
+      type: String
+    }
+  },
+  render: function render(createElement) {
+    var _this$$props = this.$props,
+        entries = _this$$props.entries,
+        mode = _this$$props.mode,
+        labelContainerClass = _this$$props.labelContainerClass,
+        labelItemClass = _this$$props.labelItemClass,
+        delayTriggerLatency = _this$$props.delayTriggerLatency,
+        triggerEvents = _this$$props.triggerEvents,
+        delayTriggerEvents = _this$$props.delayTriggerEvents,
+        delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents,
+        fnSwitchTo = _this$$props.fnSwitchTo,
+        tabContext = _this$$props.tabContext,
+        currentIndex = _this$$props.currentIndex,
+        side = _this$$props.side;
+    var labelContainerAllClass = [labelContainerClass, labelContainerClass + '-' + side, labelContainerClass + '-' + mode, labelContainerClass + '-' + side + '-' + mode];
+    var labelItemActiveClass = labelItemClass + '-' + ClassNameSuffix.active;
+    var labelItemInactiveClass = labelItemClass + '-' + ClassNameSuffix.inactive;
+    var labelItemDisabledClass = labelItemClass + '-' + ClassNameSuffix.disabled;
+    var labelItemHiddenClass = labelItemClass + '-' + ClassNameSuffix.hidden;
+    return createElement('div', {
+      'class': labelContainerAllClass
+    }, entries.map(function (entry, index) {
+      var label = entry.label,
+          key = entry.key,
+          disabled = entry.disabled,
+          hidden = entry.hidden;
+      var pos = {
+        index: index,
+        key: key
+      };
+      var delayTriggerCancelEventHandlers;
+      var delayTriggerEventHandlers;
+      var triggerEventHandlers;
+
+      if (!disabled && !hidden) {
+        var doSwitch = function doSwitch() {
+          clearTimeout(tabContext.delayTimeout);
+          fnSwitchTo(pos);
+        };
+
+        var localDelayTimeout;
+        var delayDoSwitch = delayTriggerLatency <= 0 ? doSwitch : function () {
+          clearTimeout(tabContext.delayTimeout);
+          localDelayTimeout = tabContext.delayTimeout = setTimeout(doSwitch, delayTriggerLatency);
+        };
+
+        var cancelDelayDoSwitch = function cancelDelayDoSwitch() {
+          if (localDelayTimeout === tabContext.delayTimeout) {
+            clearTimeout(localDelayTimeout);
+          }
+        };
+
+        triggerEventHandlers = createEventHandler(triggerEvents, doSwitch);
+
+        if (delayTriggerEvents && delayTriggerEvents.length) {
+          delayTriggerEventHandlers = createEventHandler(delayTriggerEvents, delayDoSwitch);
+          delayTriggerCancelEventHandlers = createEventHandler(delayTriggerCancelEvents, cancelDelayDoSwitch);
+        }
+      }
+
+      var labelItemAllClass = [labelItemClass];
+      labelItemAllClass.push(index === currentIndex ? labelItemActiveClass : labelItemInactiveClass);
+
+      if (disabled) {
+        labelItemAllClass.push(labelItemDisabledClass);
+      }
+
+      if (hidden) {
+        labelItemAllClass.push(labelItemHiddenClass);
+      }
+
+      return createElement('div', {
+        'class': labelItemAllClass,
+        on: _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers),
+        key: key ? 'key-' + key : 'index-' + index
+      }, label);
+    }));
+  }
+};
+
+var PanelContainer = {
+  name: 'VueTabberPanelContainer',
+  props: {
+    entries: {
+      type: Array
+    },
+    mode: {
+      type: String
+    },
+    panelContainerClass: {
+      type: String
+    },
+    panelItemClass: {
+      type: String
+    },
+    panelItemActiveClass: {
+      type: String
+    },
+    panelItemInactiveClass: {
+      type: String
+    },
+    panelItemDisabledClass: {
+      type: String
+    },
+    panelItemHiddenClass: {
+      type: String
+    },
+    currentIndex: {
+      type: Number
+    }
+  },
+  render: function render(createElement) {
+    var _this$$props = this.$props,
+        entries = _this$$props.entries,
+        mode = _this$$props.mode,
+        panelContainerClass = _this$$props.panelContainerClass,
+        panelItemClass = _this$$props.panelItemClass,
+        currentIndex = _this$$props.currentIndex;
+    var panelContainerModeClass = panelContainerClass + '-' + mode;
+    var panelContainerAllClass = [panelContainerClass, panelContainerModeClass];
+    var panelItemActiveClass = panelItemClass + '-' + ClassNameSuffix.active;
+    var panelItemInactiveClass = panelItemClass + '-' + ClassNameSuffix.inactive;
+    var panelItemDisabledClass = panelItemClass + '-' + ClassNameSuffix.disabled;
+    var panelItemHiddenClass = panelItemClass + '-' + ClassNameSuffix.hidden;
+    return createElement('div', {
+      'class': panelContainerAllClass
+    }, entries.map(function (entry, index) {
+      var panel = entry.panel,
+          key = entry.key,
+          disabled = entry.disabled,
+          hidden = entry.hidden;
+      var panelItemAllClass = [panelItemClass];
+      panelItemAllClass.push(index === currentIndex ? panelItemActiveClass : panelItemInactiveClass);
+
+      if (disabled) {
+        panelItemAllClass.push(panelItemDisabledClass);
+      }
+
+      if (hidden) {
+        panelItemAllClass.push(panelItemHiddenClass);
+      }
+
+      return createElement('div', {
+        'class': panelItemAllClass,
+        key: key ? 'key-' + key : 'index-' + index
+      }, panel);
+    }));
+  }
+};
+
 var TabContainer = {
-  name: 'TabContainer',
-  props: TabContainerPropsDefinition,
+  name: 'VueTabberTabContainer',
+  props: {
+    entries: {
+      type: Array
+    },
+    mode: {
+      type: String
+    },
+    tabContainerClass: {
+      type: String
+    },
+    labelContainerClass: {
+      type: String
+    },
+    labelItemClass: {
+      type: String
+    },
+    panelContainerClass: {
+      type: String
+    },
+    panelItemClass: {
+      type: String
+    },
+    delayTriggerLatency: {
+      type: Number
+    },
+    showHeaderLabelContainer: {
+      type: Boolean
+    },
+    showFooterLabelContainer: {
+      type: Boolean
+    },
+    triggerEvents: {
+      type: Array
+    },
+    delayTriggerEvents: {
+      type: Array
+    },
+    delayTriggerCancelEvents: {
+      type: Array
+    },
+    fnSwitchTo: {
+      type: Function
+    },
+    tabContext: {
+      type: Object
+    },
+    currentIndex: {
+      type: Number
+    }
+  },
+  render: function render(createElement) {
+    var _this$$props = this.$props,
+        entries = _this$$props.entries,
+        mode = _this$$props.mode,
+        tabContainerClass = _this$$props.tabContainerClass,
+        labelContainerClass = _this$$props.labelContainerClass,
+        labelItemClass = _this$$props.labelItemClass,
+        panelContainerClass = _this$$props.panelContainerClass,
+        panelItemClass = _this$$props.panelItemClass,
+        delayTriggerLatency = _this$$props.delayTriggerLatency,
+        showHeaderLabelContainer = _this$$props.showHeaderLabelContainer,
+        showFooterLabelContainer = _this$$props.showFooterLabelContainer,
+        triggerEvents = _this$$props.triggerEvents,
+        delayTriggerEvents = _this$$props.delayTriggerEvents,
+        delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents,
+        fnSwitchTo = _this$$props.fnSwitchTo,
+        tabContext = _this$$props.tabContext,
+        currentIndex = _this$$props.currentIndex;
+    var tabContainerModeClass = tabContainerClass + '-' + mode;
+    var tabContainerAllClass = [tabContainerClass, tabContainerModeClass];
+    var children = [];
+
+    if (showHeaderLabelContainer) {
+      children.push(createElement(LabelContainer, {
+        props: {
+          entries: entries,
+          mode: mode,
+          labelContainerClass: labelContainerClass,
+          labelItemClass: labelItemClass,
+          delayTriggerLatency: delayTriggerLatency,
+          triggerEvents: triggerEvents,
+          delayTriggerEvents: delayTriggerEvents,
+          delayTriggerCancelEvents: delayTriggerCancelEvents,
+          fnSwitchTo: fnSwitchTo,
+          tabContext: tabContext,
+          currentIndex: currentIndex,
+          side: ClassNameSuffix.header
+        }
+      }));
+    }
+
+    children.push(createElement(PanelContainer, {
+      props: {
+        entries: entries,
+        mode: mode,
+        panelContainerClass: panelContainerClass,
+        panelItemClass: panelItemClass,
+        currentIndex: currentIndex
+      }
+    }));
+
+    if (showFooterLabelContainer) {
+      children.push(createElement(LabelContainer, {
+        props: {
+          entries: entries,
+          mode: mode,
+          labelContainerClass: labelContainerClass,
+          labelItemClass: labelItemClass,
+          delayTriggerLatency: delayTriggerLatency,
+          triggerEvents: triggerEvents,
+          delayTriggerEvents: delayTriggerEvents,
+          delayTriggerCancelEvents: delayTriggerCancelEvents,
+          fnSwitchTo: fnSwitchTo,
+          tabContext: tabContext,
+          currentIndex: currentIndex,
+          side: ClassNameSuffix.footer
+        }
+      }));
+    }
+
+    return createElement('div', {
+      'class': tabContainerAllClass
+    }, children);
+  }
+};
+
+var invalidNormalizedPosition = {
+  index: -1,
+  key: undefined
+};
+
+function normalizePosition(entries, position) {
+  if (typeof position === 'number') {
+    return {
+      index: position,
+      key: entries[position] && entries[position].key
+    };
+  } else if (isFinite(position)) {
+    var index = parseInt(position);
+    return {
+      index: index,
+      key: entries[index].key
+    };
+  } else if (position) {
+    var result = undefined;
+    entries.some(function (entry, i) {
+      if (entry.key === position) {
+        result = {
+          index: i,
+          key: entry.key
+        };
+        return true;
+      }
+
+      return false;
+    });
+    return result || invalidNormalizedPosition;
+  } else {
+    return invalidNormalizedPosition;
+  }
+}
+
+var Tab = {
+  name: 'VueTabberTab',
+  props: tabPropsDefinition,
+  created: function created() {
+    this.tabContext = {
+      delayTimeout: 0
+    };
+    this.prevPosition = invalidNormalizedPosition;
+    this.currentPosition = invalidNormalizedPosition;
+    this.updateTargetPosition();
+  },
   data: function data() {
     return {
-      count: 0,
-      targetIndex: getValidIndex(this.activeIndex),
-      currentIndex: -1,
-      renderedIndex: -1,
-      validTriggerEvents: getValidEvents(this.triggerEvents),
-      validDelayTriggerEvents: getValidEvents(this.delayTriggerEvents),
-      validDelayTriggerCancelEvents: getValidEvents(this.delayTriggerCancelEvents),
-      delayTimeout: undefined
+      manageTargetPosition: true,
+      targetPosition: -1
     };
   },
-  computed: {
-    tabContainerModeClass: function tabContainerModeClass() {
-      return this.tabContainerClass + '-' + this.mode;
+  methods: {
+    updateTargetPosition: function updateTargetPosition() {
+      var activePosition = this.activePosition;
+
+      if (activePosition === undefined || activePosition === null || typeof activePosition === 'number' && !isFinite(activePosition)) {
+        this.manageTargetPosition = true;
+      } else {
+        this.targetPosition = activePosition;
+        this.manageTargetPosition = false;
+      }
     },
-    labelItemActiveClass: function labelItemActiveClass() {
-      return this.labelItemClass + '-' + 'active';
+    updateCurrentPosition: function updateCurrentPosition() {
+      var prevPosition = this.prevPosition,
+          currentPosition = this.currentPosition;
+
+      if (prevPosition.index !== currentPosition.index) {
+        this.$emit('switched', prevPosition, currentPosition);
+      }
+
+      this.prevPosition = currentPosition;
     },
-    labelItemInactiveClass: function labelItemInactiveClass() {
-      return this.labelItemClass + '-' + 'inactive';
-    },
-    labelItemDisabledClass: function labelItemDisabledClass() {
-      return this.labelItemClass + '-' + 'disabled';
-    },
-    labelItemHiddenClass: function labelItemHiddenClass() {
-      return this.labelItemClass + '-' + 'hidden';
-    },
-    panelItemActiveClass: function panelItemActiveClass() {
-      return this.panelItemClass + '-' + 'active';
-    },
-    panelItemInactiveClass: function panelItemInactiveClass() {
-      return this.panelItemClass + '-' + 'inactive';
-    },
-    panelItemDisabledClass: function panelItemDisabledClass() {
-      return this.panelItemClass + '-' + 'disabled';
-    },
-    panelItemHiddenClass: function panelItemHiddenClass() {
-      return this.panelItemClass + '-' + 'hidden';
+    switchTo: function switchTo(normalizedPosition) {
+      var onUpdateTargetPosition = this.$props.onUpdateTargetPosition;
+
+      if (this.manageTargetPosition) {
+        if (!onUpdateTargetPosition || onUpdateTargetPosition(normalizedPosition) !== false) {
+          this.targetPosition = normalizedPosition.index;
+        }
+      } else {
+        this.$emit('updateActivePosition', normalizedPosition);
+      }
+
+      return normalizedPosition;
     }
   },
   watch: {
-    activeIndex: function activeIndex(newValue) {
-      this.switchTo(newValue);
-    }
-  },
-  methods: {
-    switchTo: function switchTo(index) {
-      this.targetIndex = getValidIndex(index);
+    activePosition: function activePosition(value) {
+      this.updateTargetPosition(value);
     }
   },
   beforeUnmount: function beforeUnmount() {
     clearTimeout(this.delayTimeout);
   },
   render: function render(createElement) {
-    this.count = this.entries.length;
-    var oldIndex = this.currentIndex;
-    var newIndex = this.targetIndex >= this.count ? this.count - 1 : this.targetIndex;
+    var _this$$props = this.$props,
+        entries = _this$$props.entries,
+        mode = _this$$props.mode,
+        tabContainerClass = _this$$props.tabContainerClass,
+        labelContainerClass = _this$$props.labelContainerClass,
+        labelItemClass = _this$$props.labelItemClass,
+        panelContainerClass = _this$$props.panelContainerClass,
+        panelItemClass = _this$$props.panelItemClass,
+        delayTriggerLatency = _this$$props.delayTriggerLatency,
+        showHeaderLabelContainer = _this$$props.showHeaderLabelContainer,
+        showFooterLabelContainer = _this$$props.showFooterLabelContainer,
+        triggerEvents = _this$$props.triggerEvents,
+        delayTriggerEvents = _this$$props.delayTriggerEvents,
+        delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents;
+    var tabContext = this.tabContext,
+        normalizedPrevPosition = this.prevPosition;
+    var prevIndex = normalizedPrevPosition.index;
+    var targetPosition = this.$data.targetPosition;
+    var normalizedTargetPosition = normalizePosition(entries, targetPosition);
+    var targetIndex = normalizedTargetPosition.index;
+    var entryCount = entries.length;
+    var currentIndex;
 
-    if (oldIndex !== newIndex) {
-      this.currentIndex = newIndex;
-      this.$emit('switching', oldIndex, newIndex);
-      this.$emit('update:activeIndex', newIndex);
+    if (targetIndex === -1) {
+      currentIndex = entryCount > 0 ? 0 : -1;
+      this.currentPosition = normalizePosition(entries, currentIndex);
+    } else if (targetIndex < entryCount) {
+      currentIndex = targetIndex;
+      this.currentPosition = normalizedTargetPosition;
+    } else {
+      currentIndex = entryCount - 1;
+      this.currentPosition = normalizePosition(entries, currentIndex);
     }
 
-    return createTabContainer(createElement, this);
+    if (prevIndex !== currentIndex) {
+      this.$emit('switching', normalizedPrevPosition, this.currentPosition);
+    }
+
+    return createElement(TabContainer, {
+      props: {
+        entries: entries,
+        mode: mode,
+        tabContainerClass: tabContainerClass,
+        labelContainerClass: labelContainerClass,
+        labelItemClass: labelItemClass,
+        panelContainerClass: panelContainerClass,
+        panelItemClass: panelItemClass,
+        delayTriggerLatency: delayTriggerLatency,
+        showHeaderLabelContainer: showHeaderLabelContainer,
+        showFooterLabelContainer: showFooterLabelContainer,
+        triggerEvents: triggerEvents,
+        delayTriggerEvents: delayTriggerEvents,
+        delayTriggerCancelEvents: delayTriggerCancelEvents,
+        fnSwitchTo: this.switchTo,
+        tabContext: tabContext,
+        currentIndex: currentIndex
+      }
+    });
+  },
+  mounted: function mounted() {
+    this.updateCurrentPosition();
   },
   updated: function updated() {
-    var oldIndex = this.renderedIndex;
-    var newIndex = this.currentIndex;
-
-    if (oldIndex !== newIndex) {
-      this.renderedIndex = newIndex;
-      this.$emit('switched', oldIndex, newIndex);
-    }
+    this.updateCurrentPosition();
   }
 };
 
-var Tab = {
-  name: 'Tab',
-  props: TabPropsDefinition,
+var Index = {
+  Label: Label,
+  Panel: Panel,
+  name: 'VueTabber',
+  props: publicPropsDefinition,
   render: function render(createElement) {
     var slotChildren = this.$slots.default;
-
-    if (!slotChildren || !slotChildren.length) {
-      return null;
-    }
-
-    var entries = parseEntries(slotChildren);
-    return createElement(TabContainer, {
+    var _this$$props = this.$props,
+        triggerEvents = _this$$props.triggerEvents,
+        delayTriggerEvents = _this$$props.delayTriggerEvents,
+        delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents;
+    return createElement(Tab, {
       props: _objectSpread({}, this.$props, {
-        entries: entries
-      })
+        entries: parseEntries(slotChildren),
+        triggerEvents: normalizeEvents(triggerEvents),
+        delayTriggerEvents: normalizeEvents(delayTriggerEvents),
+        delayTriggerCancelEvents: normalizeEvents(delayTriggerCancelEvents)
+      }),
+      on: this.$listeners
     });
   }
 };
 
-export { Tab, Label as TabLabel, Panel as TabPanel };
+export default Index;
