@@ -253,6 +253,23 @@
     return eventHandlers;
   }
 
+  var PREFIX = '__vue-tabber';
+  var NUMBER_MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
+  var currentTabberContainerId = -1;
+
+  function getNextTabContainerId() {
+    currentTabberContainerId = (currentTabberContainerId + 1) % NUMBER_MAX_SAFE_INTEGER;
+    return currentTabberContainerId;
+  }
+
+  function getLabelItemId(tabberId, side, index) {
+    return "".concat(PREFIX, "__").concat(tabberId, "__").concat(side, "__label__").concat(index);
+  }
+
+  function getPanelItemId(tabberId, index) {
+    return "".concat(PREFIX, "__").concat(tabberId, "__panel__").concat(index);
+  }
+
   var LabelContainer = {
     name: 'VueTabberLabelContainer',
     props: {
@@ -312,8 +329,12 @@
       var labelItemInactiveClass = labelItemClass + '-' + ClassNameSuffix.inactive;
       var labelItemDisabledClass = labelItemClass + '-' + ClassNameSuffix.disabled;
       var labelItemHiddenClass = labelItemClass + '-' + ClassNameSuffix.hidden;
+      var tabberId = tabContext.tabberId;
       return createElement('div', {
-        'class': labelContainerAllClass
+        'class': labelContainerAllClass,
+        attrs: {
+          role: 'tablist'
+        }
       }, entries.map(function (entry, index) {
         var label = entry.label,
             key = entry.key,
@@ -353,8 +374,9 @@
           }
         }
 
+        var isActive = index === currentIndex;
         var labelItemAllClass = [labelItemClass];
-        labelItemAllClass.push(index === currentIndex ? labelItemActiveClass : labelItemInactiveClass);
+        labelItemAllClass.push(isActive ? labelItemActiveClass : labelItemInactiveClass);
 
         if (disabled) {
           labelItemAllClass.push(labelItemDisabledClass);
@@ -366,6 +388,14 @@
 
         return createElement('div', {
           'class': labelItemAllClass,
+          attrs: {
+            tabIndex: 0,
+            id: getLabelItemId(tabberId, side, index),
+            role: 'tab',
+            'aria-controls': getPanelItemId(tabberId, index),
+            'aria-selected': isActive,
+            'aria-expanded': isActive
+          },
           on: _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers),
           key: key ? 'key-' + key : 'index-' + index
         }, label);
@@ -400,8 +430,14 @@
       panelItemHiddenClass: {
         type: String
       },
+      tabContext: {
+        type: Object
+      },
       currentIndex: {
         type: Number
+      },
+      refLabelSide: {
+        type: String
       }
     },
     render: function render(createElement) {
@@ -410,13 +446,16 @@
           mode = _this$$props.mode,
           panelContainerClass = _this$$props.panelContainerClass,
           panelItemClass = _this$$props.panelItemClass,
-          currentIndex = _this$$props.currentIndex;
+          tabContext = _this$$props.tabContext,
+          currentIndex = _this$$props.currentIndex,
+          refLabelSide = _this$$props.refLabelSide;
       var panelContainerModeClass = panelContainerClass + '-' + mode;
       var panelContainerAllClass = [panelContainerClass, panelContainerModeClass];
       var panelItemActiveClass = panelItemClass + '-' + ClassNameSuffix.active;
       var panelItemInactiveClass = panelItemClass + '-' + ClassNameSuffix.inactive;
       var panelItemDisabledClass = panelItemClass + '-' + ClassNameSuffix.disabled;
       var panelItemHiddenClass = panelItemClass + '-' + ClassNameSuffix.hidden;
+      var tabberId = tabContext.tabberId;
       return createElement('div', {
         'class': panelContainerAllClass
       }, entries.map(function (entry, index) {
@@ -424,8 +463,9 @@
             key = entry.key,
             disabled = entry.disabled,
             hidden = entry.hidden;
+        var isActive = index === currentIndex;
         var panelItemAllClass = [panelItemClass];
-        panelItemAllClass.push(index === currentIndex ? panelItemActiveClass : panelItemInactiveClass);
+        panelItemAllClass.push(isActive ? panelItemActiveClass : panelItemInactiveClass);
 
         if (disabled) {
           panelItemAllClass.push(panelItemDisabledClass);
@@ -437,6 +477,12 @@
 
         return createElement('div', {
           'class': panelItemAllClass,
+          attrs: {
+            id: getPanelItemId(tabberId, index),
+            role: 'tabpanel',
+            'aria-labelledby': getLabelItemId(tabberId, refLabelSide, index),
+            'aria-hidden': !isActive
+          },
           key: key ? 'key-' + key : 'index-' + index
         }, panel);
       }));
@@ -542,7 +588,9 @@
           mode: mode,
           panelContainerClass: panelContainerClass,
           panelItemClass: panelItemClass,
-          currentIndex: currentIndex
+          tabContext: tabContext,
+          currentIndex: currentIndex,
+          refLabelSide: showHeaderLabelContainer || !showFooterLabelContainer ? ClassNameSuffix.header : ClassNameSuffix.footer
         }
       }));
 
@@ -612,6 +660,7 @@
     props: tabPropsDefinition,
     created: function created() {
       this.tabContext = {
+        tabberId: getNextTabContainerId(),
         delayTimeout: 0
       };
       this.prevPosition = invalidNormalizedPosition;

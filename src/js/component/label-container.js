@@ -1,5 +1,6 @@
 import createEventHandler from '../utility/create-event-handler';
 import ClassNameSuffix from '../utility/class-name-suffix';
+import {getLabelItemId, getPanelItemId} from '../utility/get-id';
 
 const LabelContainer = {
 	name: 'VueTabberLabelContainer',
@@ -51,8 +52,13 @@ const LabelContainer = {
 		const labelItemDisabledClass = labelItemClass + '-' + ClassNameSuffix.disabled;
 		const labelItemHiddenClass = labelItemClass + '-' + ClassNameSuffix.hidden;
 
+		const {tabberId} = tabContext;
+
 		return createElement('div', {
 			'class': labelContainerAllClass,
+			attrs: {
+				role: 'tablist'
+			},
 		}, entries.map((entry, index) => {
 			const {label, key, disabled, hidden} = entry;
 			const pos = {index, key};
@@ -85,8 +91,9 @@ const LabelContainer = {
 				}
 			}
 
+			const isActive = index === currentIndex;
 			const labelItemAllClass = [labelItemClass];
-			labelItemAllClass.push(index === currentIndex ? labelItemActiveClass : labelItemInactiveClass);
+			labelItemAllClass.push(isActive ? labelItemActiveClass : labelItemInactiveClass);
 			if (disabled) {
 				labelItemAllClass.push(labelItemDisabledClass);
 			}
@@ -96,6 +103,14 @@ const LabelContainer = {
 
 			return createElement('div', {
 				'class': labelItemAllClass,
+				attrs: {
+					tabIndex: 0,
+					id: getLabelItemId(tabberId, side, index),
+					role: 'tab',
+					'aria-controls': getPanelItemId(tabberId, index),
+					'aria-selected': isActive,
+					'aria-expanded': isActive
+				},
 				on: {
 					...delayTriggerCancelEventHandlers,
 					...delayTriggerEventHandlers,

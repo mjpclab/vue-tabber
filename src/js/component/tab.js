@@ -1,5 +1,6 @@
 import TabContainer from './tab-container';
 import {tabPropsDefinition} from '../utility/props-definition';
+import {getNextTabContainerId} from '../utility/get-id';
 import {invalidNormalizedPosition, normalizePosition} from '../utility/normalize-position';
 
 const Tab = {
@@ -7,6 +8,7 @@ const Tab = {
 	props: tabPropsDefinition,
 	created() {
 		this.tabContext = {
+			tabberId: getNextTabContainerId(),
 			delayTimeout: 0
 		};
 		this.prevPosition = invalidNormalizedPosition;

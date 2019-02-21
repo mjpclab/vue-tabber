@@ -79,7 +79,10 @@ const TabContainer = {
 				mode,
 				panelContainerClass,
 				panelItemClass,
-				currentIndex
+
+				tabContext,
+				currentIndex,
+				refLabelSide: showHeaderLabelContainer || !showFooterLabelContainer ? ClassNameSuffix.header : ClassNameSuffix.footer
 			}
 		}));
 		if (showFooterLabelContainer) {
