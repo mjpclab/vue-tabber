@@ -158,6 +158,10 @@ var sharedPropsDefinition = {
     },
     default: 'horizontal'
   },
+  keyboardSwitch: {
+    type: Boolean,
+    default: true
+  },
   delayTriggerLatency: {
     type: [Number, String],
     default: 200
@@ -264,6 +268,19 @@ function getPanelItemId(tabberId, index) {
   return "".concat(PREFIX, "__").concat(tabberId, "__panel__").concat(index);
 }
 
+var UP = 'Up';
+var DOWN = 'Down';
+var LEFT = 'Left';
+var RIGHT = 'Right';
+var ARROW_UP = 'ArrowUp';
+var ARROW_DOWN = 'ArrowDown';
+var ARROW_LEFT = 'ArrowLeft';
+var ARROW_RIGHT = 'ArrowRight';
+var TAB = 'Tab';
+var HOME = 'Home';
+var END = 'End';
+var SPACE = ' ';
+var ENTER = 'Enter';
 var LabelContainer = {
   name: 'VueTabberLabelContainer',
   props: {
@@ -272,6 +289,9 @@ var LabelContainer = {
     },
     mode: {
       type: String
+    },
+    keyboardSwitch: {
+      type: Boolean
     },
     labelContainerClass: {
       type: String
@@ -294,6 +314,18 @@ var LabelContainer = {
     fnSwitchTo: {
       type: Function
     },
+    fnSwitchPrevious: {
+      type: Function
+    },
+    fnSwitchNext: {
+      type: Function
+    },
+    fnSwitchFirst: {
+      type: Function
+    },
+    fnSwitchLast: {
+      type: Function
+    },
     tabContext: {
       type: Object
     },
@@ -304,20 +336,80 @@ var LabelContainer = {
       type: String
     }
   },
+  methods: {
+    onKeyDown: function onKeyDown(e, pos) {
+      var _this$$props = this.$props,
+          fnSwitchTo = _this$$props.fnSwitchTo,
+          fnSwitchPrevious = _this$$props.fnSwitchPrevious,
+          fnSwitchNext = _this$$props.fnSwitchNext,
+          fnSwitchFirst = _this$$props.fnSwitchFirst,
+          fnSwitchLast = _this$$props.fnSwitchLast;
+      var switchResult;
+
+      if (e.key) {
+        switch (e.key) {
+          case UP:
+          case LEFT:
+          case ARROW_UP:
+          case ARROW_LEFT:
+            switchResult = fnSwitchPrevious();
+            break;
+
+          case DOWN:
+          case RIGHT:
+          case ARROW_DOWN:
+          case ARROW_RIGHT:
+            switchResult = fnSwitchNext();
+            break;
+
+          case TAB:
+            switchResult = e.shiftKey ? fnSwitchPrevious() : fnSwitchNext();
+
+            if (switchResult) {
+              e.preventDefault();
+            }
+
+            break;
+
+          case HOME:
+            switchResult = fnSwitchFirst();
+            break;
+
+          case END:
+            switchResult = fnSwitchLast();
+            break;
+
+          case SPACE:
+          case ENTER:
+            switchResult = fnSwitchTo(pos);
+            break;
+        }
+      }
+
+      if (switchResult) {
+        var targetNode = e.currentTarget.parentNode.childNodes[switchResult.index];
+        targetNode && targetNode.focus && targetNode.focus();
+        e.preventDefault();
+      }
+    }
+  },
   render: function render(createElement) {
-    var _this$$props = this.$props,
-        entries = _this$$props.entries,
-        mode = _this$$props.mode,
-        labelContainerClass = _this$$props.labelContainerClass,
-        labelItemClass = _this$$props.labelItemClass,
-        delayTriggerLatency = _this$$props.delayTriggerLatency,
-        triggerEvents = _this$$props.triggerEvents,
-        delayTriggerEvents = _this$$props.delayTriggerEvents,
-        delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents,
-        fnSwitchTo = _this$$props.fnSwitchTo,
-        tabContext = _this$$props.tabContext,
-        currentIndex = _this$$props.currentIndex,
-        side = _this$$props.side;
+    var _this = this;
+
+    var _this$$props2 = this.$props,
+        entries = _this$$props2.entries,
+        mode = _this$$props2.mode,
+        keyboardSwitch = _this$$props2.keyboardSwitch,
+        labelContainerClass = _this$$props2.labelContainerClass,
+        labelItemClass = _this$$props2.labelItemClass,
+        delayTriggerLatency = _this$$props2.delayTriggerLatency,
+        triggerEvents = _this$$props2.triggerEvents,
+        delayTriggerEvents = _this$$props2.delayTriggerEvents,
+        delayTriggerCancelEvents = _this$$props2.delayTriggerCancelEvents,
+        fnSwitchTo = _this$$props2.fnSwitchTo,
+        tabContext = _this$$props2.tabContext,
+        currentIndex = _this$$props2.currentIndex,
+        side = _this$$props2.side;
     var labelContainerAllClass = [labelContainerClass, labelContainerClass + '-' + side, labelContainerClass + '-' + mode, labelContainerClass + '-' + side + '-' + mode];
     var labelItemActiveClass = labelItemClass + '-' + ClassNameSuffix.active;
     var labelItemInactiveClass = labelItemClass + '-' + ClassNameSuffix.inactive;
@@ -390,7 +482,11 @@ var LabelContainer = {
           'aria-selected': isActive,
           'aria-expanded': isActive
         },
-        on: _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers),
+        on: _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers, {
+          keydown: keyboardSwitch ? function (e) {
+            return _this.onKeyDown(e, pos);
+          } : undefined
+        }),
         key: key ? 'key-' + key : 'index-' + index
       }, label);
     }));
@@ -492,6 +588,18 @@ var TabContainer = {
     mode: {
       type: String
     },
+    keyboardSwitch: {
+      type: Boolean
+    },
+    delayTriggerLatency: {
+      type: Number
+    },
+    showHeaderLabelContainer: {
+      type: Boolean
+    },
+    showFooterLabelContainer: {
+      type: Boolean
+    },
     tabContainerClass: {
       type: String
     },
@@ -507,15 +615,6 @@ var TabContainer = {
     panelItemClass: {
       type: String
     },
-    delayTriggerLatency: {
-      type: Number
-    },
-    showHeaderLabelContainer: {
-      type: Boolean
-    },
-    showFooterLabelContainer: {
-      type: Boolean
-    },
     triggerEvents: {
       type: Array
     },
@@ -526,6 +625,18 @@ var TabContainer = {
       type: Array
     },
     fnSwitchTo: {
+      type: Function
+    },
+    fnSwitchPrevious: {
+      type: Function
+    },
+    fnSwitchNext: {
+      type: Function
+    },
+    fnSwitchFirst: {
+      type: Function
+    },
+    fnSwitchLast: {
       type: Function
     },
     tabContext: {
@@ -539,18 +650,23 @@ var TabContainer = {
     var _this$$props = this.$props,
         entries = _this$$props.entries,
         mode = _this$$props.mode,
+        keyboardSwitch = _this$$props.keyboardSwitch,
+        delayTriggerLatency = _this$$props.delayTriggerLatency,
+        showHeaderLabelContainer = _this$$props.showHeaderLabelContainer,
+        showFooterLabelContainer = _this$$props.showFooterLabelContainer,
         tabContainerClass = _this$$props.tabContainerClass,
         labelContainerClass = _this$$props.labelContainerClass,
         labelItemClass = _this$$props.labelItemClass,
         panelContainerClass = _this$$props.panelContainerClass,
         panelItemClass = _this$$props.panelItemClass,
-        delayTriggerLatency = _this$$props.delayTriggerLatency,
-        showHeaderLabelContainer = _this$$props.showHeaderLabelContainer,
-        showFooterLabelContainer = _this$$props.showFooterLabelContainer,
         triggerEvents = _this$$props.triggerEvents,
         delayTriggerEvents = _this$$props.delayTriggerEvents,
         delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents,
         fnSwitchTo = _this$$props.fnSwitchTo,
+        fnSwitchPrevious = _this$$props.fnSwitchPrevious,
+        fnSwitchNext = _this$$props.fnSwitchNext,
+        fnSwitchFirst = _this$$props.fnSwitchFirst,
+        fnSwitchLast = _this$$props.fnSwitchLast,
         tabContext = _this$$props.tabContext,
         currentIndex = _this$$props.currentIndex;
     var tabContainerModeClass = tabContainerClass + '-' + mode;
@@ -562,6 +678,7 @@ var TabContainer = {
         props: {
           entries: entries,
           mode: mode,
+          keyboardSwitch: keyboardSwitch,
           labelContainerClass: labelContainerClass,
           labelItemClass: labelItemClass,
           delayTriggerLatency: delayTriggerLatency,
@@ -569,6 +686,10 @@ var TabContainer = {
           delayTriggerEvents: delayTriggerEvents,
           delayTriggerCancelEvents: delayTriggerCancelEvents,
           fnSwitchTo: fnSwitchTo,
+          fnSwitchPrevious: fnSwitchPrevious,
+          fnSwitchNext: fnSwitchNext,
+          fnSwitchFirst: fnSwitchFirst,
+          fnSwitchLast: fnSwitchLast,
           tabContext: tabContext,
           currentIndex: currentIndex,
           side: ClassNameSuffix.header
@@ -593,6 +714,7 @@ var TabContainer = {
         props: {
           entries: entries,
           mode: mode,
+          keyboardSwitch: keyboardSwitch,
           labelContainerClass: labelContainerClass,
           labelItemClass: labelItemClass,
           delayTriggerLatency: delayTriggerLatency,
@@ -600,6 +722,10 @@ var TabContainer = {
           delayTriggerEvents: delayTriggerEvents,
           delayTriggerCancelEvents: delayTriggerCancelEvents,
           fnSwitchTo: fnSwitchTo,
+          fnSwitchPrevious: fnSwitchPrevious,
+          fnSwitchNext: fnSwitchNext,
+          fnSwitchFirst: fnSwitchFirst,
+          fnSwitchLast: fnSwitchLast,
           tabContext: tabContext,
           currentIndex: currentIndex,
           side: ClassNameSuffix.footer
@@ -649,6 +775,10 @@ function normalizePosition(entries, position) {
   }
 }
 
+var SWITCH_DIRECTION = {
+  BACKWARD: 0,
+  FORWARD: 1
+};
 var Tab = {
   name: 'VueTabberTab',
   props: tabPropsDefinition,
@@ -696,6 +826,65 @@ var Tab = {
       }
 
       return normalizedPosition;
+    },
+    _switchNeighbor: function _switchNeighbor(fromIndex, direction, options) {
+      var includeDisabled, includeHidden, loop, exclude;
+
+      if (options) {
+        includeDisabled = options.includeDisabled;
+        includeHidden = options.includeHidden;
+        loop = options.loop;
+        exclude = options.exclude;
+      }
+
+      var entries = this.$props.entries;
+      var excludeIndecies = exclude ? exclude.map(function (pos) {
+        return normalizePosition(entries, pos).index;
+      }) : [];
+      var itemCount = entries.length;
+      var maxIterationCount = -1;
+
+      if (loop) {
+        if (fromIndex >= 0 && fromIndex < itemCount) {
+          maxIterationCount = itemCount - 1;
+        } else {
+          maxIterationCount = itemCount;
+        }
+      } else if (direction === SWITCH_DIRECTION.BACKWARD) {
+        maxIterationCount = fromIndex;
+      } else if (direction === SWITCH_DIRECTION.FORWARD) {
+        maxIterationCount = itemCount - fromIndex - 1;
+      }
+
+      var iterationStep = direction === SWITCH_DIRECTION.BACKWARD ? -1 : 1;
+
+      for (var i = 1; i <= maxIterationCount; i++) {
+        var tabItemIndex = (fromIndex + i * iterationStep + itemCount) % itemCount;
+
+        if (excludeIndecies.indexOf(tabItemIndex) >= 0) {
+          continue;
+        }
+
+        var _entries$tabItemIndex = entries[tabItemIndex],
+            disabled = _entries$tabItemIndex.disabled,
+            hidden = _entries$tabItemIndex.hidden;
+
+        if (!disabled && !hidden || includeDisabled && !hidden || !disabled && includeHidden || includeDisabled && includeHidden) {
+          return this.switchTo(normalizePosition(entries, tabItemIndex));
+        }
+      }
+    },
+    switchPrevious: function switchPrevious(options) {
+      return this._switchNeighbor(this.currentPosition.index, SWITCH_DIRECTION.BACKWARD, options);
+    },
+    switchNext: function switchNext(options) {
+      return this._switchNeighbor(this.currentPosition.index, SWITCH_DIRECTION.FORWARD, options);
+    },
+    switchFirst: function switchFirst(options) {
+      return this._switchNeighbor(-1, SWITCH_DIRECTION.FORWARD, options);
+    },
+    switchLast: function switchLast(options) {
+      return this._switchNeighbor(this.$props.entries.length, SWITCH_DIRECTION.BACKWARD, options);
     }
   },
   watch: {
@@ -715,6 +904,7 @@ var Tab = {
         labelItemClass = _this$$props.labelItemClass,
         panelContainerClass = _this$$props.panelContainerClass,
         panelItemClass = _this$$props.panelItemClass,
+        keyboardSwitch = _this$$props.keyboardSwitch,
         delayTriggerLatency = _this$$props.delayTriggerLatency,
         showHeaderLabelContainer = _this$$props.showHeaderLabelContainer,
         showFooterLabelContainer = _this$$props.showFooterLabelContainer,
@@ -754,6 +944,7 @@ var Tab = {
         labelItemClass: labelItemClass,
         panelContainerClass: panelContainerClass,
         panelItemClass: panelItemClass,
+        keyboardSwitch: keyboardSwitch,
         delayTriggerLatency: delayTriggerLatency,
         showHeaderLabelContainer: showHeaderLabelContainer,
         showFooterLabelContainer: showFooterLabelContainer,
@@ -761,6 +952,10 @@ var Tab = {
         delayTriggerEvents: delayTriggerEvents,
         delayTriggerCancelEvents: delayTriggerCancelEvents,
         fnSwitchTo: this.switchTo,
+        fnSwitchPrevious: this.switchPrevious,
+        fnSwitchNext: this.switchNext,
+        fnSwitchFirst: this.switchFirst,
+        fnSwitchLast: this.switchLast,
         tabContext: tabContext,
         currentIndex: currentIndex
       }

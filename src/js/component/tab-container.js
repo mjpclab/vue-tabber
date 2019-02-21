@@ -7,20 +7,25 @@ const TabContainer = {
 	props: {
 		entries: {type: Array},
 		mode: {type: String},
+		keyboardSwitch: {type: Boolean},
+		delayTriggerLatency: {type: Number},
+		showHeaderLabelContainer: {type: Boolean},
+		showFooterLabelContainer: {type: Boolean},
 		tabContainerClass: {type: String},
 		labelContainerClass: {type: String},
 		labelItemClass: {type: String},
 		panelContainerClass: {type: String},
 		panelItemClass: {type: String},
-		delayTriggerLatency: {type: Number},
-		showHeaderLabelContainer: {type: Boolean},
-		showFooterLabelContainer: {type: Boolean},
 
 		triggerEvents: {type: Array},
 		delayTriggerEvents: {type: Array},
 		delayTriggerCancelEvents: {type: Array},
 
 		fnSwitchTo: {type: Function},
+		fnSwitchPrevious: {type: Function},
+		fnSwitchNext: {type: Function},
+		fnSwitchFirst: {type: Function},
+		fnSwitchLast: {type: Function},
 
 		tabContext: {type: Object},
 		currentIndex: {type: Number}
@@ -29,20 +34,25 @@ const TabContainer = {
 		const {
 			entries,
 			mode,
+			keyboardSwitch,
+			delayTriggerLatency,
+			showHeaderLabelContainer,
+			showFooterLabelContainer,
 			tabContainerClass,
 			labelContainerClass,
 			labelItemClass,
 			panelContainerClass,
 			panelItemClass,
-			delayTriggerLatency,
-			showHeaderLabelContainer,
-			showFooterLabelContainer,
 
 			triggerEvents,
 			delayTriggerEvents,
 			delayTriggerCancelEvents,
 
 			fnSwitchTo,
+			fnSwitchPrevious,
+			fnSwitchNext,
+			fnSwitchFirst,
+			fnSwitchLast,
 
 			tabContext,
 			currentIndex
@@ -57,6 +67,7 @@ const TabContainer = {
 				props: {
 					entries,
 					mode,
+					keyboardSwitch,
 					labelContainerClass,
 					labelItemClass,
 					delayTriggerLatency,
@@ -66,6 +77,10 @@ const TabContainer = {
 					delayTriggerCancelEvents,
 
 					fnSwitchTo,
+					fnSwitchPrevious,
+					fnSwitchNext,
+					fnSwitchFirst,
+					fnSwitchLast,
 
 					tabContext,
 					currentIndex,
@@ -90,6 +105,7 @@ const TabContainer = {
 				props: {
 					entries,
 					mode,
+					keyboardSwitch,
 					labelContainerClass,
 					labelItemClass,
 					delayTriggerLatency,
@@ -99,6 +115,10 @@ const TabContainer = {
 					delayTriggerCancelEvents,
 
 					fnSwitchTo,
+					fnSwitchPrevious,
+					fnSwitchNext,
+					fnSwitchFirst,
+					fnSwitchLast,
 
 					tabContext,
 					currentIndex,

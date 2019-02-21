@@ -6,6 +6,7 @@ const sharedPropsDefinition = {
 		},
 		default: 'horizontal'
 	},
+	keyboardSwitch: {type: Boolean, default: true},
 	delayTriggerLatency: {type: [Number, String], default: 200},
 	activePosition: {type: [Number, String]},
 

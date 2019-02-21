@@ -198,6 +198,14 @@ Notice that vertical style is implemented by CSS flex features, which means old 
 You can specify options by setting properties on `<vue-tabber>` element.
 
 ## Behavior Properties
+`entries`  
+Specify tab entries you want to render as a tab, should be an array of rendering items, which has property `label`, `panel` and optional `key`.
+`label` will be shown on tab label container. `panel` is the content of the tab. `key` is used to identify different tab labels and panels.
+
+`keyboardSwitch`  
+Specify if active tab item could be switched by keyboard when label item has focus.
+If enabled, end user could use arrow keys and Tab key to (request) switch active tab item. Defaults to `true`.
+
 `trigger-events`  
 Determine the types of events triggered on label-item that will make the panel-item switched.
 Default value is `click`.
