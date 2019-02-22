@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title>vue-tabber demo - nested</title>
+	<title>vue-tabber demo - simple - by template</title>
 	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 
@@ -16,27 +16,17 @@
 
 <script type="text/x-template" id="template">
 	<tab>
-		<tab-label>A</tab-label>
-		<tab-panel>
-			<tab mode="vertical">
-				<tab-label>A-1</tab-label>
-				<tab-panel>
-					<tab>
-						<tab-label>A-1-1</tab-label>
-						<tab-panel>a-1-1</tab-panel>
+		<tab-label>title 1</tab-label>
+		<tab-panel>content 1</tab-panel>
 
-						<tab-label>A-1-2</tab-label>
-						<tab-panel>a-1-2</tab-panel>
-					</tab>
-				</tab-panel>
+		<tab-label>title 2</tab-label>
+		<tab-panel>content 2</tab-panel>
+		<tab-panel><p>another content 2</p></tab-panel>
+		<p>Yet another content 2, non-Label elements defaults to be panel content.</p>
+		Pure text of content 2. Continues Panel contents belongs to same Label.
 
-				<tab-label>A-2</tab-label>
-				<tab-panel>a-2</tab-panel>
-			</tab>
-		</tab-panel>
-
-		<tab-label>B</tab-label>
-		<tab-panel>b</tab-panel>
+		<tab-label>title 3</tab-label>
+		<tab-panel>content 3</tab-panel>
 	</tab>
 </script>
 

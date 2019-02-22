@@ -2,50 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title>Demo</title>
-	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
-	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<title>react-tabber demo</title>
 </head>
 <body>
-<script type="text/x-template" id="template">
-	<div id="container">
-		<tab @switching="onSwitching" :entries="entries">
-			<tab-label key="optional-key-1">title 1</tab-label>
-			<tab-panel>content of panel 1.</tab-panel>
-			<tab-panel>another content of panel 1.</tab-panel>
-
-			<tab-label key="optional-key-2">title 2</tab-label>
-			<tab-panel>content of panel 2</tab-panel>
-			<tab-panel><p>tab-panel tag is optional if wrapped by another tag.</p></tab-panel>
-			<p>tab-panel tag is optional if wrapped by another tag.</p>
-		</tab>
-	</div>
-</script>
-<div id="app"></div>
-
-<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
-<script type="text/javascript" src="../dist/vue-tabber.js"></script>
-
-<script type="text/javascript">
-	Vue.component('Tab', VueTabber);
-	Vue.component('TabLabel', VueTabber.Label);
-	Vue.component('TabPanel', VueTabber.Panel);
-
-	var app = new Vue({
-		el: '#app',
-		template: '#template',
-		data: {
-			entries: [
-				{label: 'title 0', panel: 'content 0', key: 'optional-key-0'},
-			]
-		},
-		methods: {
-			onSwitching: function (from, to) {
-				console.log('switching', from, to);
-			}
-		}
-	});
-</script>
+<p><a href="simple-data-structure.html">Simple - by data structure</a></p>
+<p><a href="simple-template.html">Simple - by template</a></p>
+<p><a href="switch-on-hover.html">Switch on hover</a></p>
+<p><a href="switch-on-hover-delay.html">Switch on hover delay</a></p>
+<p><a href="controlled-active-position.html">Controlled active position</a></p>
+<p><a href="nested.html">Nested</a></p>
 </body>
 </html>

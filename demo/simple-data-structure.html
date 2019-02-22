@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title>vue-tabber demo - nested</title>
+	<title>vue-tabber demo - simple - by data structure</title>
 	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 
@@ -15,29 +15,7 @@
 <script type="text/javascript" src="../dist/vue-tabber.js"></script>
 
 <script type="text/x-template" id="template">
-	<tab>
-		<tab-label>A</tab-label>
-		<tab-panel>
-			<tab mode="vertical">
-				<tab-label>A-1</tab-label>
-				<tab-panel>
-					<tab>
-						<tab-label>A-1-1</tab-label>
-						<tab-panel>a-1-1</tab-panel>
-
-						<tab-label>A-1-2</tab-label>
-						<tab-panel>a-1-2</tab-panel>
-					</tab>
-				</tab-panel>
-
-				<tab-label>A-2</tab-label>
-				<tab-panel>a-2</tab-panel>
-			</tab>
-		</tab-panel>
-
-		<tab-label>B</tab-label>
-		<tab-panel>b</tab-panel>
-	</tab>
+	<tab :entries="entries"></tab>
 </script>
 
 <script type="text/javascript">
@@ -48,7 +26,13 @@
 			TabLabel: VueTabber.Label,
 			TabPanel: VueTabber.Panel
 		},
-		template: '#template'
+		template: '#template',
+		data: {
+			entries: [
+				{label: 'title 1', panel: 'content 1'},
+				{label: 'title 2', panel: 'content 2'}
+			]
+		}
 	})
 	;
 </script>
