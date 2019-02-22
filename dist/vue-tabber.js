@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.VueTabber = factory());
-}(this, function () { 'use strict';
+  (global.VueTabber = factory());
+}(this, (function () { 'use strict';
 
   function _defineProperty(obj, key, value) {
     if (key in obj) {
@@ -156,7 +156,9 @@
   var sharedPropsDefinition = {
     entries: {
       type: Array,
-      default: []
+      default: function _default() {
+        return [];
+      }
     },
     mode: {
       validator: function validator(value) {
@@ -1001,4 +1003,4 @@
 
   return Index;
 
-}));
+})));

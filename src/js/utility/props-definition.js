@@ -1,5 +1,10 @@
 const sharedPropsDefinition = {
-	entries: {type: Array, default: []},
+	entries: {
+		type: Array,
+		default: function () {
+			return [];
+		}
+	},
 	mode: {
 		validator(value) {
 			return ['horizontal', 'vertical'].indexOf(value) >= 0

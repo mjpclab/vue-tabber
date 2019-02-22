@@ -150,7 +150,9 @@ function parseEntries(propEntries, vNodes) {
 var sharedPropsDefinition = {
   entries: {
     type: Array,
-    default: []
+    default: function _default() {
+      return [];
+    }
   },
   mode: {
     validator: function validator(value) {
