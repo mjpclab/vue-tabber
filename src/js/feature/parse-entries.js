@@ -55,7 +55,7 @@ function parseEntries(propEntries, vNodes) {
 			}
 			if (isPanel(vNode)) {
 				panelVNodes.push(...vNode.componentOptions.children);
-			} else if (vNode.tag) {
+			} else {
 				panelVNodes.push(vNode);
 			}
 		}

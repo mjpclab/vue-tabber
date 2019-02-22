@@ -134,7 +134,7 @@ function parseEntries(propEntries, vNodes) {
         var _panelVNodes;
 
         (_panelVNodes = panelVNodes).push.apply(_panelVNodes, _toConsumableArray(vNode.componentOptions.children));
-      } else if (vNode.tag) {
+      } else {
         panelVNodes.push(vNode);
       }
     }
