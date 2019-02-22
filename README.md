@@ -236,6 +236,9 @@ An `updateActivePosition` event will be emitted with new position `{index, key}`
 
 ## UI Properties
 ### Tab
+`mode`  
+Specify label container layout. Can be `horizontal` (default) or `vertical`.
+
 `tab-container-class`  
 CSS class for tab container. Default value is 'tab-container'.
 
