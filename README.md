@@ -52,6 +52,7 @@ Vue.component('TabPanel', Tab.Panel);
 ```javascript
 import Vue from 'vue';
 import Tab from 'vue-tabber';
+
 new Vue({
 	components: {
 		Tab: Tab,
@@ -73,8 +74,6 @@ Put tab information in the app or component's template like below:
 
 		<tab-label key="optional-key-2">title 2</tab-label>
 		<tab-panel>content of panel 2</tab-panel>
-		<tab-panel><p>tab-panel tag is optional if wrapped by another tag.</p></tab-panel>
-		<p>tab-panel tag is optional if wrapped by another tag.</p>
 	</tab>
 </div>
 ```
@@ -124,6 +123,7 @@ Here is the example for rewriting the template into `render()` function:
 ```javascript
 import Vue from 'vue';
 import Tab from 'vue-tabber';
+
 new Vue({
 	el: '#app',
 	render: function (createElement) {
@@ -189,13 +189,13 @@ Copying or referencing CSS files from `dist/theme/` directory.
 To use vertical labels, specify property `mode` to "vertical".  
 Notice that vertical style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.
 ```vue
-<vue-tabber mode="vertical">
+<tab mode="vertical">
 	......
-</vue-tabber>
+</tab>
 ```
 
 # Properties
-You can specify options by setting properties on `<vue-tabber>` element.
+You can specify options by setting properties on `<tab>` element.
 
 ## Behavior Properties
 `entries`  
