@@ -57,11 +57,11 @@ var Label = {
   props: {
     disabled: {
       type: [Boolean],
-      default: false
+      "default": false
     },
     hidden: {
       type: [Boolean],
-      default: false
+      "default": false
     }
   },
   render: function render() {
@@ -150,7 +150,7 @@ function parseEntries(propEntries, vNodes) {
 var sharedPropsDefinition = {
   entries: {
     type: Array,
-    default: function _default() {
+    "default": function _default() {
       return [];
     }
   },
@@ -158,53 +158,53 @@ var sharedPropsDefinition = {
     validator: function validator(value) {
       return ['horizontal', 'vertical'].indexOf(value) >= 0;
     },
-    default: 'horizontal'
+    "default": 'horizontal'
   },
   keyboardSwitch: {
     type: Boolean,
-    default: true
+    "default": true
   },
   delayTriggerLatency: {
     type: [Number, String],
-    default: 200
+    "default": 200
   },
   activePosition: {
     type: [Number, String]
   },
   tabContainerClass: {
     type: String,
-    default: 'tab-container'
+    "default": 'tab-container'
   },
   labelContainerClass: {
     type: String,
-    default: 'label-container'
+    "default": 'label-container'
   },
   showHeaderLabelContainer: {
     type: Boolean,
-    default: true
+    "default": true
   },
   showFooterLabelContainer: {
     type: Boolean,
-    default: false
+    "default": false
   },
   labelItemClass: {
     type: String,
-    default: 'label-item'
+    "default": 'label-item'
   },
   panelContainerClass: {
     type: String,
-    default: 'panel-container'
+    "default": 'panel-container'
   },
   panelItemClass: {
     type: String,
-    default: 'panel-item'
+    "default": 'panel-item'
   }
 };
 
 var publicPropsDefinition = _objectSpread({}, sharedPropsDefinition, {
   triggerEvents: {
     type: [Array, String],
-    default: 'click'
+    "default": 'click'
   },
   delayTriggerEvents: {
     type: [Array, String]
@@ -474,21 +474,27 @@ var LabelContainer = {
         labelItemAllClass.push(labelItemHiddenClass);
       }
 
+      var attrs = {
+        tabIndex: 0,
+        id: getLabelItemId(tabberId, side, index),
+        role: 'tab',
+        'aria-controls': getPanelItemId(tabberId, index),
+        'aria-selected': isActive,
+        'aria-expanded': isActive
+      };
+
+      var on = _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers);
+
+      if (keyboardSwitch) {
+        on.keydown = function (e) {
+          return _this.onKeyDown(e, pos);
+        };
+      }
+
       return createElement('div', {
         'class': labelItemAllClass,
-        attrs: {
-          tabIndex: 0,
-          id: getLabelItemId(tabberId, side, index),
-          role: 'tab',
-          'aria-controls': getPanelItemId(tabberId, index),
-          'aria-selected': isActive,
-          'aria-expanded': isActive
-        },
-        on: _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers, {
-          keydown: keyboardSwitch ? function (e) {
-            return _this.onKeyDown(e, pos);
-          } : undefined
-        }),
+        attrs: attrs,
+        on: on,
         key: key ? 'key-' + key : 'index-' + index
       }, label);
     }));
@@ -977,7 +983,7 @@ var Index = {
   name: 'VueTabber',
   props: publicPropsDefinition,
   render: function render(createElement) {
-    var slotChildren = this.$slots.default;
+    var slotChildren = this.$slots["default"];
     var _this$$props = this.$props,
         entries = _this$$props.entries,
         triggerEvents = _this$$props.triggerEvents,

@@ -169,22 +169,29 @@ const LabelContainer = {
 				labelItemAllClass.push(labelItemHiddenClass);
 			}
 
+
+			const attrs = {
+				tabIndex: 0,
+				id: getLabelItemId(tabberId, side, index),
+				role: 'tab',
+				'aria-controls': getPanelItemId(tabberId, index),
+				'aria-selected': isActive,
+				'aria-expanded': isActive
+			};
+
+			const on = {
+				...delayTriggerCancelEventHandlers,
+				...delayTriggerEventHandlers,
+				...triggerEventHandlers
+			};
+			if (keyboardSwitch) {
+				on.keydown = e => this.onKeyDown(e, pos)
+			}
+
 			return createElement('div', {
 				'class': labelItemAllClass,
-				attrs: {
-					tabIndex: 0,
-					id: getLabelItemId(tabberId, side, index),
-					role: 'tab',
-					'aria-controls': getPanelItemId(tabberId, index),
-					'aria-selected': isActive,
-					'aria-expanded': isActive
-				},
-				on: {
-					...delayTriggerCancelEventHandlers,
-					...delayTriggerEventHandlers,
-					...triggerEventHandlers,
-					keydown: keyboardSwitch ? e => this.onKeyDown(e, pos) : undefined
-				},
+				attrs,
+				on,
 				key: key ? 'key-' + key : 'index-' + index,
 			}, label);
 		}));

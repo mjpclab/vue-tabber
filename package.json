@@ -1,6 +1,6 @@
 {
   "name": "vue-tabber",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Vue.js tab sheet component",
   "main": "dist/vue-tabber.js",
   "scripts": {
@@ -14,16 +14,16 @@
     "sheet"
   ],
   "devDependencies": {
-    "@babel/core": "^7.3.3",
-    "@babel/preset-env": "^7.3.1",
-    "rollup": "^1.2.2",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "rollup": "^1.10.1",
     "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^4.0.1",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-uglify": "^6.0.2",
-    "rollup-plugin-vue": "^4.7.2",
-    "vue": "^2.6.7",
-    "vue-template-compiler": "^2.6.7"
+    "rollup-plugin-vue": "^5.0.0",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10"
   },
   "repository": {
     "type": "git",
