@@ -224,11 +224,11 @@ Specify how long (in milliseconds) need to wait before trigger the delayed switc
 The initial active index or key of the tab.
 
 `v-on:switching(from:{index, key}, to:{index, key})`  
-A `switching` event will be emitted with parameters `oldIndex` and `newIndex` when switching to another panel item.
+A `switching` event will be emitted with parameters `from` and `to` when switching to another panel item.
 Subscribe this event if you want to know a switching is performed as early as possible.
 
 `v-on:switched(from:{index, key}, to:{index, key})`  
-A `switched` event will be emitted with parameters `oldIndex` and `newIndex` when switched to another panel item.
+A `switched` event will be emitted with parameters `from` and `to` when switched to another panel item.
 Subscribe this event if you want to do some work based on result of switching(e.g. get the height of the component).
 
 `v-on:updateActivePosition({index, key})`  
