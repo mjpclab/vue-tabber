@@ -491,7 +491,7 @@ var LabelContainer = {
         };
       }
 
-      return createElement('div', {
+      return createElement('span', {
         'class': labelItemAllClass,
         attrs: attrs,
         on: on,

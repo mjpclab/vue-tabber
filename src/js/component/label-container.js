@@ -188,7 +188,7 @@ const LabelContainer = {
 				on.keydown = e => this.onKeyDown(e, pos)
 			}
 
-			return createElement('div', {
+			return createElement('span', {
 				'class': labelItemAllClass,
 				attrs,
 				on,
