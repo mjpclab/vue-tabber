@@ -13,20 +13,35 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function _objectSpread(target) {
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
 
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
     }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
   }
 
   return target;
@@ -201,7 +216,7 @@ var sharedPropsDefinition = {
   }
 };
 
-var publicPropsDefinition = _objectSpread({}, sharedPropsDefinition, {
+var publicPropsDefinition = _objectSpread2({}, sharedPropsDefinition, {
   triggerEvents: {
     type: [Array, String],
     "default": 'click'
@@ -214,7 +229,7 @@ var publicPropsDefinition = _objectSpread({}, sharedPropsDefinition, {
   }
 });
 
-var tabPropsDefinition = _objectSpread({}, publicPropsDefinition, {
+var tabPropsDefinition = _objectSpread2({}, publicPropsDefinition, {
   triggerEvents: {
     type: Array
   },
@@ -483,7 +498,7 @@ var LabelContainer = {
         'aria-expanded': isActive
       };
 
-      var on = _objectSpread({}, delayTriggerCancelEventHandlers, delayTriggerEventHandlers, triggerEventHandlers);
+      var on = _objectSpread2({}, delayTriggerCancelEventHandlers, {}, delayTriggerEventHandlers, {}, triggerEventHandlers);
 
       if (keyboardSwitch) {
         on.keydown = function (e) {
@@ -990,7 +1005,7 @@ var Index = {
         delayTriggerEvents = _this$$props.delayTriggerEvents,
         delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents;
     return createElement(Tab, {
-      props: _objectSpread({}, this.$props, {
+      props: _objectSpread2({}, this.$props, {
         entries: parseEntries(entries, slotChildren),
         triggerEvents: normalizeEvents(triggerEvents),
         delayTriggerEvents: normalizeEvents(delayTriggerEvents),
