@@ -1,7 +1,7 @@
-import resolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
+import resolve from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
 import vue from 'rollup-plugin-vue';
-import {uglify} from 'rollup-plugin-uglify';
+import {terser} from "rollup-plugin-terser";
 
 const getConfig = function (filename) {
 	const format = filename.indexOf('.esm') >= 0 ? 'esm' : 'umd';
@@ -20,9 +20,9 @@ const getConfig = function (filename) {
 		external: ['vue'],
 		plugins: [
 			resolve(),
-			babel(),
+			babel({ babelHelpers: 'bundled' }),
 			vue(),
-			isMinify && uglify()
+			isMinify && terser()
 		],
 	};
 

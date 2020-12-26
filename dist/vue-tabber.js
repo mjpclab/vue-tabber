@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.VueTabber = factory());
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.VueTabber = factory());
 }(this, (function () { 'use strict';
 
   function _defineProperty(obj, key, value) {
@@ -54,23 +54,36 @@
   }
 
   function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
 
   function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-      return arr2;
-    }
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
   }
 
   function _iterableToArray(iter) {
-    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
   }
 
   function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance");
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
   var Label = {
@@ -222,7 +235,7 @@
     }
   };
 
-  var publicPropsDefinition = _objectSpread2({}, sharedPropsDefinition, {
+  var publicPropsDefinition = _objectSpread2(_objectSpread2({}, sharedPropsDefinition), {}, {
     triggerEvents: {
       type: [Array, String],
       "default": 'click'
@@ -235,7 +248,7 @@
     }
   });
 
-  var tabPropsDefinition = _objectSpread2({}, publicPropsDefinition, {
+  var tabPropsDefinition = _objectSpread2(_objectSpread2({}, publicPropsDefinition), {}, {
     triggerEvents: {
       type: Array
     },
@@ -504,7 +517,7 @@
           'aria-expanded': isActive
         };
 
-        var on = _objectSpread2({}, delayTriggerCancelEventHandlers, {}, delayTriggerEventHandlers, {}, triggerEventHandlers);
+        var on = _objectSpread2(_objectSpread2(_objectSpread2({}, delayTriggerCancelEventHandlers), delayTriggerEventHandlers), triggerEventHandlers);
 
         if (keyboardSwitch) {
           on.keydown = function (e) {
@@ -1011,7 +1024,7 @@
           delayTriggerEvents = _this$$props.delayTriggerEvents,
           delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents;
       return createElement(Tab, {
-        props: _objectSpread2({}, this.$props, {
+        props: _objectSpread2(_objectSpread2({}, this.$props), {}, {
           entries: parseEntries(entries, slotChildren),
           triggerEvents: normalizeEvents(triggerEvents),
           delayTriggerEvents: normalizeEvents(delayTriggerEvents),
