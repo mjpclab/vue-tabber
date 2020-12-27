@@ -136,16 +136,11 @@ function parseEntries(propEntries, vNodes) {
 
   vNodes && vNodes.length && vNodes.forEach(function (vNode) {
     if (isLabel(vNode)) {
-      var _labelVNodes;
-
       if (labelVNodes.length) {
         pushEntry();
       }
 
-      labelVNodes = [];
-
-      (_labelVNodes = labelVNodes).push.apply(_labelVNodes, _toConsumableArray(vNode.componentOptions.children));
-
+      labelVNodes = vNode.componentOptions.children;
       panelVNodes = [];
       key = vNode.key;
       var _vNode$componentOptio = vNode.componentOptions.propsData,

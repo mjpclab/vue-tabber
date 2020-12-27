@@ -42,8 +42,7 @@ function parseEntries(propEntries, vNodes) {
 			if (labelVNodes.length) {
 				pushEntry();
 			}
-			labelVNodes = [];
-			labelVNodes.push(...vNode.componentOptions.children);
+			labelVNodes = vNode.componentOptions.children;
 			panelVNodes = [];
 			key = vNode.key;
 			const {disabled: itemDisabled, hidden: itemHidden} = vNode.componentOptions.propsData;
