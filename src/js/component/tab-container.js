@@ -128,7 +128,7 @@ const TabContainer = {
 		}
 
 		return createElement('div', {
-			'class': tabContainerAllClass,
+			'class': tabContainerAllClass
 		}, children);
 	}
 };

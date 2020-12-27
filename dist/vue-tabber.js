@@ -1029,8 +1029,7 @@
           triggerEvents: normalizeEvents(triggerEvents),
           delayTriggerEvents: normalizeEvents(delayTriggerEvents),
           delayTriggerCancelEvents: normalizeEvents(delayTriggerCancelEvents)
-        }),
-        on: this.$listeners
+        })
       });
     }
   };
