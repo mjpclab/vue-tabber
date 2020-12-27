@@ -1,3 +1,4 @@
+import {h} from 'vue';
 import ClassNameSuffix from '../utility/class-name-suffix';
 import LabelContainer from './label-container';
 import PanelContainer from './panel-container';
@@ -30,7 +31,7 @@ const TabContainer = {
 		tabContext: {type: Object},
 		currentIndex: {type: Number}
 	},
-	render(createElement) {
+	render() {
 		const {
 			entries,
 			mode,
@@ -63,71 +64,65 @@ const TabContainer = {
 
 		const children = [];
 		if (showHeaderLabelContainer) {
-			children.push(createElement(LabelContainer, {
-				props: {
-					entries,
-					mode,
-					keyboardSwitch,
-					labelContainerClass,
-					labelItemClass,
-					delayTriggerLatency,
-
-					triggerEvents,
-					delayTriggerEvents,
-					delayTriggerCancelEvents,
-
-					fnSwitchTo,
-					fnSwitchPrevious,
-					fnSwitchNext,
-					fnSwitchFirst,
-					fnSwitchLast,
-
-					tabContext,
-					currentIndex,
-					side: ClassNameSuffix.header
-				}
-			}));
-		}
-		children.push(createElement(PanelContainer, {
-			props: {
+			children.push(h(LabelContainer, {
 				entries,
 				mode,
-				panelContainerClass,
-				panelItemClass,
+				keyboardSwitch,
+				labelContainerClass,
+				labelItemClass,
+				delayTriggerLatency,
+
+				triggerEvents,
+				delayTriggerEvents,
+				delayTriggerCancelEvents,
+
+				fnSwitchTo,
+				fnSwitchPrevious,
+				fnSwitchNext,
+				fnSwitchFirst,
+				fnSwitchLast,
 
 				tabContext,
 				currentIndex,
-				refLabelSide: showHeaderLabelContainer || !showFooterLabelContainer ? ClassNameSuffix.header : ClassNameSuffix.footer
-			}
+				side: ClassNameSuffix.header
+			}));
+		}
+		children.push(h(PanelContainer, {
+			entries,
+			mode,
+			panelContainerClass,
+			panelItemClass,
+
+			tabContext,
+			currentIndex,
+			refLabelSide: showHeaderLabelContainer || !showFooterLabelContainer ? ClassNameSuffix.header : ClassNameSuffix.footer
 		}));
 		if (showFooterLabelContainer) {
-			children.push(createElement(LabelContainer, {
-				props: {
-					entries,
-					mode,
-					keyboardSwitch,
-					labelContainerClass,
-					labelItemClass,
-					delayTriggerLatency,
+			children.push(h(LabelContainer, {
+				entries,
+				mode,
+				keyboardSwitch,
+				labelContainerClass,
+				labelItemClass,
+				delayTriggerLatency,
 
-					triggerEvents,
-					delayTriggerEvents,
-					delayTriggerCancelEvents,
+				triggerEvents,
+				delayTriggerEvents,
+				delayTriggerCancelEvents,
 
-					fnSwitchTo,
-					fnSwitchPrevious,
-					fnSwitchNext,
-					fnSwitchFirst,
-					fnSwitchLast,
+				fnSwitchTo,
+				fnSwitchPrevious,
+				fnSwitchNext,
+				fnSwitchFirst,
+				fnSwitchLast,
 
-					tabContext,
-					currentIndex,
-					side: ClassNameSuffix.footer
-				}
+				tabContext,
+				currentIndex,
+				side: ClassNameSuffix.footer
 			}));
 		}
 
-		return createElement('div', {
+		return h('div', {
 			'class': tabContainerAllClass
 		}, children);
 	}

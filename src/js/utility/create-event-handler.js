@@ -1,7 +1,8 @@
 function createEventHandler(events, handler) {
 	const eventHandlers = {};
 	events.forEach(function (event) {
-		eventHandlers[event] = handler;
+		var eventName = 'on' + event[0].toUpperCase() + event.substring(1).toLowerCase()
+		eventHandlers[eventName] = handler;
 	});
 	return eventHandlers;
 }

@@ -1,3 +1,4 @@
+import {h} from 'vue';
 import createEventHandler from '../utility/create-event-handler';
 import ClassNameSuffix from '../utility/class-name-suffix';
 import {getLabelItemId, getPanelItemId} from '../utility/get-id';
@@ -88,7 +89,7 @@ const LabelContainer = {
 			}
 		}
 	},
-	render(createElement) {
+	render() {
 		const {
 			entries,
 			mode,
@@ -122,7 +123,7 @@ const LabelContainer = {
 
 		const {tabberId} = tabContext;
 
-		return createElement('div', {
+		return h('div', {
 			'class': labelContainerAllClass,
 			attrs: {
 				role: 'tablist'
@@ -188,10 +189,10 @@ const LabelContainer = {
 				on.keydown = e => this.onKeyDown(e, pos)
 			}
 
-			return createElement('span', {
+			return h('span', {
 				'class': labelItemAllClass,
-				attrs,
-				on,
+				...attrs,
+				...on,
 				key: key ? 'key-' + key : 'index-' + index,
 			}, label);
 		}));

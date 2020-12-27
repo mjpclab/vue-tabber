@@ -1,8 +1,8 @@
 const Label = {
 	name: 'TabLabel',
 	props: {
-		disabled: {type: [Boolean], default: false},
-		hidden: {type: [Boolean], default: false}
+		disabled: {type: Boolean, default: false},
+		hidden: {type: Boolean, default: false}
 	},
 	render() {
 		return null;

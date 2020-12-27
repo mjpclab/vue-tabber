@@ -7,7 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 
-	<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="../node_modules/vue/dist/vue.global.js"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -36,16 +36,17 @@
 </script>
 
 <script type="text/javascript">
-	new Vue({
-		el: '#app',
+	Vue.createApp({
 		components: {
 			Tab: VueTabber,
 			TabLabel: VueTabber.Label,
 			TabPanel: VueTabber.Panel
 		},
 		template: '#template',
-		data: {
-			activePosition: 0
+		data: function () {
+			return {
+				activePosition: 0
+			};
 		},
 		methods: {
 			onUpdateActivePosition({index, key}) {
@@ -62,7 +63,7 @@
 			}
 
 		}
-	});
+	}).mount('#app');
 </script>
 </body>
 </html>

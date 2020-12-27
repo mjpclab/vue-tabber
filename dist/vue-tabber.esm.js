@@ -1,3 +1,5 @@
+import { h } from 'vue';
+
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -84,11 +86,11 @@ var Label = {
   name: 'TabLabel',
   props: {
     disabled: {
-      type: [Boolean],
+      type: Boolean,
       "default": false
     },
     hidden: {
-      type: [Boolean],
+      type: Boolean,
       "default": false
     }
   },
@@ -105,11 +107,11 @@ var Panel = {
 };
 
 function isLabel(vNode) {
-  return vNode.componentOptions && vNode.componentOptions.Ctor && vNode.componentOptions.Ctor.extendOptions === Label;
+  return vNode.type === Label;
 }
 
 function isPanel(vNode) {
-  return vNode.componentOptions && vNode.componentOptions.Ctor && vNode.componentOptions.Ctor.extendOptions === Panel;
+  return vNode.type === Panel;
 }
 
 function parseEntries(propEntries, vNodes) {
@@ -136,32 +138,33 @@ function parseEntries(propEntries, vNodes) {
 
   vNodes && vNodes.length && vNodes.forEach(function (vNode) {
     if (isLabel(vNode)) {
-      var _labelVNodes;
-
       if (labelVNodes.length) {
         pushEntry();
       }
 
       labelVNodes = [];
 
-      (_labelVNodes = labelVNodes).push.apply(_labelVNodes, _toConsumableArray(vNode.componentOptions.children));
+      if (vNode.children && vNode.children["default"]) {
+        var _labelVNodes;
+
+        (_labelVNodes = labelVNodes).push.apply(_labelVNodes, _toConsumableArray(vNode.children["default"]()));
+      } else {
+        labelVNodes.push('');
+      }
 
       panelVNodes = [];
       key = vNode.key;
-      var _vNode$componentOptio = vNode.componentOptions.propsData,
-          itemDisabled = _vNode$componentOptio.disabled,
-          itemHidden = _vNode$componentOptio.hidden;
-      disabled = Boolean(itemDisabled);
-      hidden = Boolean(itemHidden);
+      disabled = Boolean(vNode.props && vNode.props.disabled);
+      hidden = Boolean(vNode.props && vNode.props.hidden);
     } else {
       if (!labelVNodes.length) {
         labelVNodes.push('');
       }
 
-      if (isPanel(vNode)) {
+      if (isPanel(vNode) && vNode.children && vNode.children["default"]) {
         var _panelVNodes;
 
-        (_panelVNodes = panelVNodes).push.apply(_panelVNodes, _toConsumableArray(vNode.componentOptions.children));
+        (_panelVNodes = panelVNodes).push.apply(_panelVNodes, _toConsumableArray(vNode.children["default"]()));
       } else {
         panelVNodes.push(vNode);
       }
@@ -276,7 +279,8 @@ var ClassNameSuffix = {
 function createEventHandler(events, handler) {
   var eventHandlers = {};
   events.forEach(function (event) {
-    eventHandlers[event] = handler;
+    var eventName = 'on' + event[0].toUpperCase() + event.substring(1).toLowerCase();
+    eventHandlers[eventName] = handler;
   });
   return eventHandlers;
 }
@@ -423,7 +427,7 @@ var LabelContainer = {
       }
     }
   },
-  render: function render(createElement) {
+  render: function render() {
     var _this = this;
 
     var _this$$props2 = this.$props,
@@ -446,7 +450,7 @@ var LabelContainer = {
     var labelItemDisabledClass = labelItemClass + '-' + ClassNameSuffix.disabled;
     var labelItemHiddenClass = labelItemClass + '-' + ClassNameSuffix.hidden;
     var tabberId = tabContext.tabberId;
-    return createElement('div', {
+    return h('div', {
       'class': labelContainerAllClass,
       attrs: {
         role: 'tablist'
@@ -519,12 +523,11 @@ var LabelContainer = {
         };
       }
 
-      return createElement('span', {
-        'class': labelItemAllClass,
-        attrs: attrs,
-        on: on,
+      return h('span', _objectSpread2(_objectSpread2(_objectSpread2({
+        'class': labelItemAllClass
+      }, attrs), on), {}, {
         key: key ? 'key-' + key : 'index-' + index
-      }, label);
+      }), label);
     }));
   }
 };
@@ -566,7 +569,7 @@ var PanelContainer = {
       type: String
     }
   },
-  render: function render(createElement) {
+  render: function render() {
     var _this$$props = this.$props,
         entries = _this$$props.entries,
         mode = _this$$props.mode,
@@ -582,7 +585,7 @@ var PanelContainer = {
     var panelItemDisabledClass = panelItemClass + '-' + ClassNameSuffix.disabled;
     var panelItemHiddenClass = panelItemClass + '-' + ClassNameSuffix.hidden;
     var tabberId = tabContext.tabberId;
-    return createElement('div', {
+    return h('div', {
       'class': panelContainerAllClass
     }, entries.map(function (entry, index) {
       var panel = entry.panel,
@@ -601,14 +604,12 @@ var PanelContainer = {
         panelItemAllClass.push(panelItemHiddenClass);
       }
 
-      return createElement('div', {
+      return h('div', {
         'class': panelItemAllClass,
-        attrs: {
-          id: getPanelItemId(tabberId, index),
-          role: 'tabpanel',
-          'aria-labelledby': getLabelItemId(tabberId, refLabelSide, index),
-          'aria-hidden': !isActive
-        },
+        id: getPanelItemId(tabberId, index),
+        role: 'tabpanel',
+        'aria-labelledby': getLabelItemId(tabberId, refLabelSide, index),
+        'aria-hidden': !isActive,
         key: key ? 'key-' + key : 'index-' + index
       }, panel);
     }));
@@ -682,7 +683,7 @@ var TabContainer = {
       type: Number
     }
   },
-  render: function render(createElement) {
+  render: function render() {
     var _this$$props = this.$props,
         entries = _this$$props.entries,
         mode = _this$$props.mode,
@@ -710,66 +711,60 @@ var TabContainer = {
     var children = [];
 
     if (showHeaderLabelContainer) {
-      children.push(createElement(LabelContainer, {
-        props: {
-          entries: entries,
-          mode: mode,
-          keyboardSwitch: keyboardSwitch,
-          labelContainerClass: labelContainerClass,
-          labelItemClass: labelItemClass,
-          delayTriggerLatency: delayTriggerLatency,
-          triggerEvents: triggerEvents,
-          delayTriggerEvents: delayTriggerEvents,
-          delayTriggerCancelEvents: delayTriggerCancelEvents,
-          fnSwitchTo: fnSwitchTo,
-          fnSwitchPrevious: fnSwitchPrevious,
-          fnSwitchNext: fnSwitchNext,
-          fnSwitchFirst: fnSwitchFirst,
-          fnSwitchLast: fnSwitchLast,
-          tabContext: tabContext,
-          currentIndex: currentIndex,
-          side: ClassNameSuffix.header
-        }
+      children.push(h(LabelContainer, {
+        entries: entries,
+        mode: mode,
+        keyboardSwitch: keyboardSwitch,
+        labelContainerClass: labelContainerClass,
+        labelItemClass: labelItemClass,
+        delayTriggerLatency: delayTriggerLatency,
+        triggerEvents: triggerEvents,
+        delayTriggerEvents: delayTriggerEvents,
+        delayTriggerCancelEvents: delayTriggerCancelEvents,
+        fnSwitchTo: fnSwitchTo,
+        fnSwitchPrevious: fnSwitchPrevious,
+        fnSwitchNext: fnSwitchNext,
+        fnSwitchFirst: fnSwitchFirst,
+        fnSwitchLast: fnSwitchLast,
+        tabContext: tabContext,
+        currentIndex: currentIndex,
+        side: ClassNameSuffix.header
       }));
     }
 
-    children.push(createElement(PanelContainer, {
-      props: {
-        entries: entries,
-        mode: mode,
-        panelContainerClass: panelContainerClass,
-        panelItemClass: panelItemClass,
-        tabContext: tabContext,
-        currentIndex: currentIndex,
-        refLabelSide: showHeaderLabelContainer || !showFooterLabelContainer ? ClassNameSuffix.header : ClassNameSuffix.footer
-      }
+    children.push(h(PanelContainer, {
+      entries: entries,
+      mode: mode,
+      panelContainerClass: panelContainerClass,
+      panelItemClass: panelItemClass,
+      tabContext: tabContext,
+      currentIndex: currentIndex,
+      refLabelSide: showHeaderLabelContainer || !showFooterLabelContainer ? ClassNameSuffix.header : ClassNameSuffix.footer
     }));
 
     if (showFooterLabelContainer) {
-      children.push(createElement(LabelContainer, {
-        props: {
-          entries: entries,
-          mode: mode,
-          keyboardSwitch: keyboardSwitch,
-          labelContainerClass: labelContainerClass,
-          labelItemClass: labelItemClass,
-          delayTriggerLatency: delayTriggerLatency,
-          triggerEvents: triggerEvents,
-          delayTriggerEvents: delayTriggerEvents,
-          delayTriggerCancelEvents: delayTriggerCancelEvents,
-          fnSwitchTo: fnSwitchTo,
-          fnSwitchPrevious: fnSwitchPrevious,
-          fnSwitchNext: fnSwitchNext,
-          fnSwitchFirst: fnSwitchFirst,
-          fnSwitchLast: fnSwitchLast,
-          tabContext: tabContext,
-          currentIndex: currentIndex,
-          side: ClassNameSuffix.footer
-        }
+      children.push(h(LabelContainer, {
+        entries: entries,
+        mode: mode,
+        keyboardSwitch: keyboardSwitch,
+        labelContainerClass: labelContainerClass,
+        labelItemClass: labelItemClass,
+        delayTriggerLatency: delayTriggerLatency,
+        triggerEvents: triggerEvents,
+        delayTriggerEvents: delayTriggerEvents,
+        delayTriggerCancelEvents: delayTriggerCancelEvents,
+        fnSwitchTo: fnSwitchTo,
+        fnSwitchPrevious: fnSwitchPrevious,
+        fnSwitchNext: fnSwitchNext,
+        fnSwitchFirst: fnSwitchFirst,
+        fnSwitchLast: fnSwitchLast,
+        tabContext: tabContext,
+        currentIndex: currentIndex,
+        side: ClassNameSuffix.footer
       }));
     }
 
-    return createElement('div', {
+    return h('div', {
       'class': tabContainerAllClass
     }, children);
   }
@@ -931,7 +926,7 @@ var Tab = {
   beforeUnmount: function beforeUnmount() {
     clearTimeout(this.delayTimeout);
   },
-  render: function render(createElement) {
+  render: function render() {
     var _this$$props = this.$props,
         entries = _this$$props.entries,
         mode = _this$$props.mode,
@@ -971,30 +966,28 @@ var Tab = {
       this.$emit('switching', normalizedPrevPosition, this.currentPosition);
     }
 
-    return createElement(TabContainer, {
-      props: {
-        entries: entries,
-        mode: mode,
-        tabContainerClass: tabContainerClass,
-        labelContainerClass: labelContainerClass,
-        labelItemClass: labelItemClass,
-        panelContainerClass: panelContainerClass,
-        panelItemClass: panelItemClass,
-        keyboardSwitch: keyboardSwitch,
-        delayTriggerLatency: delayTriggerLatency,
-        showHeaderLabelContainer: showHeaderLabelContainer,
-        showFooterLabelContainer: showFooterLabelContainer,
-        triggerEvents: triggerEvents,
-        delayTriggerEvents: delayTriggerEvents,
-        delayTriggerCancelEvents: delayTriggerCancelEvents,
-        fnSwitchTo: this.switchTo,
-        fnSwitchPrevious: this.switchPrevious,
-        fnSwitchNext: this.switchNext,
-        fnSwitchFirst: this.switchFirst,
-        fnSwitchLast: this.switchLast,
-        tabContext: tabContext,
-        currentIndex: currentIndex
-      }
+    return h(TabContainer, {
+      entries: entries,
+      mode: mode,
+      tabContainerClass: tabContainerClass,
+      labelContainerClass: labelContainerClass,
+      labelItemClass: labelItemClass,
+      panelContainerClass: panelContainerClass,
+      panelItemClass: panelItemClass,
+      keyboardSwitch: keyboardSwitch,
+      delayTriggerLatency: delayTriggerLatency,
+      showHeaderLabelContainer: showHeaderLabelContainer,
+      showFooterLabelContainer: showFooterLabelContainer,
+      triggerEvents: triggerEvents,
+      delayTriggerEvents: delayTriggerEvents,
+      delayTriggerCancelEvents: delayTriggerCancelEvents,
+      fnSwitchTo: this.switchTo,
+      fnSwitchPrevious: this.switchPrevious,
+      fnSwitchNext: this.switchNext,
+      fnSwitchFirst: this.switchFirst,
+      fnSwitchLast: this.switchLast,
+      tabContext: tabContext,
+      currentIndex: currentIndex
     });
   },
   mounted: function mounted() {
@@ -1009,22 +1002,21 @@ var Index = {
   Label: Label,
   Panel: Panel,
   name: 'VueTabber',
+  inheritAttrs: false,
   props: publicPropsDefinition,
-  render: function render(createElement) {
-    var slotChildren = this.$slots["default"];
+  render: function render() {
+    var slotChildren = this.$slots["default"] && this.$slots["default"]();
     var _this$$props = this.$props,
         entries = _this$$props.entries,
         triggerEvents = _this$$props.triggerEvents,
         delayTriggerEvents = _this$$props.delayTriggerEvents,
         delayTriggerCancelEvents = _this$$props.delayTriggerCancelEvents;
-    return createElement(Tab, {
-      props: _objectSpread2(_objectSpread2({}, this.$props), {}, {
-        entries: parseEntries(entries, slotChildren),
-        triggerEvents: normalizeEvents(triggerEvents),
-        delayTriggerEvents: normalizeEvents(delayTriggerEvents),
-        delayTriggerCancelEvents: normalizeEvents(delayTriggerCancelEvents)
-      })
-    });
+    return h(Tab, _objectSpread2(_objectSpread2({}, this.$props), {}, {
+      entries: parseEntries(entries, slotChildren),
+      triggerEvents: normalizeEvents(triggerEvents),
+      delayTriggerEvents: normalizeEvents(delayTriggerEvents),
+      delayTriggerCancelEvents: normalizeEvents(delayTriggerCancelEvents)
+    }));
   }
 };
 

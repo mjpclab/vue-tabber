@@ -7,7 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 
-	<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="../node_modules/vue/dist/vue.global.js"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -19,21 +19,22 @@
 </script>
 
 <script type="text/javascript">
-	new Vue({
-		el: '#app',
+	Vue.createApp({
 		components: {
 			Tab: VueTabber,
 			TabLabel: VueTabber.Label,
 			TabPanel: VueTabber.Panel
 		},
 		template: '#template',
-		data: {
-			entries: [
-				{label: 'title 1', panel: 'content 1'},
-				{label: 'title 2', panel: 'content 2'}
-			]
+		data: function () {
+			return {
+				entries: [
+					{label: 'title 1', panel: 'content 1'},
+					{label: 'title 2', panel: 'content 2'}
+				]
+			}
 		}
-	});
+	}).mount('#app');
 </script>
 </body>
 </html>

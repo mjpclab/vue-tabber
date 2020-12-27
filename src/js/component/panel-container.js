@@ -1,3 +1,4 @@
+import {h} from 'vue';
 import ClassNameSuffix from '../utility/class-name-suffix';
 import {getLabelItemId, getPanelItemId} from '../utility/get-id';
 
@@ -17,7 +18,7 @@ const PanelContainer = {
 		currentIndex: {type: Number},
 		refLabelSide: {type: String}
 	},
-	render(createElement) {
+	render() {
 		const {
 			entries,
 			mode,
@@ -39,7 +40,7 @@ const PanelContainer = {
 
 		const {tabberId} = tabContext;
 
-		return createElement('div', {
+		return h('div', {
 			'class': panelContainerAllClass,
 		}, entries.map((entry, index) => {
 			const {panel, key, disabled, hidden} = entry;
@@ -54,15 +55,13 @@ const PanelContainer = {
 				panelItemAllClass.push(panelItemHiddenClass);
 			}
 
-			return createElement('div', {
+			return h('div', {
 				'class': panelItemAllClass,
-				attrs: {
-					id: getPanelItemId(tabberId, index),
-					role: 'tabpanel',
-					'aria-labelledby': getLabelItemId(tabberId, refLabelSide, index),
-					'aria-hidden': !isActive
-				},
-				key: key ? 'key-' + key : 'index-' + index,
+				id: getPanelItemId(tabberId, index),
+				role: 'tabpanel',
+				'aria-labelledby': getLabelItemId(tabberId, refLabelSide, index),
+				'aria-hidden': !isActive,
+				key: key ? 'key-' + key : 'index-' + index
 			}, panel);
 		}));
 	}

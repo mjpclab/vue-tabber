@@ -2,15 +2,11 @@ import Label from '../component/label';
 import Panel from '../component/panel';
 
 function isLabel(vNode) {
-	return vNode.componentOptions &&
-		vNode.componentOptions.Ctor &&
-		vNode.componentOptions.Ctor.extendOptions === Label;
+	return vNode.type === Label;
 }
 
 function isPanel(vNode) {
-	return vNode.componentOptions &&
-		vNode.componentOptions.Ctor &&
-		vNode.componentOptions.Ctor.extendOptions === Panel;
+	return vNode.type === Panel;
 }
 
 function parseEntries(propEntries, vNodes) {
@@ -43,18 +39,21 @@ function parseEntries(propEntries, vNodes) {
 				pushEntry();
 			}
 			labelVNodes = [];
-			labelVNodes.push(...vNode.componentOptions.children);
+			if (vNode.children && vNode.children.default) {
+				labelVNodes.push(...vNode.children.default());
+			} else {
+				labelVNodes.push('');
+			}
 			panelVNodes = [];
 			key = vNode.key;
-			const {disabled: itemDisabled, hidden: itemHidden} = vNode.componentOptions.propsData;
-			disabled = Boolean(itemDisabled);
-			hidden = Boolean(itemHidden);
+			disabled = Boolean(vNode.props && vNode.props.disabled);
+			hidden = Boolean(vNode.props && vNode.props.hidden);
 		} else {
 			if (!labelVNodes.length) {
 				labelVNodes.push('');
 			}
-			if (isPanel(vNode)) {
-				panelVNodes.push(...vNode.componentOptions.children);
+			if (isPanel(vNode) && vNode.children && vNode.children.default) {
+				panelVNodes.push(...vNode.children.default());
 			} else {
 				panelVNodes.push(vNode);
 			}

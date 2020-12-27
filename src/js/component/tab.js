@@ -1,3 +1,4 @@
+import {h} from 'vue';
 import TabContainer from './tab-container';
 import {tabPropsDefinition} from '../utility/props-definition';
 import {getNextTabContainerId} from '../utility/get-id';
@@ -23,7 +24,7 @@ const Tab = {
 	data() {
 		return {
 			manageTargetPosition: true,
-			targetPosition: -1,
+			targetPosition: -1
 		};
 	},
 	methods: {
@@ -125,7 +126,7 @@ const Tab = {
 	beforeUnmount() {
 		clearTimeout(this.delayTimeout);
 	},
-	render(createElement) {
+	render() {
 		const {
 			entries,
 			mode,
@@ -170,33 +171,31 @@ const Tab = {
 			this.$emit('switching', normalizedPrevPosition, this.currentPosition);
 		}
 
-		return createElement(TabContainer, {
-			props: {
-				entries,
-				mode,
-				tabContainerClass,
-				labelContainerClass,
-				labelItemClass,
-				panelContainerClass,
-				panelItemClass,
-				keyboardSwitch,
-				delayTriggerLatency,
-				showHeaderLabelContainer,
-				showFooterLabelContainer,
+		return h(TabContainer, {
+			entries,
+			mode,
+			tabContainerClass,
+			labelContainerClass,
+			labelItemClass,
+			panelContainerClass,
+			panelItemClass,
+			keyboardSwitch,
+			delayTriggerLatency,
+			showHeaderLabelContainer,
+			showFooterLabelContainer,
 
-				triggerEvents,
-				delayTriggerEvents,
-				delayTriggerCancelEvents,
+			triggerEvents,
+			delayTriggerEvents,
+			delayTriggerCancelEvents,
 
-				fnSwitchTo: this.switchTo,
-				fnSwitchPrevious: this.switchPrevious,
-				fnSwitchNext: this.switchNext,
-				fnSwitchFirst: this.switchFirst,
-				fnSwitchLast: this.switchLast,
+			fnSwitchTo: this.switchTo,
+			fnSwitchPrevious: this.switchPrevious,
+			fnSwitchNext: this.switchNext,
+			fnSwitchFirst: this.switchFirst,
+			fnSwitchLast: this.switchLast,
 
-				tabContext,
-				currentIndex
-			}
+			tabContext,
+			currentIndex
 		});
 	},
 	mounted() {
