@@ -80,15 +80,27 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
+function parseBooleanProp(propValue) {
+  switch (propValue) {
+    case false:
+    case 'false':
+    case undefined:
+    case null:
+      return false;
+  }
+
+  return true;
+}
+
 var Label = {
   name: 'TabLabel',
   props: {
     disabled: {
-      type: [Boolean],
+      type: Boolean,
       "default": false
     },
     hidden: {
-      type: [Boolean],
+      type: Boolean,
       "default": false
     }
   },
@@ -146,8 +158,8 @@ function parseEntries(propEntries, vNodes) {
       var _vNode$componentOptio = vNode.componentOptions.propsData,
           itemDisabled = _vNode$componentOptio.disabled,
           itemHidden = _vNode$componentOptio.hidden;
-      disabled = Boolean(itemDisabled);
-      hidden = Boolean(itemHidden);
+      disabled = parseBooleanProp(itemDisabled);
+      hidden = parseBooleanProp(itemHidden);
     } else {
       if (!labelVNodes.length) {
         labelVNodes.push('');

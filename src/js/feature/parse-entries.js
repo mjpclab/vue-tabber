@@ -1,3 +1,4 @@
+import parseBooleanProp from './parse-boolean-prop';
 import Label from '../component/label';
 import Panel from '../component/panel';
 
@@ -46,8 +47,8 @@ function parseEntries(propEntries, vNodes) {
 			panelVNodes = [];
 			key = vNode.key;
 			const {disabled: itemDisabled, hidden: itemHidden} = vNode.componentOptions.propsData;
-			disabled = Boolean(itemDisabled);
-			hidden = Boolean(itemHidden);
+			disabled = parseBooleanProp(itemDisabled);
+			hidden = parseBooleanProp(itemHidden);
 		} else {
 			if (!labelVNodes.length) {
 				labelVNodes.push('');
